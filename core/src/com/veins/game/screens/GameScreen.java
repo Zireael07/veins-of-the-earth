@@ -96,6 +96,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
      //convert world position to isometric position
     public Vector3 worldToIso(Vector3 point, int tileWidth, int tileHeight, boolean round) {
         point.x /= tileWidth;
+        point.y = point.y + logic.getYOffset();
         point.y = (point.y - tileHeight / 2) / tileHeight + point.x;
         point.x -= point.y - point.x;
         //round if asked to
