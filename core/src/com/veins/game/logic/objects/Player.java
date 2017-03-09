@@ -5,6 +5,7 @@
  */
 package com.veins.game.logic.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.veins.game.logic.GameLogic;
 
@@ -53,4 +54,21 @@ public class Player extends Sprite {
         setSelfX(fx);
         setSelfY(fy);
     }
+    
+     public void AttemptMove(int dx, int dy){
+         if (CheckMove(getSelfX() + dx, getSelfY() + dy))
+        {
+            AssignPlayerPosition(getSelfX() + dx, getSelfY() + dy);
+            Gdx.app.log("Movement", "Player coords" + getSelfX() + ","+ getSelfY()); 
+            
+            //for iso
+            int player_x = (int) (getSelfX()*logic.TILE_WIDTH+0.25*logic.TILE_WIDTH);
+            int player_y = getSelfY()*logic.TILE_HEIGHT;
+            setPosition(player_x, player_y);
+         }
+         else
+         {
+             System.out.println("Can't move to" + (getSelfX()+dx) + " " + (getSelfY() + dy));
+         }
+     }
 }

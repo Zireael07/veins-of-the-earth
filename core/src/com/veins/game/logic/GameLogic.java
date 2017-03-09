@@ -5,6 +5,9 @@
  */
 package com.veins.game.logic;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.veins.game.logic.objects.Player;
+
 /**
  *
  * @author AdmKasia
@@ -16,4 +19,23 @@ public class GameLogic {
     //iso
     public static final int ISO_WIDTH = 54;
     public static final int ISO_HEIGHT = 27;
+    
+    public static final int TILE_WIDTH = 32;
+    public static final int TILE_HEIGHT = 32;
+    
+    Player player;
+       
+    public GameLogic()
+    {
+        player = new Player(
+        MathUtils.random(MAP_WIDTH/2),
+        MathUtils.random(MAP_HEIGHT/2),
+        this
+        );
+    }
+    
+    public Player getPlayer()
+    {
+        return player;
+    }
 }
