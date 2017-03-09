@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.veins.game.MyVeinsGame;
@@ -92,7 +93,20 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
          Gdx.input.setInputProcessor(null);
      }
     
-    
+     //convert world position to isometric position
+    public Vector3 worldToIso(Vector3 point, int tileWidth, int tileHeight, boolean round) {
+        point.x /= tileWidth;
+        point.y = (point.y - tileHeight / 2) / tileHeight + point.x;
+        point.x -= point.y - point.x;
+        //round if asked to
+        if (round){
+            point.x = (int)point.x;
+            point.y = (int)point.y;
+        }
+    return point;
+}
+     
+     
     @Override
     public boolean keyDown(int i) {
         switch (i)
@@ -125,6 +139,22 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Gdx.app.log("Mouse Event","Click at " + screenX + "," + screenY);
+      
+      Vector3 screenCoordinates = new Vector3(screenX,screenY,0);
+      //remember to take viewport into account
+      Vector3 worldCoordinates = camera.unproject(screenCoordinates, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
+      Gdx.app.log("Mouse Event","Projected at " + worldCoordinates.x + "," + worldCoordinates.y);
+      
+      //necessary to calculate tile coords
+      float TileWidth = layer.getTileWidth() * 1.0f;
+      float TileHeight = layer.getTileHeight() * 1.0f;
+      int IntWidth = (int)TileWidth;
+      int IntHeight = (int)TileHeight;
+   
+      Vector3 outputPos = worldToIso(worldCoordinates, IntWidth, IntHeight, true);
+     
+      Gdx.app.log("Mouse Event", "Tile coords " + outputPos);
         return false;
     }
 
