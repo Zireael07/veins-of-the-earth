@@ -49,10 +49,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         layer = (TiledMapTileLayer)map.getLayers().get(0);
         
         //camera stuffs
-        camera = new OrthographicCamera(logic.MAP_WIDTH*logic.TILE_WIDTH, logic.MAP_HEIGHT*logic.TILE_HEIGHT);
+        camera = new OrthographicCamera(logic.MAP_WIDTH*logic.ISO_WIDTH, logic.MAP_HEIGHT*logic.TILE_HEIGHT);
         camera.translate(camera.viewportWidth/2,camera.viewportHeight/2);
         //let's have some padding
-        viewport = new ScalingViewport(Scaling.none, logic.MAP_WIDTH*logic.TILE_WIDTH+5, logic.MAP_HEIGHT*logic.TILE_HEIGHT+5, camera);
+        viewport = new ScalingViewport(Scaling.none, logic.MAP_WIDTH*logic.ISO_WIDTH+5, logic.MAP_HEIGHT*logic.TILE_HEIGHT+5, camera);
         
         batch = new SpriteBatch();
         //add player
