@@ -21,11 +21,11 @@ public class MapGenerator {
     
     TiledMap map;
     Texture tiles;
-    private GameLogic logic;
+    GameLogic g_logic;
     
     //init the game logic ref
     public MapGenerator(GameLogic logic) {
-        logic = logic;
+        g_logic = logic;
     }
            
     
@@ -34,7 +34,7 @@ public class MapGenerator {
         TextureRegion[][] splitTiles = TextureRegion.split(tiles, 54, 54);
         map = new TiledMap();
         MapLayers layers = map.getLayers();
-        TiledMapTileLayer new_layer = new TiledMapTileLayer(logic.MAP_WIDTH, logic.MAP_HEIGHT, logic.ISO_WIDTH, logic.ISO_HEIGHT);
+        TiledMapTileLayer new_layer = new TiledMapTileLayer(g_logic.MAP_WIDTH, g_logic.MAP_HEIGHT, g_logic.ISO_WIDTH, g_logic.ISO_HEIGHT);
         for (int x = 0; x < 10; x++) 
             {
                 for (int y = 0; y < 10; y++) 
@@ -56,6 +56,10 @@ public class MapGenerator {
                         new_layer.setCell(x, y, cell);
                 }
             }
+            
+            
+            float y_off = g_logic.getYOffset();
+            new_layer.setOffsetY(y_off);
             layers.add(new_layer);
 
     return map;

@@ -5,6 +5,7 @@
  */
 package com.veins.game.logic;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.veins.game.logic.objects.Player;
 
@@ -37,5 +38,12 @@ public class GameLogic {
     public Player getPlayer()
     {
         return player;
+    }
+    
+    public float getYOffset()
+    {
+        float calc = (float) (MAP_HEIGHT*ISO_HEIGHT)/2;
+        Gdx.app.log("Yoff", "Offset is " + calc);
+        return -calc;
     }
 }
