@@ -11,10 +11,14 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.logic.GameLogic;
+import com.veins.game.logic.MapGenerator;
 import com.veins.game.logic.objects.Player;
 
 /**
@@ -28,10 +32,20 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     OrthographicCamera camera;
     ScalingViewport viewport;
     
+    //map
+    MapGenerator mapgen;
+    IsometricTiledMapRenderer renderer;
+    TiledMapTileLayer layer;
     
     public GameScreen(MyVeinsGame _game) {
         super(_game);
         logic = new GameLogic();
+        
+        //map gen
+        mapgen = new MapGenerator(logic);
+        TiledMap map = mapgen.createMap();
+        renderer = new IsometricTiledMapRenderer(map);
+        layer = (TiledMapTileLayer)map.getLayers().get(0);
         
         //camera stuffs
         camera = new OrthographicCamera(logic.MAP_WIDTH*logic.TILE_WIDTH, logic.MAP_HEIGHT*logic.TILE_HEIGHT);
@@ -56,6 +70,12 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //camera
         camera.update();
+        
+        // set the TiledMapRenderer view based on what the
+	// camera sees, and render the map
+        renderer.setView(camera);
+        renderer.render();
+        
         batch.setProjectionMatrix(camera.combined);
         
         batch.begin();
