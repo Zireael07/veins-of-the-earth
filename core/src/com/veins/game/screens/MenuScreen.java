@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.veins.game.MyVeinsGame;
 
 /**
@@ -33,10 +35,17 @@ public class MenuScreen extends DefaultScreen {
     Stage stage;
     SpriteBatch batch;
     
+    ScalingViewport viewport;
+    
     public MenuScreen(MyVeinsGame _game) {
         super(_game);
             batch = new SpriteBatch();
             stage = new Stage();
+            
+            //set viewport
+            viewport = new ScalingViewport(Scaling.none, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            stage.setViewport(viewport);
+            
             
             Gdx.input.setInputProcessor(stage);
             // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
