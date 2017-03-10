@@ -43,7 +43,7 @@ public class GameLogic {
     public float getYOffset()
     {
         float calc = (float) (MAP_HEIGHT*ISO_HEIGHT)/2;
-        Gdx.app.log("Yoff", "Offset is " + calc);
+        //Gdx.app.log("Yoff", "Offset is " + calc);
         return -calc;
     }
 }
