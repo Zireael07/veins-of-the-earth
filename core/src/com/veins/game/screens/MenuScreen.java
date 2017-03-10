@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -74,8 +76,15 @@ public class MenuScreen extends DefaultScreen {
             textButtonStyle.font = skin.getFont("default");
             skin.add("default", textButtonStyle);
                     
+            //configure LabelStyle name "default"
+            LabelStyle labelStyle = new LabelStyle();
+            labelStyle.font = skin.getFont("default");
+            skin.add("default", labelStyle);
             
             stage.addActor(game.res.UIStone);
+            
+            final Label label = new Label("Hello world", skin);
+            stage.addActor(label);
             
             // Create a table that fills the screen. Everything else will go inside this table.
             Table table = new Table();
