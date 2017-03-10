@@ -2,6 +2,7 @@ package com.veins.game;
 
 import com.badlogic.gdx.Game;
 import com.veins.game.screens.GameScreen;
+import com.veins.game.screens.MenuScreen;
 
 public class MyVeinsGame extends Game {
         public Resources res;
@@ -10,7 +11,8 @@ public class MyVeinsGame extends Game {
 	@Override
 	public void create () {
                 res = new Resources();
-                setScreen(new GameScreen(this));
+                setScreen(new MenuScreen(this));
+                //setScreen(new GameScreen(this));
 	}
 	
 	@Override
