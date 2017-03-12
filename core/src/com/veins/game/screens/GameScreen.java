@@ -68,9 +68,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         //add player
         player = logic.getPlayer();
         player.set(game.res.player);
-        int player_x = (int) (player.getSelfX()*logic.TILE_WIDTH+0.25*logic.TILE_WIDTH);
-        int player_y = player.getSelfY()*logic.TILE_HEIGHT;
-        player.setPosition(player_x, player_y);
+        //place player
+        player.Place();
+        
         Gdx.input.setInputProcessor(this);
         
         //polygon
@@ -101,12 +101,6 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         TiledMapTileLayer.Cell cell = layer.getCell((int)isoPos.x, (int)isoPos.y);
 	if (cell != null) {
-            
-            //necessary to calculate tile coords
-            /*float TileWidth = layer.getTileWidth() * 1.0f;
-            float TileHeight = layer.getTileHeight() * 1.0f;
-            int IntWidth = (int)TileWidth;
-            int IntHeight = (int)TileHeight;*/
             
             worldPos = logic.IsotoWorld(isoPos);
             
