@@ -103,12 +103,12 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
 	if (cell != null) {
             
             //necessary to calculate tile coords
-            float TileWidth = layer.getTileWidth() * 1.0f;
+            /*float TileWidth = layer.getTileWidth() * 1.0f;
             float TileHeight = layer.getTileHeight() * 1.0f;
             int IntWidth = (int)TileWidth;
-            int IntHeight = (int)TileHeight;
+            int IntHeight = (int)TileHeight;*/
             
-            worldPos = IsotoWorld(isoPos, IntWidth, IntHeight);
+            worldPos = logic.IsotoWorld(isoPos);
             
             float x1 = worldPos.x;
             float y2 = worldPos.y;
@@ -118,21 +118,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
             shape_renderer.polygon(tile_border.getTransformedVertices());
         }
         
-        //debug
-        /*shape_renderer.setColor(Color.CYAN);
-        Vector3 origin = new Vector3(0, (int) -logic.getYOffset()+10, 0);
-        shape_renderer.circle(origin.x, origin.y, 4);
-
-        Vector3 bottom = new Vector3((int)origin.x+logic.ISO_WIDTH/2, (int)origin.y-logic.ISO_HEIGHT/2, 0);
-        
-        Vector3 top = new Vector3((int)origin.x+logic.ISO_WIDTH/2, (int)origin.y+logic.ISO_HEIGHT/2, 0);
-        
-        shape_renderer.setColor(Color.RED);
-        shape_renderer.circle(bottom.x, bottom.y, 4);
-        shape_renderer.line(origin, bottom);
-        shape_renderer.circle(top.x, top.y, 4);
-        shape_renderer.line(origin, top);*/
-        
+        //debug goes here
         
         shape_renderer.end();
         
@@ -149,56 +135,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
          Gdx.input.setInputProcessor(null);
      }
     
+     //initing some stuff we absolutely need to function
      private Vector3 isoPos = new Vector3();
      private Vector3 worldPos = new Vector3();
-     //convert world position to isometric position
-    public Vector3 worldToIso(Vector3 point, int tileWidth, int tileHeight, boolean round) {
-        //worldPos.set(point);
-        point.x /= tileWidth;
-        point.y = point.y + logic.getYOffset();
-        point.y = (point.y - tileHeight / 2) / tileHeight + point.x;
-        point.x -= point.y - point.x;
-        //round if asked to
-        if (round){
-            point.x = (int)point.x;
-            point.y = (int)point.y;
-        }
-        
-        isoPos.set(point);
-    return point;
-}
-     public Vector3 IsotoWorld(Vector3 iso, int tileWidth, int tileHeight){
-         //Gdx.app.log("Iso", "iso is" + iso);
-         Vector3 point = new Vector3();
-         Vector3 origin = new Vector3 (0, -logic.getYOffset()+logic.ISO_HEIGHT/2, 0);
-         //Gdx.app.log("Origin", "origin is" + origin);
-         
-         //vector from bottom to origin
-         Vector3 bottom = new Vector3 (logic.ISO_WIDTH/2, origin.y-logic.ISO_HEIGHT/2, 0);
-         Vector3 right = new Vector3(bottom.x-origin.x, bottom.y-origin.y, 0);
-         Gdx.app.log("IsotoWorld", "right vec is" + right);
-         
-         //vector from top to origin
-         Vector3 top = new Vector3(logic.ISO_WIDTH/2, origin.y+logic.ISO_HEIGHT/2, 0);
-        Vector3 up = new Vector3(top.x-origin.x, top.y-origin.y, 0); 
-         //Gdx.app.log("IsotoWorld", "top vec is" + top);
-         Gdx.app.log("IsotoWorld", "up vec is" + up);
-         
-         //add
-         Vector3 target_right = new Vector3(right.x*iso.x, right.y*iso.x, 0);
-         Vector3 target_up = new Vector3(up.x*iso.y, up.y*iso.y, 0);
-         Gdx.app.log("IsotoWorld", "target right is" + target_right);
-         Gdx.app.log("IsotoWorld", "target up is" + target_up);
-         
-         Vector3 target_add = origin.add(target_right);
-         Gdx.app.log("IsotoWorld", "target add is" + target_add);
-         Vector3 target = target_add.add(target_up);
-         Gdx.app.log("IsotoWorld", "target is" + target);
-         
-         point.set(target);
-         
-         return point;
-     }
      
     @Override
     public boolean keyDown(int i) {
@@ -238,14 +177,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
       //remember to take viewport into account
       Vector3 worldCoordinates = camera.unproject(screenCoordinates, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
       Gdx.app.log("Mouse Event","Projected at " + worldCoordinates.x + "," + worldCoordinates.y);
-      
-      //necessary to calculate tile coords
-      float TileWidth = layer.getTileWidth() * 1.0f;
-      float TileHeight = layer.getTileHeight() * 1.0f;
-      int IntWidth = (int)TileWidth;
-      int IntHeight = (int)TileHeight;
    
-      Vector3 outputPos = worldToIso(worldCoordinates, IntWidth, IntHeight, true);
+      Vector3 outputPos = logic.worldToIso(worldCoordinates, true);
      
       Gdx.app.log("Mouse Event", "Tile coords " + outputPos);
         return false;
@@ -261,21 +194,15 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         return false;
     }
     
-    Vector3 cs = new Vector3();
-    Vector3 temp = new Vector3();
     
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+        Vector3 cs = new Vector3();
+        Vector3 temp = new Vector3();
         camera.unproject(temp.set(screenX, screenY, 0), viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
         cs.set(temp.x, temp.y, 0);
         
-        //necessary to calculate tile coords
-      float TileWidth = layer.getTileWidth() * 1.0f;
-      float TileHeight = layer.getTileHeight() * 1.0f;
-      int IntWidth = (int)TileWidth;
-      int IntHeight = (int)TileHeight;
-        
-	worldToIso(cs, IntWidth, IntHeight, true);
+	isoPos.set(logic.worldToIso(cs, true));
         return false;
     }
 
