@@ -24,7 +24,13 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
+import com.veins.game.logic.objects.Actor;
 import com.veins.game.logic.objects.Player;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
 
 /**
  *
@@ -45,6 +51,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     //show border around tile
     ShapeRenderer shape_renderer;
     Polygon tile_border;
+    
+    //NPCs
+    ArrayList<Actor> actors = new ArrayList<Actor>();
     
     public GameScreen(MyVeinsGame _game) {
         super(_game);
@@ -71,6 +80,24 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         //place player
         player.Place();
         
+        //profile!
+        //Instant start = Instant.now();
+        
+        //spawn a monster
+        Actor act = logic.spawnActor(game.res.kobold, 5,5);
+        actors.add(act);
+        //spawn some monsters
+        for (int x = 0; x < logic.NUM_NPC; x++)
+        {
+            int act_x = logic.rng.between(0, logic.MAP_WIDTH-1);
+            int act_y = logic.rng.between(0, logic.MAP_HEIGHT-1);
+            act = logic.spawnActor(game.res.kobold, act_x, act_y);
+            actors.add(act);
+        }
+        
+        //Instant end = Instant.now();
+        //System.out.println(Duration.between(start, end));
+        
         Gdx.input.setInputProcessor(this);
         
         //polygon
@@ -78,6 +105,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         tile_border.setVertices(new float[]{0, 0, logic.ISO_WIDTH/2, -logic.ISO_HEIGHT/2, logic.ISO_WIDTH, 0f, logic.ISO_WIDTH/2, logic.ISO_HEIGHT/2});
     }
+    
     
     @Override
      public void render (float delta) {
@@ -121,6 +149,13 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //draw player
         player.draw(batch);
+        
+        //draw NPCs
+        for (Actor act : actors)
+        {
+            act.draw(batch);
+        }
+        
         batch.end();
      }
     @Override
