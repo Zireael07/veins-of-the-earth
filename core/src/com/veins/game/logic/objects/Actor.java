@@ -14,17 +14,12 @@ import com.veins.game.logic.GameLogic;
  *
  * @author AdmKasia
  */
-public class Player extends Actor {
-    
-    public Player(int fx, int fy, GameLogic logic){
-        super(fx, fy, logic);
-    }
-    
-    /*private int x;
+public class Actor extends Sprite {
+    private int x;
     private int y;
     private GameLogic g_logic;
     
-    public Player(int fx, int fy, GameLogic logic)
+    public Actor(int fx, int fy, GameLogic logic)
     {
         x = fx;
         y = fy;
@@ -55,7 +50,7 @@ public class Player extends Actor {
                 fy <= g_logic.MAP_HEIGHT-1);
     }
     
-    public void AssignPlayerPosition(int fx, int fy)
+    public void AssignGridPosition(int fx, int fy)
     {
         setSelfX(fx);
         setSelfY(fy);
@@ -64,7 +59,7 @@ public class Player extends Actor {
      public void AttemptMove(int dx, int dy){
          if (CheckMove(getSelfX() + dx, getSelfY() + dy))
         {
-            AssignPlayerPosition(getSelfX() + dx, getSelfY() + dy);
+            AssignGridPosition(getSelfX() + dx, getSelfY() + dy);
             Gdx.app.log("Movement", "Player coords" + getSelfX() + ","+ getSelfY()); 
             
             Place();
@@ -77,10 +72,10 @@ public class Player extends Actor {
      
      //handles both on-screen display and grid coords
      public void Place(){
-        Vector3 gridplayerPos = new Vector3(getSelfX(), getSelfY(), 0);
-        Vector3 isoTile = g_logic.IsotoWorld(gridplayerPos);
-        int player_x = (int) isoTile.x+g_logic.ISO_WIDTH/4;
-        int player_y = (int) isoTile.y-g_logic.ISO_HEIGHT/4;
-        setPosition(player_x, player_y);
-     }*/
+        Vector3 gridactorPos = new Vector3(getSelfX(), getSelfY(), 0);
+        Vector3 isoTile = g_logic.IsotoWorld(gridactorPos);
+        int actor_x = (int) isoTile.x+g_logic.ISO_WIDTH/4;
+        int actor_y = (int) isoTile.y-g_logic.ISO_HEIGHT/4;
+        setPosition(actor_x, actor_y);
+     }
 }
