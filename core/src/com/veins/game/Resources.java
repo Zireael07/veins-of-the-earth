@@ -25,6 +25,7 @@ public class Resources {
      public BitmapFont font;
  
      public Sprite player;
+     public Sprite kobold;
      
 //     public TextureAtlas UIatlas;
  
@@ -33,6 +34,7 @@ public class Resources {
          font = new BitmapFont();
          gameSprites = new TextureAtlas(Gdx.files.internal("packed/game.atlas"));
          player = new Sprite(gameSprites.findRegion("human_m"));
+         kobold = new Sprite(gameSprites.findRegion("kobold"));
 
          UIStone_tex = new Texture(Gdx.files.internal("stone_background.png"));
          UIStone = new Image(UIStone_tex);

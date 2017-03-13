@@ -60,7 +60,7 @@ public class Actor extends Sprite {
          if (CheckMove(getSelfX() + dx, getSelfY() + dy))
         {
             AssignGridPosition(getSelfX() + dx, getSelfY() + dy);
-            Gdx.app.log("Movement", "Player coords" + getSelfX() + ","+ getSelfY()); 
+            //Gdx.app.log("Movement", "Player coords" + getSelfX() + ","+ getSelfY()); 
             
             Place();
          }
@@ -73,6 +73,7 @@ public class Actor extends Sprite {
      //handles both on-screen display and grid coords
      public void Place(){
         Vector3 gridactorPos = new Vector3(getSelfX(), getSelfY(), 0);
+        Gdx.app.log("Actor", "actor pos is" + gridactorPos.x + " , " +gridactorPos.y);
         Vector3 isoTile = g_logic.IsotoWorld(gridactorPos);
         int actor_x = (int) isoTile.x+g_logic.ISO_WIDTH/4;
         int actor_y = (int) isoTile.y-g_logic.ISO_HEIGHT/4;
