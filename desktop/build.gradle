@@ -12,6 +12,9 @@ task run(dependsOn: classes, type: JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+    jvmArgs = ["-Xverify:none"]
+    systemProperties = System.getProperties()
+
 }
 
 task debug(dependsOn: classes, type: JavaExec) {
@@ -20,6 +23,9 @@ task debug(dependsOn: classes, type: JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+    jvmArgs = ["-Xverify:none"]
+    systemProperties = System.getProperties()
+
     debug = true
 }
 
