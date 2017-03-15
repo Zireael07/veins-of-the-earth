@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.veins.game.MyVeinsGame;
@@ -35,10 +36,11 @@ public class MenuScreen extends DefaultScreen {
     
     Skin skin;
     Stage stage;
-    SpriteBatch batch;
-    
-    //ScalingViewport viewport;
     ScreenViewport viewport;
+    
+    SpriteBatch batch;
+    float heightratio;
+    float widthratio;
     
     public MenuScreen(MyVeinsGame _game) {
         super(_game);
@@ -48,14 +50,17 @@ public class MenuScreen extends DefaultScreen {
             
             //set viewport
            viewport = new ScreenViewport();
-           //viewport = new ScalingViewport(Scaling.none, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
            stage.setViewport(viewport);
-            
+           
+           heightratio = Gdx.graphics.getHeight()/704f;
+           Gdx.app.log("Background", "Height ratio is: " + heightratio + " window height is " + Gdx.graphics.getHeight());
+           widthratio = 1088*heightratio;
+           Gdx.app.log("Background", "Width ratio is: " + widthratio);
             
             Gdx.input.setInputProcessor(stage);
             // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
             // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
-            //skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"), game.res.UIatlas);
+            
 
             skin = new Skin();
             // Generate a 1x1 white texture and store it in the skin named "white".
@@ -80,8 +85,6 @@ public class MenuScreen extends DefaultScreen {
             LabelStyle labelStyle = new LabelStyle();
             labelStyle.font = skin.getFont("default");
             skin.add("default", labelStyle);
-            
-            stage.addActor(game.res.UIStone);
             
             final Label label = new Label("Hello world", skin);
             stage.addActor(label);
@@ -119,6 +122,11 @@ public class MenuScreen extends DefaultScreen {
 	public void render (float f) {
 		Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                
+                batch.begin();
+                //show background picture resized to match window
+                batch.draw(game.res.menu_bg_tex, 0, 0, widthratio, Gdx.graphics.getHeight());
+                batch.end();
                 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();

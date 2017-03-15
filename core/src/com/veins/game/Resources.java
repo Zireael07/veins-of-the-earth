@@ -19,8 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public class Resources {
          TextureAtlas gameSprites;
-    public Texture UIStone_tex;
+    private Texture UIStone_tex;
     public Image UIStone;
+    
+    public Texture menu_bg_tex;
+    public Image menu_background;
      
      public BitmapFont font;
  
@@ -38,7 +41,10 @@ public class Resources {
 
          UIStone_tex = new Texture(Gdx.files.internal("stone_background.png"));
          UIStone = new Image(UIStone_tex);
-         //UIatlas = new TextureAtlas(Gdx.files.internal("skin/craftacular-ui.atlas"));
+         
+         menu_bg_tex = new Texture(Gdx.files.internal("Veins.png"));
+         menu_background = new Image(menu_bg_tex);
+         
      }
  
      public void dispose()
