@@ -21,6 +21,7 @@ allprojects {
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
         regexodusVersion = 'v0.1.2'
+        visuiVersion = '1.2.5'
     }
 
     repositories {
@@ -55,6 +56,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        compile "com.kotcrab.vis:vis-ui:$visuiVersion"
     }
 }
 
