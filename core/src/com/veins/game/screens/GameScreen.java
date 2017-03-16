@@ -19,17 +19,17 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
 import com.veins.game.logic.objects.Actor;
 import com.veins.game.logic.objects.Player;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 
 /**
@@ -42,6 +42,11 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     Player player;
     OrthographicCamera camera;
     ScalingViewport viewport;
+    
+    //gui
+    Stage stage;
+    ScreenViewport hud_viewport;
+    OrthographicCamera hud_camera;
     
     //map
     MapGenerator mapgen;
@@ -58,6 +63,13 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     public GameScreen(MyVeinsGame _game) {
         super(_game);
         logic = new GameLogic();
+        
+        //gui
+        hud_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());    
+        //set viewport
+        hud_viewport = new ScreenViewport(hud_camera);
+        stage = new Stage();
+        stage.setViewport(hud_viewport);
         
         //map gen
         mapgen = new MapGenerator(logic);
@@ -79,9 +91,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         player.set(game.res.player);
         //place player
         player.Place();
-        
-        //profile!
-        //Instant start = Instant.now();
+
         
         //spawn a monster
         Actor act = logic.spawnActor(game.res.kobold, 5,5);
@@ -95,15 +105,16 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
             actors.add(act);
         }
         
-        //Instant end = Instant.now();
-        //System.out.println(Duration.between(start, end));
-        
         Gdx.input.setInputProcessor(this);
         
         //polygon
         tile_border = new Polygon();
         
         tile_border.setVertices(new float[]{0, 0, logic.ISO_WIDTH/2, -logic.ISO_HEIGHT/2, logic.ISO_WIDTH, 0f, logic.ISO_WIDTH/2, logic.ISO_HEIGHT/2});
+    
+        //ui elements
+        final VisLabel label = new VisLabel("Hello world");
+        stage.addActor(label);
     }
     
     
@@ -114,7 +125,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //camera
         camera.update();
-        
+        viewport.apply();
         // set the TiledMapRenderer view based on what the
 	// camera sees, and render the map
         renderer.setView(camera);
@@ -146,7 +157,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        
+        //viewport.apply();
         //draw player
         player.draw(batch);
         
@@ -157,10 +168,16 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         }
         
         batch.end();
+        
+        stage.getViewport().apply();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+	stage.draw();
      }
     @Override
      public void dispose(){
          batch.dispose();
+         stage.dispose();
          Gdx.input.setInputProcessor(null);
      }
     
@@ -244,5 +261,6 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     public void resize(int width, int height)
     {
         viewport.update(width, height);
+        hud_viewport.update(width, height, true);
     }
 }
