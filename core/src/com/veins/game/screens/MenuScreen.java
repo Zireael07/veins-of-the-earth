@@ -26,6 +26,9 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.veins.game.MyVeinsGame;
 
 /**
@@ -58,35 +61,10 @@ public class MenuScreen extends DefaultScreen {
            Gdx.app.log("Background", "Width ratio is: " + widthratio);
             
             Gdx.input.setInputProcessor(stage);
-            // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
-            // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
             
-
-            skin = new Skin();
-            // Generate a 1x1 white texture and store it in the skin named "white".
-            Pixmap pixmap = new Pixmap(1, 1, Format.RGBA8888);
-            pixmap.setColor(Color.WHITE);
-            pixmap.fill();
-            skin.add("white", new Texture(pixmap));
-
-            // Store the default libgdx font under the name "default".
-            skin.add("default", new BitmapFont());
-
-            // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
-            TextButtonStyle textButtonStyle = new TextButtonStyle();
-            textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-            textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-            textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-            textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-            textButtonStyle.font = skin.getFont("default");
-            skin.add("default", textButtonStyle);
-                    
-            //configure LabelStyle name "default"
-            LabelStyle labelStyle = new LabelStyle();
-            labelStyle.font = skin.getFont("default");
-            skin.add("default", labelStyle);
+            VisUI.load();
             
-            final Label label = new Label("Hello world", skin);
+            final VisLabel label = new VisLabel("Hello world");
             stage.addActor(label);
             
             // Create a table that fills the screen. Everything else will go inside this table.
@@ -95,7 +73,7 @@ public class MenuScreen extends DefaultScreen {
             stage.addActor(table);
 
             // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
-            final TextButton button = new TextButton("New game", skin);
+            final VisTextButton button = new VisTextButton("New game");
             table.add(button);
 
             // Add a listener to the button. ChangeListener is fired when the button's checked state changes, eg when clicked,
@@ -140,6 +118,6 @@ public class MenuScreen extends DefaultScreen {
 	@Override
 	public void dispose () {
 		stage.dispose();
-		skin.dispose();
+//		skin.dispose();
     }
 }
