@@ -47,6 +47,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     Stage stage;
     ScreenViewport hud_viewport;
     OrthographicCamera hud_camera;
+    final VisLabel coords_label;
     
     //map
     MapGenerator mapgen;
@@ -113,8 +114,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         tile_border.setVertices(new float[]{0, 0, logic.ISO_WIDTH/2, -logic.ISO_HEIGHT/2, logic.ISO_WIDTH, 0f, logic.ISO_WIDTH/2, logic.ISO_HEIGHT/2});
     
         //ui elements
-        final VisLabel label = new VisLabel("Hello world");
-        stage.addActor(label);
+        coords_label = new VisLabel("Hello");
+        stage.addActor(coords_label);
     }
     
     
@@ -249,6 +250,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         cs.set(temp.x, temp.y, 0);
         
 	isoPos.set(logic.worldToIso(cs, true));
+        //set the coords label
+        coords_label.setX(temp.x+60);
+        coords_label.setY(temp.y+60);
+        coords_label.setText((int) isoPos.x + ", " + (int) isoPos.y);
         return false;
     }
 
