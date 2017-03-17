@@ -5,12 +5,13 @@
  */
 package com.veins.game.logic;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
-import com.veins.game.logic.objects.Actor;
-import com.veins.game.logic.objects.Player;
+import com.veins.game.components.PositionComponent;
+import com.veins.game.components.SpriteComponent;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -32,37 +33,24 @@ public class GameLogic {
     
     public static int NUM_NPC = 4;
     
-    Player player;
+    //Player player;
+    
+    //ecs
+    public Engine engine;
+    Entity player;
        
     public GameLogic()
     {
         rng = new StatefulRNG();
         
+        engine = new Engine();
         
-        player = new Player(
+        /*player = new Player(
         MathUtils.random(MAP_WIDTH/2),
         MathUtils.random(MAP_HEIGHT/2),
         this
-        );
+        );*/
     
-    }
-    
-    public Player getPlayer()
-    {
-        return player;
-    }
-    
-    public Actor spawnActor(Sprite tile, int x, int y){
-        Actor actor = new Actor(x, y,
-            //MathUtils.random(MAP_WIDTH-1),
-            //MathUtils.random(MAP_HEIGHT-1),
-        this);
-        
-        actor.set(tile);
-        actor.Place();
-        Gdx.app.log("Actor", "Spawned an actor at " + x + " " + y);
-        
-        return actor;
     }
     
     public float getYOffset()
@@ -122,4 +110,18 @@ public class GameLogic {
          
          return point;
      }
+    
+    //ECS
+    public void CreateActor(TextureRegion tile){
+        Entity player = new Entity();
+        player.add(new PositionComponent());
+        player.add(new SpriteComponent(tile));
+        
+        engine.addEntity(player);
+    }
+    
+    public Entity CreatePlayer(TextureRegion tile){
+        CreateActor(tile);
+        return player;
+    }
 }

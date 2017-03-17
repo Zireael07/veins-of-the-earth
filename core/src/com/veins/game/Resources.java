@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public class Resources {
          TextureAtlas gameSprites;
+         public TextureRegion player_tex;
+         public TextureRegion kobold_tex;
     private Texture UIStone_tex;
     public Image UIStone;
     
@@ -36,8 +38,10 @@ public class Resources {
      {
          font = new BitmapFont();
          gameSprites = new TextureAtlas(Gdx.files.internal("packed/game.atlas"));
-         player = new Sprite(gameSprites.findRegion("human_m"));
-         kobold = new Sprite(gameSprites.findRegion("kobold"));
+         player_tex = new TextureRegion(gameSprites.findRegion("human_m"));
+         kobold_tex = new TextureRegion(gameSprites.findRegion("kobold"));
+         player = new Sprite(player_tex);
+         kobold = new Sprite(kobold_tex);
 
          UIStone_tex = new Texture(Gdx.files.internal("stone_background.png"));
          UIStone = new Image(UIStone_tex);

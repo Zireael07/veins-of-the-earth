@@ -5,6 +5,7 @@
  */
 package com.veins.game.screens;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -17,20 +18,18 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
-import com.veins.game.logic.objects.Actor;
 import com.veins.game.logic.objects.Player;
-import java.util.ArrayList;
+import com.veins.game.systems.PositionSystem;
+import com.veins.game.systems.RenderingSystem;
 
 /**
  *
@@ -58,12 +57,15 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     ShapeRenderer shape_renderer;
     Polygon tile_border;
     
-    //NPCs
-    ArrayList<Actor> actors = new ArrayList<Actor>();
+    //ecs
+    Engine engine;
     
     public GameScreen(MyVeinsGame _game) {
         super(_game);
         logic = new GameLogic();
+        
+        //ecs
+        engine = logic.engine;
         
         //gui
         hud_camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());    
@@ -88,22 +90,16 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         batch = new SpriteBatch();
         //add player
-        player = logic.getPlayer();
-        player.set(game.res.player);
-        //place player
-        player.Place();
 
-        
-        //spawn a monster
-        Actor act = logic.spawnActor(game.res.kobold, 5,5);
-        actors.add(act);
+        logic.CreatePlayer(game.res.player_tex);
+
         //spawn some monsters
         for (int x = 0; x < logic.NUM_NPC; x++)
         {
             int act_x = logic.rng.between(0, logic.MAP_WIDTH-1);
             int act_y = logic.rng.between(0, logic.MAP_HEIGHT-1);
-            act = logic.spawnActor(game.res.kobold, act_x, act_y);
-            actors.add(act);
+
+            logic.CreateActor(game.res.kobold_tex);
         }
         
         Gdx.input.setInputProcessor(this);
@@ -113,6 +109,12 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         tile_border.setVertices(new float[]{0, 0, logic.ISO_WIDTH/2, -logic.ISO_HEIGHT/2, logic.ISO_WIDTH, 0f, logic.ISO_WIDTH/2, logic.ISO_HEIGHT/2});
     
+        
+        //ecs
+        engine.addSystem(new PositionSystem(0, logic));
+        engine.addSystem(new RenderingSystem(1, batch));
+        
+        
         //ui elements
         coords_label = new VisLabel("Hello");
         stage.addActor(coords_label);
@@ -158,15 +160,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        //viewport.apply();
-        //draw player
-        player.draw(batch);
         
-        //draw NPCs
-        for (Actor act : actors)
-        {
-            act.draw(batch);
-        }
+        engine.update(delta);
         
         batch.end();
         
