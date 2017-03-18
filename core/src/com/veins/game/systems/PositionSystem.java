@@ -17,8 +17,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.logic.GameLogic;
-import static com.veins.game.logic.GameLogic.ISO_HEIGHT;
-import static com.veins.game.logic.GameLogic.ISO_WIDTH;
 
 /**
  *

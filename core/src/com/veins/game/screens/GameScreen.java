@@ -113,8 +113,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     
         
         //ecs
-        engine.addSystem(new PositionSystem(0, logic));
-        engine.addSystem(new RenderingSystem(1, batch));
+        engine.addSystem(new MovementSystem(0, logic));
+        engine.addSystem(new PositionSystem(1, logic));
+        engine.addSystem(new RenderingSystem(2, batch));
         
         
         //ui elements
@@ -188,15 +189,19 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         switch (i)
         {
             case Input.Keys.RIGHT:
+                engine.getSystem(MovementSystem.class).attemptMove(player, 1, 0);
                 //player.AttemptMove(1,0);
                 break;
             case Input.Keys.LEFT:
+                engine.getSystem(MovementSystem.class).attemptMove(player, -1, 0);
                 //player.AttemptMove(-1,0);
                 break;
             case Input.Keys.UP:
+                engine.getSystem(MovementSystem.class).attemptMove(player, 0, 1);
                 //player.AttemptMove(0,1);
                 break;
             case Input.Keys.DOWN:
+                engine.getSystem(MovementSystem.class).attemptMove(player, 0, -1);
                 //player.AttemptMove(0, -1);
                 break;
         }
