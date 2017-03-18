@@ -44,12 +44,6 @@ public class GameLogic {
         rng = new StatefulRNG();
         
         engine = new Engine();
-        
-        /*player = new Player(
-        MathUtils.random(MAP_WIDTH/2),
-        MathUtils.random(MAP_HEIGHT/2),
-        this
-        );*/
     
     }
     
@@ -112,16 +106,17 @@ public class GameLogic {
      }
     
     //ECS
-    public void CreateActor(TextureRegion tile){
-        Entity player = new Entity();
-        player.add(new PositionComponent());
-        player.add(new SpriteComponent(tile));
+    public Entity CreateActor(TextureRegion tile){
+        Entity actor = new Entity();
+        actor.add(new PositionComponent());
+        actor.add(new SpriteComponent(tile));
         
-        engine.addEntity(player);
+        engine.addEntity(actor);
+        return actor;
     }
     
     public Entity CreatePlayer(TextureRegion tile){
-        CreateActor(tile);
+        player = CreateActor(tile);
         return player;
     }
 }

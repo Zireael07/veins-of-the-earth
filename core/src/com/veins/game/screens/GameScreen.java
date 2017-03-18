@@ -6,6 +6,7 @@
 package com.veins.game.screens;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -28,6 +29,7 @@ import com.veins.game.MyVeinsGame;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
 import com.veins.game.logic.objects.Player;
+import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RenderingSystem;
 
@@ -38,7 +40,7 @@ import com.veins.game.systems.RenderingSystem;
 public class GameScreen extends DefaultScreen implements InputProcessor {
     SpriteBatch batch;
     GameLogic logic;
-    Player player;
+    Entity player;
     OrthographicCamera camera;
     ScalingViewport viewport;
     
@@ -91,7 +93,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         batch = new SpriteBatch();
         //add player
 
-        logic.CreatePlayer(game.res.player_tex);
+        player = logic.CreatePlayer(game.res.player_tex);
 
         //spawn some monsters
         for (int x = 0; x < logic.NUM_NPC; x++)
@@ -186,16 +188,16 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         switch (i)
         {
             case Input.Keys.RIGHT:
-                player.AttemptMove(1,0);
+                //player.AttemptMove(1,0);
                 break;
             case Input.Keys.LEFT:
-                player.AttemptMove(-1,0);
+                //player.AttemptMove(-1,0);
                 break;
             case Input.Keys.UP:
-                player.AttemptMove(0,1);
+                //player.AttemptMove(0,1);
                 break;
             case Input.Keys.DOWN:
-                player.AttemptMove(0, -1);
+                //player.AttemptMove(0, -1);
                 break;
         }
         return false;
