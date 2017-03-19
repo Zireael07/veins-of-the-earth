@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SpriteComponent;
 import squidpony.squidmath.StatefulRNG;
@@ -92,13 +93,13 @@ public class GameLogic {
          //add
          Vector3 target_right = new Vector3(right.x*iso.x, right.y*iso.x, 0);
          Vector3 target_up = new Vector3(up.x*iso.y, up.y*iso.y, 0);
-         Gdx.app.log("IsotoWorld", "target right is" + target_right);
-         Gdx.app.log("IsotoWorld", "target up is" + target_up);
+         //Gdx.app.log("IsotoWorld", "target right is" + target_right);
+         //Gdx.app.log("IsotoWorld", "target up is" + target_up);
          
          Vector3 target_add = origin.add(target_right);
-         Gdx.app.log("IsotoWorld", "target add is" + target_add);
+         //Gdx.app.log("IsotoWorld", "target add is" + target_add);
          Vector3 target = target_add.add(target_up);
-         Gdx.app.log("IsotoWorld", "target is" + target);
+         //Gdx.app.log("IsotoWorld", "target is" + target);
          
          point.set(target);
          
@@ -106,19 +107,21 @@ public class GameLogic {
      }
     
     //ECS
-    public Entity CreateActor(TextureRegion tile){
+    public Entity CreateActor(String name, TextureRegion tile){
         Entity actor = new Entity();
         actor.add(new PositionComponent());
         actor.add(new SpriteComponent(tile));
+        actor.add(new NameComponent(name));
         
         engine.addEntity(actor);
         return actor;
     }
     
-    public Entity CreateActor(TextureRegion tile, int fx, int fy){
+    public Entity CreateActor(String name, TextureRegion tile, int fx, int fy){
         Entity actor = new Entity();
         actor.add(new PositionComponent(fx, fy));
         actor.add(new SpriteComponent(tile));
+        actor.add(new NameComponent(name));
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
         
@@ -126,8 +129,8 @@ public class GameLogic {
         return actor;
     }
     
-    public Entity CreatePlayer(TextureRegion tile){
-        player = CreateActor(tile);
+    public Entity CreatePlayer(String name, TextureRegion tile){
+        player = CreateActor(name, tile);
         return player;
     }
 }
