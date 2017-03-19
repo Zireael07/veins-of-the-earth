@@ -115,6 +115,17 @@ public class GameLogic {
         return actor;
     }
     
+    public Entity CreateActor(TextureRegion tile, int fx, int fy){
+        Entity actor = new Entity();
+        actor.add(new PositionComponent(fx, fy));
+        actor.add(new SpriteComponent(tile));
+        
+        Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
+        
+        engine.addEntity(actor);
+        return actor;
+    }
+    
     public Entity CreatePlayer(TextureRegion tile){
         player = CreateActor(tile);
         return player;

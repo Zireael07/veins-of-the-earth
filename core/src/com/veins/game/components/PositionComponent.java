@@ -12,6 +12,16 @@ import com.badlogic.ashley.core.Component;
  * @author AdmKasia
  */
 public class PositionComponent implements Component {
-    public int x = 1;
-    public int y = 1;
+    public int x;
+    public int y;
+    
+    public PositionComponent(){
+        x = 1;
+        y = 1;
+    }
+    
+    public PositionComponent(int fx, int fy){
+        x = fx;
+        y = fy;
+    }
 }
