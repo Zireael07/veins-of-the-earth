@@ -11,7 +11,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
+import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 
 /**
@@ -20,10 +22,13 @@ import com.veins.game.logic.GameLogic;
  */
 public class MovementSystem extends EntitySystem {
     private ComponentMapper<PositionComponent>  positionMap   = ComponentMapper.getFor(PositionComponent.class);
+    private ComponentMapper<TurnsComponent> turnsMap = ComponentMapper.getFor(TurnsComponent.class);
+    
     
     private ImmutableArray<Entity> entities;
     
     private GameLogic g_logic;
+    private Engine g_engine;
     
     public MovementSystem(int priority, GameLogic logic){
         super.priority = priority;
@@ -32,6 +37,7 @@ public class MovementSystem extends EntitySystem {
     
     public void addedToEngine(Engine engine){
         entities = engine.getEntitiesFor(Family.all(PositionComponent.class).get());
+        g_engine = engine;
     }
     
     public void update(float deltaTime){
@@ -83,8 +89,22 @@ public class MovementSystem extends EntitySystem {
     
     public void processEntity(Entity entity, float deltaTime) {
         PositionComponent positionCom  = positionMap.get(entity);
+        TurnsComponent turnsCom = turnsMap.get(entity);
         
-        positionCom.x = positionCom.x;
+       // test NPC movement
+       String str = entity.getComponent(NameComponent.class).string;
+       
+       
+       if (str == "Player"){       
+       }
+       else
+       {
+           if (turnsCom.blocking){
+               attemptMove(entity, 1, 0);
+               g_engine.getSystem(TurnTimeSystem.class).UnblockTurns(entity);
+           }
+           
+       }     
     }
     
 }
