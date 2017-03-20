@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SpriteComponent;
+import com.veins.game.components.TurnsComponent;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -112,6 +113,7 @@ public class GameLogic {
         actor.add(new PositionComponent());
         actor.add(new SpriteComponent(tile));
         actor.add(new NameComponent(name));
+        actor.add(new TurnsComponent());
         
         engine.addEntity(actor);
         return actor;
@@ -122,6 +124,7 @@ public class GameLogic {
         actor.add(new PositionComponent(fx, fy));
         actor.add(new SpriteComponent(tile));
         actor.add(new NameComponent(name));
+        actor.add(new TurnsComponent());
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
         
