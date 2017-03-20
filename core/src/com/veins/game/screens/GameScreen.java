@@ -26,12 +26,14 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
 import com.veins.game.logic.objects.Player;
 import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RenderingSystem;
+import com.veins.game.systems.TurnTimeSystem;
 
 /**
  *
@@ -113,9 +115,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     
         
         //ecs
-        engine.addSystem(new MovementSystem(0, logic));
-        engine.addSystem(new PositionSystem(1, logic));
-        engine.addSystem(new RenderingSystem(2, batch));
+        engine.addSystem(new TurnTimeSystem(0));
+        engine.addSystem(new MovementSystem(1, logic));
+        engine.addSystem(new PositionSystem(2, logic));
+        engine.addSystem(new RenderingSystem(3, batch));
         
         
         //ui elements
@@ -189,19 +192,31 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         switch (i)
         {
             case Input.Keys.RIGHT:
-                engine.getSystem(MovementSystem.class).attemptMove(player, 1, 0);
+                if (player.getComponent(TurnsComponent.class).blocking){
+                    engine.getSystem(MovementSystem.class).attemptMove(player, 1, 0);
+                    engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                }
                 //player.AttemptMove(1,0);
                 break;
             case Input.Keys.LEFT:
-                engine.getSystem(MovementSystem.class).attemptMove(player, -1, 0);
+                if (player.getComponent(TurnsComponent.class).blocking){
+                    engine.getSystem(MovementSystem.class).attemptMove(player, -1, 0);
+                    engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                }
                 //player.AttemptMove(-1,0);
                 break;
             case Input.Keys.UP:
-                engine.getSystem(MovementSystem.class).attemptMove(player, 0, 1);
+                if (player.getComponent(TurnsComponent.class).blocking){
+                    engine.getSystem(MovementSystem.class).attemptMove(player, 0, 1);
+                    engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                }
                 //player.AttemptMove(0,1);
                 break;
             case Input.Keys.DOWN:
-                engine.getSystem(MovementSystem.class).attemptMove(player, 0, -1);
+                if (player.getComponent(TurnsComponent.class).blocking){
+                    engine.getSystem(MovementSystem.class).attemptMove(player, 0, -1);
+                    engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                }
                 //player.AttemptMove(0, -1);
                 break;
         }
