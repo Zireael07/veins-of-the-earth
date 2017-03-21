@@ -84,6 +84,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         renderer = new IsometricTiledMapRenderer(map);
         layer = (TiledMapTileLayer)map.getLayers().get(0);
         
+        //char dungeon
+        char[][] dungeon = mapgen.createCharMap();
+        Gdx.app.log("Char dungeon", '\n' + mapgen.toString());
+        
         shape_renderer = new ShapeRenderer();
         
         //camera stuffs

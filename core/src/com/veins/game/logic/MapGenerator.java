@@ -23,6 +23,8 @@ public class MapGenerator {
     Texture tiles;
     GameLogic g_logic;
     
+    char[][] dungeon;
+    
     //init the game logic ref
     public MapGenerator(GameLogic logic) {
         g_logic = logic;
@@ -63,5 +65,44 @@ public class MapGenerator {
             layers.add(new_layer);
 
     return map;
+    }
+    
+    
+    public void put(char elem, int x, int y) {
+        dungeon[x][y] = elem;
+    }
+    
+    public char[][] createCharMap(){
+        dungeon = new char[10][10];
+        for (int x = 0; x < 10; x++) 
+            {
+                for (int y = 0; y < 10; y++) 
+                {
+                        if (x == 0 || x == 9)
+                        {
+                            put('#', x, y);
+                        }
+                        else
+                        {
+                            put('.', x, y); 
+                        }
+                }
+        }
+        return dungeon;
+    }
+    
+    public String toString() {
+        char[][] trans = new char[10][10];
+        for (int x = 0; x < 10; x++) {
+            for (int y = 0; y < 10; y++) {
+                trans[y][x] = dungeon[x][y];
+            }
+        }
+        StringBuffer sb = new StringBuffer();
+        for (int row = 0; row < 10; row++) {
+            sb.append(trans[row]);
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 }
