@@ -11,10 +11,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
+import java.util.ArrayList;
+import squidpony.squidmath.Coord;
 
 /**
  *
@@ -86,6 +89,18 @@ public class MovementSystem extends EntitySystem {
         }
     }
     
+    public void moveTo(Entity entity, int tx, int ty){
+        int self_x = getPositionX(entity);
+        int self_y = getPositionY(entity);
+        
+        int dx = tx-self_x;
+        int dy = ty-self_y;
+        
+        Gdx.app.log("AI path", "move to " + tx + ", " + ty + " result " + dx + ", " + dy);
+        
+        attemptMove(entity, dx, dy);
+    }
+    
     
     public void processEntity(Entity entity, float deltaTime) {
         PositionComponent positionCom  = positionMap.get(entity);
@@ -100,7 +115,37 @@ public class MovementSystem extends EntitySystem {
        else
        {
            if (turnsCom.blocking){
-               attemptMove(entity, 1, 0);
+               Coord start = Coord.get(getPositionX(entity), getPositionY(entity));
+               Coord target = Coord.get(getPositionX(g_logic.getPlayer()), getPositionY(g_logic.getPlayer()));
+               
+               if (getPositionX(entity) == getPositionX(g_logic.getPlayer()) && getPositionY(entity) == getPositionY(g_logic.getPlayer())) 
+               {
+                   Gdx.app.log("AI path", "Do nothing because same position as player");
+               } 
+               else
+               {
+                   char[][] dunmap = g_logic.getDungeon();
+                   if (dunmap[start.x][start.y] == '#'){
+                       Gdx.app.log("AI path", "Do nothing because we're on wall tile");
+                   }
+                   else
+                   {
+                   
+                   g_logic.getAIMap().findPath(20, null, null, start, target);
+
+                //debug
+                for (Coord c: g_logic.getAIMap().path){
+                    Gdx.app.log("AI path", Integer.toString(c.x) + ", " + Integer.toString(c.y));
+                }
+
+                if (g_logic.getAIMap().path != null){
+                    ArrayList<Coord> path = g_logic.getAIMap().path;
+                    moveTo(entity, path.get(0).x, path.get(0).y);
+                }
+               }
+               }
+               
+               //old stuff
                g_engine.getSystem(TurnTimeSystem.class).UnblockTurns(entity);
            }
            
