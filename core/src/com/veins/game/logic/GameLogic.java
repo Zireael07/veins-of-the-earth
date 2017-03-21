@@ -14,6 +14,7 @@ import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
+import squidpony.squidai.DijkstraMap;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -35,11 +36,13 @@ public class GameLogic {
     
     public static int NUM_NPC = 4;
     
-    //Player player;
-    
     //ecs
     public Engine engine;
     Entity player;
+    
+    //Dijkstra
+    char[][] dungeon;
+    DijkstraMap g_AIMap;
        
     public GameLogic()
     {
@@ -49,6 +52,25 @@ public class GameLogic {
     
     }
     
+    public void setAIMap(DijkstraMap map)
+    {
+        g_AIMap = map;
+    }
+    
+    public DijkstraMap getAIMap(){
+        return g_AIMap;
+    }
+    
+    public void setDungeon(char[][] chars){
+        dungeon = chars;
+    }
+    
+    public char[][] getDungeon(){
+        return dungeon;
+    }
+    
+    
+    //used to convert from grid positions to iso
     public float getYOffset()
     {
         float calc = (float) (MAP_HEIGHT*ISO_HEIGHT)/2;
@@ -134,6 +156,10 @@ public class GameLogic {
     
     public Entity CreatePlayer(String name, TextureRegion tile){
         player = CreateActor(name, tile);
+        return player;
+    }
+    
+    public Entity getPlayer(){
         return player;
     }
 }

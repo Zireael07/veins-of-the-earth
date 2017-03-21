@@ -34,6 +34,7 @@ import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RenderingSystem;
 import com.veins.game.systems.TurnTimeSystem;
+import squidpony.squidai.DijkstraMap;
 
 /**
  *
@@ -56,6 +57,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     MapGenerator mapgen;
     IsometricTiledMapRenderer renderer;
     TiledMapTileLayer layer;
+    
+    DijkstraMap AIMap;
     
     //show border around tile
     ShapeRenderer shape_renderer;
@@ -85,8 +88,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         layer = (TiledMapTileLayer)map.getLayers().get(0);
         
         //char dungeon
-        char[][] dungeon = mapgen.createCharMap();
+        logic.setDungeon(mapgen.createCharMap());
         Gdx.app.log("Char dungeon", '\n' + mapgen.toString());
+        AIMap = new DijkstraMap(logic.getDungeon(), DijkstraMap.Measurement.CHEBYSHEV);
+        logic.setAIMap(AIMap);
         
         shape_renderer = new ShapeRenderer();
         
