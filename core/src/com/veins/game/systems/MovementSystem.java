@@ -78,13 +78,38 @@ public class MovementSystem extends EntitySystem {
     }
     
     public boolean checkMove(Entity entity, int fx, int fy){
+        char[][] dunmap = g_logic.getDungeon();
         return (fx >= 0 &&
                 fx <= g_logic.MAP_WIDTH-1 && fy >= 0 &&
-                fy <= g_logic.MAP_HEIGHT-1);
+                fy <= g_logic.MAP_HEIGHT-1 
+                && dunmap[fx][fy] != '#'
+                );
+    }
+    
+    public boolean checkMoveActor(Entity entity, int fx, int fy){
+        boolean res = true;
+        for (int i = 0; i < entities.size(); i++)
+        {
+            Entity entity_check = entities.get(i);
+            if (entity_check != entity && fx == getPositionX(entity_check) && fy == getPositionY(entity_check))
+            {
+                res = false;
+                Gdx.app.log("AI path", "There's an actor at " + fx + ", " + fy);
+                break;
+            }
+            else
+            {
+                res = true;
+            }
+        }
+        //Gdx.app.log("AI path", "check move returns " + res);
+        return res;
     }
     
     public void attemptMove(Entity entity, int dx, int dy){
-        if (checkMove(entity, getPositionX(entity) + dx, getPositionY(entity) + dy)){
+        if (checkMove(entity, getPositionX(entity) + dx, getPositionY(entity) + dy) 
+            && checkMoveActor(entity, getPositionX(entity) + dx, getPositionY(entity) + dy) 
+            ){
             setPosition(entity, getPositionX(entity) + dx, getPositionY(entity) + dy);
         }
     }
