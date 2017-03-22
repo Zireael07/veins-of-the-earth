@@ -124,11 +124,11 @@ public class MovementSystem extends EntitySystem {
                } 
                else
                {
-                   char[][] dunmap = g_logic.getDungeon();
+                   /*char[][] dunmap = g_logic.getDungeon();
                    if (dunmap[start.x][start.y] == '#'){
                        Gdx.app.log("AI path", "Do nothing because we're on wall tile");
                    }
-                   else
+                   else*/
                    {
                    
                    g_logic.getAIMap().findPath(20, null, null, start, target);
@@ -140,7 +140,9 @@ public class MovementSystem extends EntitySystem {
 
                 if (g_logic.getAIMap().path != null){
                     ArrayList<Coord> path = g_logic.getAIMap().path;
-                    moveTo(entity, path.get(0).x, path.get(0).y);
+                    if (path.size() > 0){
+                        moveTo(entity, path.get(0).x, path.get(0).y);
+                    }
                 }
                }
                }
