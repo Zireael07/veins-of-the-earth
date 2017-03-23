@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
@@ -34,7 +35,9 @@ import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RenderingSystem;
 import com.veins.game.systems.TurnTimeSystem;
+import java.util.ArrayList;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidmath.Coord;
 
 /**
  *
@@ -254,6 +257,36 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
       Vector3 outputPos = logic.worldToIso(worldCoordinates, true);
      
       Gdx.app.log("Mouse Event", "Tile coords " + outputPos);
+      
+      if (outputPos.x > 0 && outputPos.x <= logic.MAP_WIDTH
+          && outputPos.y > 0 && outputPos.y <= logic.MAP_HEIGHT){
+          
+          Gdx.app.log("Player path", "Pathing to " + (int)outputPos.x + " ," + (int) outputPos.y);
+          
+          //path to touched tile
+          int player_x = player.getComponent(PositionComponent.class).x;
+          int player_y = player.getComponent(PositionComponent.class).y;
+          Coord start = Coord.get(player_x, player_y);
+          Coord target = Coord.get((int)outputPos.x, (int)outputPos.y);
+          
+          logic.getAIMap().findPath(20, null, null, start, target);
+          for (Coord c: logic.getAIMap().path){
+                Gdx.app.log("Player path", Integer.toString(c.x) + ", " + Integer.toString(c.y));
+          }
+
+          if (logic.getAIMap().path != null){
+                ArrayList<Coord> path = logic.getAIMap().path;
+                if (path.size() > 0){
+                        engine.getSystem(MovementSystem.class).moveTo(player, path.get(0).x, path.get(0).y);
+                        engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                    }
+          }
+      }
+      else
+      {
+          Gdx.app.log("Player path", "clicked position is out of bounds: " + (int)outputPos.x + ", " + (int)outputPos.y);
+      }
+      
         return false;
     }
 
