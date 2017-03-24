@@ -10,6 +10,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.veins.game.components.FactionComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SpriteComponent;
@@ -148,23 +149,25 @@ public class GameLogic {
      }
     
     //ECS
-    public Entity CreateActor(String name, TextureRegion tile){
+    public Entity CreateActor(String name, TextureRegion tile, String faction){
         Entity actor = new Entity();
         actor.add(new PositionComponent());
         actor.add(new SpriteComponent(tile));
         actor.add(new NameComponent(name));
         actor.add(new TurnsComponent());
+        actor.add(new FactionComponent(faction));
         
         engine.addEntity(actor);
         return actor;
     }
     
-    public Entity CreateActor(String name, TextureRegion tile, int fx, int fy){
+    public Entity CreateActor(String name, TextureRegion tile, String faction, int fx, int fy){
         Entity actor = new Entity();
         actor.add(new PositionComponent(fx, fy));
         actor.add(new SpriteComponent(tile));
         actor.add(new NameComponent(name));
         actor.add(new TurnsComponent());
+        actor.add(new FactionComponent(faction));
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
         
@@ -173,7 +176,7 @@ public class GameLogic {
     }
     
     public Entity CreatePlayer(String name, TextureRegion tile){
-        player = CreateActor(name, tile);
+        player = CreateActor(name, tile, "player");
         return player;
     }
     

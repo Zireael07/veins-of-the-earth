@@ -118,7 +118,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
             int act_x = logic.rng.between(0, logic.MAP_WIDTH-1);
             int act_y = logic.rng.between(0, logic.MAP_HEIGHT-1);
 
-            logic.CreateActor("kobold" + "#" + x, game.res.kobold_tex, act_x, act_y);
+            logic.CreateActor("kobold" + "#" + x, game.res.kobold_tex, "enemy", act_x, act_y);
         }
         
         Gdx.input.setInputProcessor(this);
