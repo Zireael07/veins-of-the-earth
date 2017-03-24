@@ -12,6 +12,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.veins.game.components.FactionComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
@@ -77,6 +78,14 @@ public class MovementSystem extends EntitySystem {
         setPositionY(entity, y);
     }
     
+    //test
+    public void combatTest(Entity entity, Entity target){
+        //Gdx.app.log("Stub", "1d100 roll " + g_logic.dice.rollDice(1, 100));
+        String str = entity.getComponent(NameComponent.class).string;
+        String target_str = target.getComponent(NameComponent.class).string;
+        g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + g_logic.dice.rollDice(1, 100));
+    }
+    
     public boolean checkMove(Entity entity, int fx, int fy){
         char[][] dunmap = g_logic.getDungeon();
         return (fx >= 0 &&
@@ -95,9 +104,14 @@ public class MovementSystem extends EntitySystem {
             {
                 res = false;
                 Gdx.app.log("AI path", "There's an actor at " + fx + ", " + fy);
-                //Gdx.app.log("Stub", "1d100 roll " + g_logic.dice.rollDice(1, 100));
-                String str = entity.getComponent(NameComponent.class).string;
-                g_logic.addLog(str + ": 1d100 roll " + g_logic.dice.rollDice(1, 100));
+                
+                //basic faction recognition
+                String self_faction = entity.getComponent(FactionComponent.class).string;
+                String faction = entity_check.getComponent(FactionComponent.class).string;
+                Gdx.app.log("Faction", "Self: " + self_faction + " target " + faction);
+                if (faction != self_faction) {
+                    combatTest(entity, entity_check);
+                }
                 break;
             }
             else
