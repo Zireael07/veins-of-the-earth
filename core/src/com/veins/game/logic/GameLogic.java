@@ -14,7 +14,10 @@ import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
+import java.util.ArrayList;
+import java.util.List;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidmath.Dice;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -33,6 +36,7 @@ public class GameLogic {
     public static final int TILE_HEIGHT = 32;
     
     public StatefulRNG rng;
+    public Dice dice;
     
     public static int NUM_NPC = 4;
     
@@ -43,15 +47,29 @@ public class GameLogic {
     //Dijkstra
     char[][] dungeon;
     DijkstraMap g_AIMap;
-       
+    
+    //message log
+    public ArrayList<String> messages;
+    //public List<String> recent_messages;
+    
     public GameLogic()
     {
+        messages = new ArrayList<String>();
+        
+        
         rng = new StatefulRNG();
+        dice = new Dice();
         
         engine = new Engine();
     
     }
     
+    //log messages
+    public void addLog(String str){
+        messages.add(str);
+    }
+    
+    //Dijkstra map
     public void setAIMap(DijkstraMap map)
     {
         g_AIMap = map;

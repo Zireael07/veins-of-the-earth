@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
@@ -36,6 +37,7 @@ import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RenderingSystem;
 import com.veins.game.systems.TurnTimeSystem;
 import java.util.ArrayList;
+import java.util.List;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidmath.Coord;
 
@@ -55,6 +57,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     ScreenViewport hud_viewport;
     OrthographicCamera hud_camera;
     final VisLabel coords_label;
+    VisTable message_table;
     
     //map
     MapGenerator mapgen;
@@ -136,6 +139,12 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         //ui elements
         coords_label = new VisLabel("Hello");
         stage.addActor(coords_label);
+        
+        message_table = new VisTable();
+        stage.addActor(message_table);
+        message_table.setPosition(70, 70);
+        message_table.setSize(40, 100);
+        message_table.columnDefaults(0).left();
     }
     
     
@@ -182,6 +191,21 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         engine.update(delta);
         
         batch.end();
+        
+        //update the log
+        message_table.clear();
+        if (logic.messages.size() < 5) {
+            for (String log : logic.messages){
+                message_table.add(new VisLabel(log)).expand().fill().row();
+            }    
+        }else{
+             List<String> recent_messages = logic.messages;
+             recent_messages = recent_messages.subList(logic.messages.size()-5, logic.messages.size());
+             
+             for (String log : recent_messages){
+                 message_table.add(new VisLabel(log)).expand().fill().row();
+             }
+            }
         
         stage.getViewport().apply();
 

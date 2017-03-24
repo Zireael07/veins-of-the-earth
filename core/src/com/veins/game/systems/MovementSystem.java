@@ -95,6 +95,9 @@ public class MovementSystem extends EntitySystem {
             {
                 res = false;
                 Gdx.app.log("AI path", "There's an actor at " + fx + ", " + fy);
+                //Gdx.app.log("Stub", "1d100 roll " + g_logic.dice.rollDice(1, 100));
+                String str = entity.getComponent(NameComponent.class).string;
+                g_logic.addLog(str + ": 1d100 roll " + g_logic.dice.rollDice(1, 100));
                 break;
             }
             else
