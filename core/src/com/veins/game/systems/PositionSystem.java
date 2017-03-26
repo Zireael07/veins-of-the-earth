@@ -15,6 +15,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.veins.game.components.PositionComponent;
+import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.logic.GameLogic;
 
@@ -27,7 +28,8 @@ public class PositionSystem extends EntitySystem {
     private ComponentMapper<PositionComponent>  positionMap   = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<SpriteComponent> spriteMap = ComponentMapper.getFor(SpriteComponent.class);
     
-    private ImmutableArray<Entity> entities;
+    private ImmutableArray<Entity> actor_entities;
+    private ImmutableArray<Entity> item_entities;
     
     private GameLogic g_logic;
     
@@ -38,32 +40,52 @@ public class PositionSystem extends EntitySystem {
     }
     
     public void addedToEngine(Engine engine){
-        entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).get());
+        actor_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).exclude(SlotComponent.class).get());
+        item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class, SlotComponent.class).get());
     }
     
     public void update(float deltaTime){
-        for (int i = 0; i < entities.size(); i++)
+        //items first
+        for (int i = 0; i < item_entities.size(); i++)
         {
-            Entity entity = entities.get(i);
-            processEntity(entity, deltaTime);
+            Entity entity = item_entities.get(i);
+            processEntity(entity, deltaTime, true);
+        }
+        //actors second
+        for (int i = 0; i < actor_entities.size(); i++)
+        {
+            Entity entity = actor_entities.get(i);
+            processEntity(entity, deltaTime, false);
         }
     }
     
     
-    public void processEntity(Entity entity, float deltaTime) {
+    public void processEntity(Entity entity, float deltaTime, boolean item) {
         PositionComponent positionCom  = positionMap.get(entity);
         SpriteComponent spriteCom = spriteMap.get(entity);
         
         if (positionCom != null){
             Vector3 gridactorPos = new Vector3(positionCom.x, positionCom.y, 0);
             Vector3 isoTile = g_logic.IsotoWorld(gridactorPos);
-            int actor_x = (int) isoTile.x+g_logic.ISO_WIDTH/4;
-            int actor_y = (int) isoTile.y-g_logic.ISO_HEIGHT/4;
             
-            for (Sprite sprite : spriteCom.sprites) {
-                //Gdx.app.log("Position system", "setting sprite position");
-                sprite.setX(actor_x);
-                sprite.setY(actor_y);
+            if (item){ 
+                int object_x = (int) isoTile.x+g_logic.ISO_WIDTH/4;
+                int object_y = (int) isoTile.y-g_logic.ISO_HEIGHT/2-g_logic.ISO_HEIGHT/4+g_logic.ISO_HEIGHT/16;
+                
+                for (Sprite sprite : spriteCom.sprites) {
+                    sprite.setX(object_x);
+                    sprite.setY(object_y);
+                }
+            }
+            else
+            {
+                int actor_x = (int) isoTile.x+g_logic.ISO_WIDTH/4;
+                int actor_y = (int) isoTile.y-g_logic.ISO_HEIGHT/4;
+
+                for (Sprite sprite : spriteCom.sprites) {
+                    sprite.setX(actor_x);
+                    sprite.setY(actor_y);
+                }
             }
             
         }
