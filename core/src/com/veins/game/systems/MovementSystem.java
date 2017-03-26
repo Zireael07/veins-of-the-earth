@@ -40,7 +40,7 @@ public class MovementSystem extends EntitySystem {
     }
     
     public void addedToEngine(Engine engine){
-        entities = engine.getEntitiesFor(Family.all(PositionComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(PositionComponent.class, TurnsComponent.class).get());
         g_engine = engine;
     }
     
@@ -103,7 +103,15 @@ public class MovementSystem extends EntitySystem {
             if (entity_check != entity && fx == getPositionX(entity_check) && fy == getPositionY(entity_check))
             {
                 res = false;
-                Gdx.app.log("AI path", "There's an actor at " + fx + ", " + fy);
+                
+                String str = entity.getComponent(NameComponent.class).string;
+                if (str == "Player"){
+                    Gdx.app.log("Player move", "There's an entity at " + fx + ", " + fy);
+                }
+                else
+                {
+                    Gdx.app.log("AI path", "There's an actor at " + fx + ", " + fy);
+                }
                 
                 //basic faction recognition
                 String self_faction = entity.getComponent(FactionComponent.class).string;
