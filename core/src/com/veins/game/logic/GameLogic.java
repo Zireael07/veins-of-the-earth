@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
+import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
 import java.util.ArrayList;
@@ -182,5 +183,16 @@ public class GameLogic {
     
     public Entity getPlayer(){
         return player;
+    }
+    
+    public Entity CreateItem(String name, TextureRegion tile, int fx, int fy){
+        Entity item = new Entity();
+        item.add(new PositionComponent(fx, fy));
+        item.add(new SpriteComponent(tile));
+        item.add(new NameComponent(name));
+        
+        Gdx.app.log("Spawn", "Spawned item at" + fx + ", " + fy);
+        engine.addEntity(item);
+        return item;
     }
 }

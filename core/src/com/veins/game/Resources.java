@@ -21,6 +21,8 @@ public class Resources {
          TextureAtlas gameSprites;
          public TextureRegion player_tex;
          public TextureRegion kobold_tex;
+         public TextureRegion sword_tex;
+         
     private Texture UIStone_tex;
     public Image UIStone;
     
@@ -40,6 +42,7 @@ public class Resources {
          gameSprites = new TextureAtlas(Gdx.files.internal("packed/game.atlas"));
          player_tex = new TextureRegion(gameSprites.findRegion("human_m"));
          kobold_tex = new TextureRegion(gameSprites.findRegion("kobold"));
+         sword_tex = new TextureRegion(gameSprites.findRegion("longsword"));
          player = new Sprite(player_tex);
          kobold = new Sprite(kobold_tex);
 
