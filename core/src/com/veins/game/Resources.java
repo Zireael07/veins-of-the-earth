@@ -22,6 +22,7 @@ public class Resources {
          public TextureRegion player_tex;
          public TextureRegion kobold_tex;
          public TextureRegion sword_tex;
+         public TextureRegion armor_tex;
          
     private Texture UIStone_tex;
     public Image UIStone;
@@ -43,6 +44,8 @@ public class Resources {
          player_tex = new TextureRegion(gameSprites.findRegion("human_m"));
          kobold_tex = new TextureRegion(gameSprites.findRegion("kobold"));
          sword_tex = new TextureRegion(gameSprites.findRegion("longsword"));
+         armor_tex = new TextureRegion(gameSprites.findRegion("armor_studded"));
+         
          player = new Sprite(player_tex);
          kobold = new Sprite(kobold_tex);
 
