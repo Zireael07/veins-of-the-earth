@@ -7,6 +7,8 @@ package com.veins.game.screens;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -27,7 +29,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
+import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
@@ -124,6 +128,11 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         int item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
         int item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
         logic.CreateItem("longsword", game.res.sword_tex, "main_hand", item_x, item_y);
+        
+        item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
+        item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
+        logic.CreateItem("leather armor", game.res.armor_tex, "body", item_x, item_y);
+        
         
         Gdx.input.setInputProcessor(this);
         
@@ -341,6 +350,21 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         coords_label.setX(temp.x+60);
         coords_label.setY(temp.y+60);
         coords_label.setText((int) isoPos.x + ", " + (int) isoPos.y);
+        
+        //if entity at x,y show name
+        String name;
+        ImmutableArray<Entity> entities = engine.getEntitiesFor(Family.all(NameComponent.class, PositionComponent.class).get());
+        for (int i = 0; i < entities.size(); i++){
+            Entity entity = entities.get(i);
+            if (engine.getSystem(MovementSystem.class).getPositionX(entity) == (int)isoPos.x
+                && engine.getSystem(MovementSystem.class).getPositionY(entity) == (int)isoPos.y)
+            {
+                name = entity.getComponent(NameComponent.class).string;
+                coords_label.setText((int) isoPos.x + ", " + (int) isoPos.y + '\n' + name);
+            }
+            
+        }
+        
         return false;
     }
 
