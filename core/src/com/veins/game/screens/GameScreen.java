@@ -31,7 +31,6 @@ import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
-import com.veins.game.logic.objects.Player;
 import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RenderingSystem;
