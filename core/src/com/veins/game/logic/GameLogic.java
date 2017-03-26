@@ -185,11 +185,12 @@ public class GameLogic {
         return player;
     }
     
-    public Entity CreateItem(String name, TextureRegion tile, int fx, int fy){
+    public Entity CreateItem(String name, TextureRegion tile, String slot, int fx, int fy){
         Entity item = new Entity();
         item.add(new PositionComponent(fx, fy));
         item.add(new SpriteComponent(tile));
         item.add(new NameComponent(name));
+        item.add(new SlotComponent(slot));
         
         Gdx.app.log("Spawn", "Spawned item at" + fx + ", " + fy);
         engine.addEntity(item);

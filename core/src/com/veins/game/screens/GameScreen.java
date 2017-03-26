@@ -123,7 +123,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         //spawn an item
         int item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
         int item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
-        logic.CreateItem("longsword", game.res.sword_tex, item_x, item_y);
+        logic.CreateItem("longsword", game.res.sword_tex, "main_hand", item_x, item_y);
         
         Gdx.input.setInputProcessor(this);
         
