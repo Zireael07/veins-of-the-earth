@@ -37,6 +37,7 @@ import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
 import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
+import com.veins.game.systems.RemovalSystem;
 import com.veins.game.systems.RenderingSystem;
 import com.veins.game.systems.TurnTimeSystem;
 import java.util.ArrayList;
@@ -147,6 +148,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         engine.addSystem(new MovementSystem(1, logic));
         engine.addSystem(new PositionSystem(2, logic));
         engine.addSystem(new RenderingSystem(3, batch));
+        //needs to be last in the list
+        engine.addSystem(new RemovalSystem(4));
         
         
         //ui elements
