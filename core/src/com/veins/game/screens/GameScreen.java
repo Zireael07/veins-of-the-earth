@@ -35,6 +35,7 @@ import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
+import com.veins.game.systems.InventorySystem;
 import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RemovalSystem;
@@ -147,9 +148,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         engine.addSystem(new TurnTimeSystem(0));
         engine.addSystem(new MovementSystem(1, logic));
         engine.addSystem(new PositionSystem(2, logic));
-        engine.addSystem(new RenderingSystem(3, batch));
+        engine.addSystem(new InventorySystem(3));
+        engine.addSystem(new RenderingSystem(4, batch));
         //needs to be last in the list
-        engine.addSystem(new RemovalSystem(4));
+        engine.addSystem(new RemovalSystem(5));
         
         
         //ui elements
@@ -271,6 +273,13 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                 }
                 //player.AttemptMove(0, -1);
                 break;
+            case Input.Keys.G:
+                if (player.getComponent(TurnsComponent.class).blocking){
+                    Gdx.app.log("Input", "Pick up attempt");
+                    int player_x = engine.getSystem(PositionSystem.class).getPositionX(player);
+                    int player_y = engine.getSystem(PositionSystem.class).getPositionY(player);
+                    engine.getSystem(InventorySystem.class).attemptPickup(player, player_x, player_y);
+                }
         }
         return false;
     }
