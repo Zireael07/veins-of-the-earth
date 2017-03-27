@@ -44,6 +44,17 @@ public class PositionSystem extends EntitySystem {
         item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class, SlotComponent.class).get());
     }
     
+    public int getPositionX(Entity entity){
+        PositionComponent positionCom  = positionMap.get(entity);
+        return positionCom.x;
+    }
+    
+    public int getPositionY(Entity entity){
+        PositionComponent positionCom  = positionMap.get(entity);
+        return positionCom.y;
+    }
+    
+    //processing
     public void update(float deltaTime){
         //items first
         for (int i = 0; i < item_entities.size(); i++)
