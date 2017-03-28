@@ -11,6 +11,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,6 +28,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.layout.GridGroup;
+import com.kotcrab.vis.ui.widget.Separator;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -67,6 +69,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     OrthographicCamera hud_camera;
     final VisLabel coords_label;
     VisTable message_table;
+    VisWindow inven_window;
     GridGroup group_eq;
     GridGroup group_inv;
     
@@ -142,7 +145,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         logic.CreateItem("leather armor", game.res.armor_tex, "body", item_x, item_y);
         
         
-        Gdx.input.setInputProcessor(this);
+        //Gdx.input.setInputProcessor(this);
+        //Setting the InputProcessor is ABSOLUTELY NEEDED TO HANDLE INPUT
+        Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));
         
         //polygon
         tile_border = new Polygon();
@@ -161,6 +166,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         
         //ui elements
+        stage.setDebugAll(true);
         coords_label = new VisLabel("");
         stage.addActor(coords_label);
         
@@ -296,23 +302,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                 }
                 break;
             case Input.Keys.I:
-                if (group_eq == null && group_inv == null) {
                     Gdx.app.log("Input", "Inventory creating");
                     displayInventory();
-                }
-                else{
-                    if (group_eq.isVisible()){
-                        //hide it
-                        group_eq.setVisible(false);
-                        group_inv.setVisible(false);
-                    }
-                    else{
-                        group_eq.setVisible(true);
-                        group_inv.setVisible(true);
-                    }
-                }
-                
-                
+
                 break;
         }
         return false;
@@ -430,13 +422,13 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         Gdx.app.log("Inventory screen", "displaying...");
         ArrayList<String> slots = player.getComponent(InventoryComponent.class).slots;
         
-        //VisWindow inven_window = new VisWindow();
+        inven_window = new VisWindow("Inventory");
         group_eq = new GridGroup(32, 4);
         group_inv = new GridGroup(32,4);  //item size 32 px, spacing 4px
 
         for (int i = 0; i < slots.size(); i++) {
         String slot = slots.get(i);
-        Gdx.app.log("Inventory screen", "Slot str is " + slot);
+
         //VisTextButton slot_button = new VisTextButton(slot);
         VisLabel slot_label = new VisLabel(slot);
         if (slot.contains("inven")){
@@ -447,13 +439,17 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
             }
         }
         
-        stage.addActor(group_eq);
-        stage.addActor(group_inv);
-         
+        inven_window.add(group_eq).row();
+        //padding
+        inven_window.add(new Separator()).padTop(50).padBottom(50).height(30).width(100).fillY().row();
+        inven_window.add(group_inv).row();
+       
+        inven_window.setCenterOnAdd(true);
+        //inven_window.pack();
+        inven_window.setHeight(400);
+        inven_window.setWidth(300);
+        inven_window.closeOnEscape();
         
-        group_eq.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2+100);
-        group_inv.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-        
-        
+        stage.addActor(inven_window); 
     }
 }
