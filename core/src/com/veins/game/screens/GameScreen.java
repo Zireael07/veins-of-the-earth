@@ -26,9 +26,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.layout.GridGroup;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SpriteComponent;
@@ -63,6 +67,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     OrthographicCamera hud_camera;
     final VisLabel coords_label;
     VisTable message_table;
+    GridGroup group_eq;
+    GridGroup group_inv;
     
     //map
     MapGenerator mapgen;
@@ -155,7 +161,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         
         //ui elements
-        coords_label = new VisLabel("Hello");
+        coords_label = new VisLabel("");
         stage.addActor(coords_label);
         
         message_table = new VisTable();
@@ -289,6 +295,25 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                     engine.getSystem(InventorySystem.class).attemptDrop(player, player_x, player_y);
                 }
                 break;
+            case Input.Keys.I:
+                if (group_eq == null && group_inv == null) {
+                    Gdx.app.log("Input", "Inventory creating");
+                    displayInventory();
+                }
+                else{
+                    if (group_eq.isVisible()){
+                        //hide it
+                        group_eq.setVisible(false);
+                        group_inv.setVisible(false);
+                    }
+                    else{
+                        group_eq.setVisible(true);
+                        group_inv.setVisible(true);
+                    }
+                }
+                
+                
+                break;
         }
         return false;
     }
@@ -399,5 +424,36 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     {
         viewport.update(width, height);
         hud_viewport.update(width, height, true);
+    }
+    
+    public void displayInventory(){
+        Gdx.app.log("Inventory screen", "displaying...");
+        ArrayList<String> slots = player.getComponent(InventoryComponent.class).slots;
+        
+        //VisWindow inven_window = new VisWindow();
+        group_eq = new GridGroup(32, 4);
+        group_inv = new GridGroup(32,4);  //item size 32 px, spacing 4px
+
+        for (int i = 0; i < slots.size(); i++) {
+        String slot = slots.get(i);
+        Gdx.app.log("Inventory screen", "Slot str is " + slot);
+        //VisTextButton slot_button = new VisTextButton(slot);
+        VisLabel slot_label = new VisLabel(slot);
+        if (slot.contains("inven")){
+            group_inv.addActor(slot_label);
+        }
+        else{
+            group_eq.addActor(slot_label);
+            }
+        }
+        
+        stage.addActor(group_eq);
+        stage.addActor(group_inv);
+         
+        
+        group_eq.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2+100);
+        group_inv.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        
+        
     }
 }
