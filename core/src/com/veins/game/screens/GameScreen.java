@@ -148,7 +148,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         engine.addSystem(new TurnTimeSystem(0));
         engine.addSystem(new MovementSystem(1, logic));
         engine.addSystem(new PositionSystem(2, logic));
-        engine.addSystem(new InventorySystem(3));
+        engine.addSystem(new InventorySystem(3, logic));
         engine.addSystem(new RenderingSystem(4, batch));
         //needs to be last in the list
         engine.addSystem(new RemovalSystem(5));
@@ -280,6 +280,15 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                     int player_y = engine.getSystem(PositionSystem.class).getPositionY(player);
                     engine.getSystem(InventorySystem.class).attemptPickup(player, player_x, player_y);
                 }
+                break;
+            case Input.Keys.D:
+                if (player.getComponent(TurnsComponent.class).blocking){
+                    Gdx.app.log("Input", "Drop attempt");
+                    int player_x = engine.getSystem(PositionSystem.class).getPositionX(player);
+                    int player_y = engine.getSystem(PositionSystem.class).getPositionY(player);
+                    engine.getSystem(InventorySystem.class).attemptDrop(player, player_x, player_y);
+                }
+                break;
         }
         return false;
     }
