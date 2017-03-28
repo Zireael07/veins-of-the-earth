@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.veins.game.components.FactionComponent;
+import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PlayerComponent;
 import com.veins.game.components.PositionComponent;
@@ -180,6 +181,7 @@ public class GameLogic {
     public Entity CreatePlayer(String name, TextureRegion tile){
         player = CreateActor(name, tile, "player");
         player.add(new PlayerComponent());
+        player.add(new InventoryComponent());
         return player;
     }
     
