@@ -24,11 +24,14 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.layout.GridGroup;
 import com.kotcrab.vis.ui.widget.Separator;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -423,22 +426,33 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         ArrayList<String> slots = player.getComponent(InventoryComponent.class).slots;
         
         inven_window = new VisWindow("Inventory");
-        group_eq = new GridGroup(32, 4);
-        group_inv = new GridGroup(32,4);  //item size 32 px, spacing 4px
+        group_eq = new GridGroup(42, 4);
+        group_inv = new GridGroup(42,4);  //item size 32 px, spacing 4px
 
         for (int i = 0; i < slots.size(); i++) {
         String slot = slots.get(i);
-
-        //VisTextButton slot_button = new VisTextButton(slot);
-        VisLabel slot_label = new VisLabel(slot);
-        if (slot.contains("inven")){
-            group_inv.addActor(slot_label);
-        }
-        else{
-            group_eq.addActor(slot_label);
+        
+        Drawable slot_image = new TextureRegionDrawable(game.res.slot_tex);
+        VisImageButton slot_button = new VisImageButton(slot_image, slot);
+        
+        
+        if (slot == "inven_1" && player.getComponent(InventoryComponent.class) != null){
+            Entity item = engine.getSystem(InventorySystem.class).getObject(player, "inven_1");
+            if (item != null){
+                Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
+                slot_button = new VisImageButton(item_image, slot);
             }
         }
         
+        if (slot.contains("inven")){
+            group_inv.addActor(slot_button);
+        }
+        else{
+            group_eq.addActor(slot_button);
+            }
+        } //end for
+        
+        //set up window
         inven_window.add(group_eq).row();
         //padding
         inven_window.add(new Separator()).padTop(50).padBottom(50).height(30).width(100).fillY().row();
