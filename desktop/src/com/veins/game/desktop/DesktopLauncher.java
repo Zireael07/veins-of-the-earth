@@ -20,5 +20,6 @@ public class DesktopLauncher {
             settings.pot = true;
             TexturePacker.process(settings, "../assets/unpacked", "packed", "game");
             TexturePacker.process(settings, "../assets/unpacked/terrain", "packed", "terrain");
+            TexturePacker.process(settings, "../assets/unpacked/inventory", "packed", "inventory");
         }
 }

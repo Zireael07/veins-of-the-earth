@@ -24,6 +24,10 @@ public class Resources {
          public TextureRegion sword_tex;
          public TextureRegion armor_tex;
          
+         public TextureRegion slot_tex;
+         
+         TextureAtlas inventorySprites;
+         
     private Texture UIStone_tex;
     public Image UIStone;
     
@@ -48,7 +52,11 @@ public class Resources {
          
          player = new Sprite(player_tex);
          kobold = new Sprite(kobold_tex);
-
+         
+         inventorySprites = new TextureAtlas(Gdx.files.internal("packed/inventory.atlas"));
+         slot_tex = new TextureRegion(inventorySprites.findRegion("background"));
+         
+         
          UIStone_tex = new Texture(Gdx.files.internal("stone_background.png"));
          UIStone = new Image(UIStone_tex);
          
@@ -60,5 +68,6 @@ public class Resources {
      public void dispose()
      {
          gameSprites.dispose();
+         inventorySprites.dispose();
      }
 }
