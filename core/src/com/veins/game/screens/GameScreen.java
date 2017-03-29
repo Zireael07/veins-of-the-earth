@@ -22,8 +22,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -454,7 +457,38 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                 if (item != null){
                     Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
                     slot_button = new VisImageButton(item_image, slot);
-                }
+                    Vector2 slot_coord = slot_button.localToStageCoordinates(new Vector2(slot_button.getX(), slot_button.getY()));
+                    final float x = slot_coord.x;
+                    final float y = slot_coord.y;
+                    slot_button.addListener(new ChangeListener() 
+                    {
+			@Override
+                        public void changed (ChangeEvent event, Actor actor) {
+                            Gdx.app.log("Button", "Clicked the button");
+                            
+                            //create a menu
+                            VisWindow menu_window = new VisWindow("Item menu");
+                            VisTextButton wear_button = new VisTextButton("Wear");
+                            wear_button.addListener(new ChangeListener()
+                            {
+                               @Override
+                                public void changed (ChangeEvent event, Actor actor) {
+                                Gdx.app.log("Button", "Clicked the inner button");
+                                //menu_window.close();
+                            }
+                            });
+                            
+                            //Gdx.app.log("Item menu", "Item menu pos " + x + " ," + y);
+                            menu_window.setPosition(50, 50);
+                            menu_window.add(wear_button).row();
+                            menu_window.pack();
+                            menu_window.setModal(true);
+                            menu_window.closeOnEscape();
+                            
+                            stage.addActor(menu_window);
+                        }
+                    }); //outer listener
+                }//end if item
             }
         }
         
