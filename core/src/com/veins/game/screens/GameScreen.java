@@ -170,6 +170,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         
         //ui elements
+        //debugging
         stage.setDebugAll(true);
         coords_label = new VisLabel("");
         stage.addActor(coords_label);
@@ -427,8 +428,16 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         ArrayList<String> slots = player.getComponent(InventoryComponent.class).slots;
         
         inven_window = new VisWindow("Inventory");
-        group_eq = new GridGroup(42, 4);
-        group_inv = new GridGroup(42,4);  //item size 32 px, spacing 4px
+        int slot_w = 42;
+        int spacing = 4;
+        group_eq = new GridGroup(slot_w, spacing);
+        group_inv = new GridGroup(slot_w, spacing);  //item size 42 px, spacing 4px
+        
+        //set size for entire inventory grid
+        int numGridW = 10;
+        int gridWidth = (slot_w+spacing)*numGridW;
+        group_inv.setWidth(gridWidth+5);
+        group_inv.setHeight((slot_w+spacing)*2);
 
         for (int i = 0; i < slots.size(); i++) {
         String slot = slots.get(i);
@@ -436,12 +445,16 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         Drawable slot_image = new TextureRegionDrawable(game.res.slot_tex);
         VisImageButton slot_button = new VisImageButton(slot_image, slot);
         
-        
-        if (slot == "inven_1" && player.getComponent(InventoryComponent.class) != null){
-            Entity item = engine.getSystem(InventorySystem.class).getObject(player, "inven_1");
-            if (item != null){
-                Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
-                slot_button = new VisImageButton(item_image, slot);
+        //Gdx.app.log("Slot", slot);
+        if ("inven_1".equals(slot)){
+            Gdx.app.log("Slot", "Slot is inven_1");
+            if (player.getComponent(InventoryComponent.class) == null){                } else {
+                Gdx.app.log("Inventory", "Player has inventory");
+                Entity item = engine.getSystem(InventorySystem.class).getObject(player, "inven_1");
+                if (item != null){
+                    Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
+                    slot_button = new VisImageButton(item_image, slot);
+                }
             }
         }
         
@@ -462,7 +475,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         inven_window.setCenterOnAdd(true);
         //inven_window.pack();
         inven_window.setHeight(400);
-        inven_window.setWidth(300);
+        inven_window.setWidth(gridWidth+5);
+        inven_window.setModal(true);
         inven_window.closeOnEscape();
         
         stage.addActor(inven_window); 

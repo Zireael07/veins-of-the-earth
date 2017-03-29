@@ -21,7 +21,10 @@ public class InventoryComponent implements Component {
     
     public InventoryComponent(){
         slots = new ArrayList<String>();
-        slots.add("inven_1");
+        for (int i = 0; i < 20; i++) {
+            slots.add("inven_"+(i+1));
+        }
+        
         slots.add("body");
         items_map = new HashMap<String, Entity>();
     }
