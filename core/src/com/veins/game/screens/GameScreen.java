@@ -174,14 +174,14 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //ui elements
         //debugging
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
         coords_label = new VisLabel("");
         stage.addActor(coords_label);
         
         message_table = new VisTable();
         stage.addActor(message_table);
         message_table.setPosition(70, 70);
-        message_table.setSize(40, 100);
+        message_table.setSize(40, 20);
         message_table.columnDefaults(0).left();
     }
     
@@ -233,11 +233,13 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         //update the log
         message_table.clear();
         if (logic.messages.size() < 5) {
+            message_table.setSize(40, 18*logic.messages.size());
             for (String log : logic.messages){
                 message_table.add(new VisLabel(log)).expand().fill().row();
             }    
         }else{
-             List<String> recent_messages = logic.messages;
+            message_table.setSize(40, 90); //75); 15x //100); 20x
+            List<String> recent_messages = logic.messages;
              recent_messages = recent_messages.subList(logic.messages.size()-5, logic.messages.size());
              
              for (String log : recent_messages){
