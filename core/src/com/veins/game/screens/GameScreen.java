@@ -438,6 +438,12 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         group_eq = new GridGroup(slot_w, spacing);
         group_inv = new GridGroup(slot_w, spacing);  //item size 42 px, spacing 4px
         
+        //set size for entire equipment grid
+        int numGridWeq = 4;
+        int gridWidthEq = (slot_w+spacing)*numGridWeq;
+        group_eq.setWidth(gridWidthEq+5);
+        group_eq.setHeight((slot_w+spacing)*5);
+        
         //set size for entire inventory grid
         int numGridW = 10;
         int gridWidth = (slot_w+spacing)*numGridW;
@@ -505,7 +511,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         //set up window
         inven_window.add(group_eq).row();
         //padding
-        inven_window.add(new Separator()).padTop(50).padBottom(50).height(30).width(100).fillY().row();
+        inven_window.add(new Separator()).padTop(3).padBottom(3).height(20).width(gridWidth).fillY().row();
         inven_window.add(group_inv).row();
        
         inven_window.setCenterOnAdd(true);

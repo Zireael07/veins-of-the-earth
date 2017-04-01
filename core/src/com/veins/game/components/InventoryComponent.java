@@ -21,11 +21,36 @@ public class InventoryComponent implements Component {
     
     public InventoryComponent(){
         slots = new ArrayList<String>();
+        //set up slots
         for (int i = 0; i < 20; i++) {
             slots.add("inven_"+(i+1));
         }
         
+        //basics
         slots.add("body");
+        slots.add("main_hand");
+        slots.add("off_hand");
+        slots.add("quiver");
+        //for swapping weapons
+        slots.add("shoulder");
+        //knicknacks
+        slots.add("ring_1");
+        slots.add("ring_2");
+        slots.add("cloak");
+        slots.add("amulet");
+        slots.add("belt");
+        //armor
+        slots.add("arms");
+        slots.add("gloves");
+        slots.add("legs");
+        slots.add("boots");
+        //tools
+        slots.add("lite");
+        slots.add("tool");
+               
+        
+        
+        //init items stuff
         items_map = new HashMap<String, Entity>();
     }
 }
