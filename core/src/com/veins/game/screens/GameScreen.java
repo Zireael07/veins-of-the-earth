@@ -167,7 +167,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         engine.addSystem(new MovementSystem(1, logic));
         engine.addSystem(new PositionSystem(2, logic));
         engine.addSystem(new InventorySystem(3, logic));
-        engine.addSystem(new RenderingSystem(4, batch));
+        engine.addSystem(new RenderingSystem(4, batch, logic, game));
         //needs to be last in the list
         engine.addSystem(new RemovalSystem(5));
         
