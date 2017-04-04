@@ -457,11 +457,11 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         VisImageButton slot_button = new VisImageButton(slot_image, slot);
         
         //Gdx.app.log("Slot", slot);
-        if ("inven_1".equals(slot)){
-            Gdx.app.log("Slot", "Slot is inven_1");
-            if (player.getComponent(InventoryComponent.class) == null){                } else {
+        //if ("inven_1".equals(slot)){
+            //Gdx.app.log("Slot", "Slot is inven_1");
+            if (player.getComponent(InventoryComponent.class) != null){                
                 Gdx.app.log("Inventory", "Player has inventory");
-                Entity item = engine.getSystem(InventorySystem.class).getObject(player, "inven_1");
+                Entity item = engine.getSystem(InventorySystem.class).getObject(player, slot);
                 if (item != null){
                     Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
                     slot_button = new VisImageButton(item_image, slot);
@@ -498,7 +498,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                     }); //outer listener
                 }//end if item
             }
-        }
+        //}
         
         if (slot.contains("inven")){
             group_inv.addActor(slot_button);
