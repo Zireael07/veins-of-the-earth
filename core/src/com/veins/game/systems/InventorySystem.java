@@ -71,13 +71,19 @@ public class InventorySystem extends EntitySystem {
             if (entity.getComponent(InventoryComponent.class) != null)
             {
             //add to inventory
-            boolean added = addObject(entity, "inven_1", item);
-            
-            //test
-            String inven_string = getObject(entity, "inven_1").getComponent(NameComponent.class).string;
-            Gdx.app.log("Inventory", "Name of object in slot inven_1 is " + inven_string);
-                if (added){
-                //remove from world
+            String added = tryaddObject(entity, "inven_1", item);
+
+                if (added != null){
+                    //test
+                    if (getObject(entity, added) != null){
+                        String inven_string = getObject(entity, added).getComponent(NameComponent.class).string;
+                        Gdx.app.log("Inventory", "Name of object in slot " + added +  " is " + inven_string);
+                    }
+                    else
+                    {
+                        Gdx.app.log("Inventory", "No item in slot " + added + "?!");
+                    }
+                    //remove from world
                     item.add(new RemoveComponent());
                 }
             }
@@ -110,6 +116,29 @@ public class InventorySystem extends EntitySystem {
         /*else{
             Gdx.app.log("Inventory", "entity missing inventory component");
         }*/
+    }
+    
+    public String tryaddObject(Entity entity, String slot, Entity item){
+        String res = null;
+        if (slot.contains("inven")){
+            //20 because of 20 inventory slots (see Inventory Component)
+            int i = 0;
+            HashMap items = entity.getComponent(InventoryComponent.class).items_map;
+            while (i < 20 && items.get("inven_"+(i+1)) != null) {
+                i++;
+            }
+                boolean added = addObject(entity, "inven_"+(i+1), item);
+                
+                if (added){
+                    res = "inven_"+(i+1);
+                }
+        }    
+        else{
+            res = null;
+        }
+        boolean test = (res !=null);
+        Gdx.app.log("Inventory", "try add to inven result " + test + " slot: " + res);
+       return res;
     }
     
     public Entity getObject(Entity entity, String slot){
