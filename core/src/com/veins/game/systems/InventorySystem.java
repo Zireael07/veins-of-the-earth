@@ -19,6 +19,7 @@ import com.veins.game.components.RemoveComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.logic.GameLogic;
+import java.util.HashMap;
 
 /**
  *
@@ -70,28 +71,41 @@ public class InventorySystem extends EntitySystem {
             if (entity.getComponent(InventoryComponent.class) != null)
             {
             //add to inventory
-            addObject(entity, "inven_1", item);
+            boolean added = addObject(entity, "inven_1", item);
             
             //test
             String inven_string = getObject(entity, "inven_1").getComponent(NameComponent.class).string;
             Gdx.app.log("Inventory", "Name of object in slot inven_1 is " + inven_string);
+                if (added){
+                //remove from world
+                    item.add(new RemoveComponent());
+                }
             }
             else
             {
                 Gdx.app.log("Inventory", "entity missing inventory component");
-            }
-            //remove from world
-            item.add(new RemoveComponent());
-            //Gdx.app.log("Inventory", "Added a remove component to item");
+            }  
         }
     }
     
-    public void addObject(Entity entity, String slot, Entity item){
+    public boolean addObject(Entity entity, String slot, Entity item){
         Gdx.app.log("Inventory", "Added entity to slot " + slot);
         
         //if (entity.getComponent(InventoryComponent.class) != null)
         {
-            entity.getComponent(InventoryComponent.class).items_map.put(slot, item);
+            HashMap items = entity.getComponent(InventoryComponent.class).items_map;
+            if (items.get(slot) == null){
+                items.put(slot, item);
+                String name = entity.getComponent(NameComponent.class).string;
+                String item_name = item.getComponent(NameComponent.class).string;
+                g_logic.addLog(name + " picked up " + item_name);
+                return true;
+            }
+            else
+            {
+                Gdx.app.log("Inventory", "There's an item in the slot " + slot);
+                return false;
+            }
         }
         /*else{
             Gdx.app.log("Inventory", "entity missing inventory component");
