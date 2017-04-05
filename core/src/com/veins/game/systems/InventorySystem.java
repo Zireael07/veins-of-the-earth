@@ -141,6 +141,19 @@ public class InventorySystem extends EntitySystem {
        return res;
     }
     
+    public void doWear(Entity entity, String old_slot, Entity item){
+        String item_name = item.getComponent(NameComponent.class).string;
+        String slot = item.getComponent(SlotComponent.class).string;
+        Gdx.app.log("Inventory", "trying to wear item " + item_name + " in slot " + slot);
+        
+        boolean added = addObject(entity, slot, item);
+        
+        if (added){
+            removeObject(entity, old_slot, item);
+        }
+        
+    }
+    
     public Entity getObject(Entity entity, String slot){
         Entity res;
         if (entity.getComponent(InventoryComponent.class).items_map.containsKey(slot)){

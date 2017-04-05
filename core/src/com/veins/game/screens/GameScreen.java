@@ -451,7 +451,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         group_inv.setHeight((slot_w+spacing)*2);
 
         for (int i = 0; i < slots.size(); i++) {
-        String slot = slots.get(i);
+        final String slot = slots.get(i);
         
         Drawable slot_image = new TextureRegionDrawable(game.res.slot_tex);
         VisImageButton slot_button = new VisImageButton(slot_image, slot);
@@ -461,7 +461,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
             //Gdx.app.log("Slot", "Slot is inven_1");
             if (player.getComponent(InventoryComponent.class) != null){                
                 Gdx.app.log("Inventory", "Player has inventory");
-                Entity item = engine.getSystem(InventorySystem.class).getObject(player, slot);
+                final Entity item = engine.getSystem(InventorySystem.class).getObject(player, slot);
                 if (item != null){
                     Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
                     slot_button = new VisImageButton(item_image, slot);
@@ -483,6 +483,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                                 public void changed (ChangeEvent event, Actor actor) {
                                 Gdx.app.log("Button", "Clicked the inner button");
                                 //menu_window.close();
+                                //try to wear the item
+                                engine.getSystem(InventorySystem.class).doWear(player, slot, item);
                             }
                             });
                             
