@@ -55,6 +55,7 @@ import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RemovalSystem;
 import com.veins.game.systems.RenderingSystem;
 import com.veins.game.systems.TurnTimeSystem;
+import com.veins.game.ui.InventorySlotButton;
 import java.util.ArrayList;
 import java.util.List;
 import squidpony.squidai.DijkstraMap;
@@ -455,7 +456,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         final String slot = slots.get(i);
         
         Drawable slot_image = new TextureRegionDrawable(game.res.slot_tex);
-        VisImageButton slot_button = new VisImageButton(slot_image, slot);
+        
+        //needs a ton of refs to work :(
+        InventorySlotButton slot_button = new InventorySlotButton(engine, stage, player, null, slot_image, slot);
         
         //Gdx.app.log("Slot", slot);
         //if ("inven_1".equals(slot)){
@@ -465,40 +468,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                 final Entity item = engine.getSystem(InventorySystem.class).getObject(player, slot);
                 if (item != null){
                     Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
-                    slot_button = new VisImageButton(item_image, slot);
-                    Vector2 slot_coord = slot_button.localToStageCoordinates(new Vector2(slot_button.getX(), slot_button.getY()));
-                    final float x = slot_coord.x;
-                    final float y = slot_coord.y;
-                    slot_button.addListener(new ChangeListener() 
-                    {
-			@Override
-                        public void changed (ChangeEvent event, Actor actor) {
-                            Gdx.app.log("Button", "Clicked the button");
-                            
-                            //create a menu
-                            final VisDialog menu_window = new VisDialog("Item menu");
-                            VisTextButton wear_button = new VisTextButton("Wear");
-                            wear_button.addListener(new ChangeListener()
-                            {
-                               @Override
-                                public void changed (ChangeEvent event, Actor actor) {
-                                Gdx.app.log("Button", "Clicked the inner button");
-                                menu_window.hide();
-                                //try to wear the item
-                                engine.getSystem(InventorySystem.class).doWear(player, slot, item);
-                            }
-                            });
-                            
-                            //Gdx.app.log("Item menu", "Item menu pos " + x + " ," + y);
-                            menu_window.setPosition(50, 50);
-                            menu_window.add(wear_button).row();
-                            menu_window.pack();
-                            menu_window.setModal(true);
-                            menu_window.closeOnEscape();
-                            
-                            stage.addActor(menu_window);
-                        }
-                    }); //outer listener
+                    //slot_button = new VisImageButton(item_image, slot);
+                    slot_button = new InventorySlotButton(engine, stage, player, item, item_image, slot);
+                    
                 }//end if item
             }
         //}
