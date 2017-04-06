@@ -35,6 +35,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.layout.GridGroup;
 import com.kotcrab.vis.ui.widget.Separator;
+import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -460,7 +461,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         //if ("inven_1".equals(slot)){
             //Gdx.app.log("Slot", "Slot is inven_1");
             if (player.getComponent(InventoryComponent.class) != null){                
-                Gdx.app.log("Inventory", "Player has inventory");
+                //Gdx.app.log("Inventory", "Player has inventory");
                 final Entity item = engine.getSystem(InventorySystem.class).getObject(player, slot);
                 if (item != null){
                     Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
@@ -475,14 +476,14 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                             Gdx.app.log("Button", "Clicked the button");
                             
                             //create a menu
-                            VisWindow menu_window = new VisWindow("Item menu");
+                            final VisDialog menu_window = new VisDialog("Item menu");
                             VisTextButton wear_button = new VisTextButton("Wear");
                             wear_button.addListener(new ChangeListener()
                             {
                                @Override
                                 public void changed (ChangeEvent event, Actor actor) {
                                 Gdx.app.log("Button", "Clicked the inner button");
-                                //menu_window.close();
+                                menu_window.hide();
                                 //try to wear the item
                                 engine.getSystem(InventorySystem.class).doWear(player, slot, item);
                             }
