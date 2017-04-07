@@ -22,30 +22,22 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.layout.GridGroup;
 import com.kotcrab.vis.ui.widget.Separator;
-import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
-import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
@@ -457,23 +449,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         Drawable slot_image = new TextureRegionDrawable(game.res.slot_tex);
         
-        //needs a ton of refs to work :(
-        InventorySlotButton slot_button = new InventorySlotButton(engine, stage, player, null, slot_image, slot);
-        
-        //Gdx.app.log("Slot", slot);
-        //if ("inven_1".equals(slot)){
-            //Gdx.app.log("Slot", "Slot is inven_1");
-            if (player.getComponent(InventoryComponent.class) != null){                
-                //Gdx.app.log("Inventory", "Player has inventory");
-                final Entity item = engine.getSystem(InventorySystem.class).getObject(player, slot);
-                if (item != null){
-                    Drawable item_image = new SpriteDrawable(item.getComponent(SpriteComponent.class).sprites.get(0));
-                    //slot_button = new VisImageButton(item_image, slot);
-                    slot_button = new InventorySlotButton(engine, stage, player, item, item_image, slot);
-                    
-                }//end if item
-            }
-        //}
+        if (player.getComponent(InventoryComponent.class) != null){ 
+            //Gdx.app.log("Inventory", "Player has inventory");
+            //needs a ton of refs to work :(
+            InventorySlotButton slot_button = new InventorySlotButton(engine, stage, player, slot_image, slot);
         
         if (slot.contains("inven")){
             group_inv.addActor(slot_button);
@@ -482,6 +461,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
             group_eq.addActor(slot_button);
             }
         } //end for
+        
+        }//end if item
         
         //set up window
         inven_window.add(group_eq).row();
