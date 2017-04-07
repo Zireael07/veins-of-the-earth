@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.InventoryComponent;
+import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PlayerComponent;
 import com.veins.game.components.PositionComponent;
@@ -158,6 +159,7 @@ public class GameLogic {
         actor.add(new SpriteComponent(tile));
         actor.add(new NameComponent(name));
         actor.add(new TurnsComponent());
+        actor.add(new LifeComponent());
         actor.add(new FactionComponent(faction));
         
         engine.addEntity(actor);
@@ -170,6 +172,7 @@ public class GameLogic {
         actor.add(new SpriteComponent(tile));
         actor.add(new NameComponent(name));
         actor.add(new TurnsComponent());
+        actor.add(new LifeComponent());
         actor.add(new FactionComponent(faction));
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
