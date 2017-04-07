@@ -25,6 +25,10 @@ public class Resources {
          public TextureRegion armor_tex;
          public TextureRegion unit_marker_tex;
          public Sprite unit_marker;
+         public TextureRegion shield_splash_tex;
+         public TextureRegion damage_splash_tex;
+         public Sprite shield_splash;
+         public Sprite damage_splash;
          
          public TextureRegion slot_tex;
          
@@ -52,8 +56,12 @@ public class Resources {
          sword_tex = new TextureRegion(gameSprites.findRegion("longsword"));
          armor_tex = new TextureRegion(gameSprites.findRegion("armor_studded"));
          unit_marker_tex = new TextureRegion(gameSprites.findRegion("unit_marker"));
+         shield_splash_tex = new TextureRegion(gameSprites.findRegion("splash_shield"));
+         damage_splash_tex = new TextureRegion(gameSprites.findRegion("splash_gray"));
          
          unit_marker = new Sprite(unit_marker_tex);
+         shield_splash = new Sprite(shield_splash_tex);
+         damage_splash = new Sprite(damage_splash_tex);
          
          player = new Sprite(player_tex);
          kobold = new Sprite(kobold_tex);
