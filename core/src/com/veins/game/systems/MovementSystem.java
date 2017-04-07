@@ -80,10 +80,18 @@ public class MovementSystem extends EntitySystem {
     
     //test
     public void combatTest(Entity entity, Entity target){
-        //Gdx.app.log("Stub", "1d100 roll " + g_logic.dice.rollDice(1, 100));
         String str = entity.getComponent(NameComponent.class).string;
         String target_str = target.getComponent(NameComponent.class).string;
-        g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + g_logic.dice.rollDice(1, 100));
+        int roll = g_logic.dice.rollDice(1, 100);
+        String success = "";
+        //roll UNDER!
+        if (roll < 55) {
+            success = "Success!";
+        }else
+        {
+            success = "Miss!";
+        }
+        g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);        
     }
     
     public boolean checkMove(Entity entity, int fx, int fy){
