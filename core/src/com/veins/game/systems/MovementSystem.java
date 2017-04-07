@@ -13,6 +13,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.veins.game.components.FactionComponent;
+import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
@@ -87,9 +88,11 @@ public class MovementSystem extends EntitySystem {
         //roll UNDER!
         if (roll < 55) {
             success = "Success!";
+            target.getComponent(LifeComponent.class).hit = 1;
         }else
         {
             success = "Miss!";
+            target.getComponent(LifeComponent.class).hit = -1;
         }
         g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);        
     }

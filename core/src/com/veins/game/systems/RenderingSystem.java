@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.FactionComponent;
+import com.veins.game.components.LifeComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
@@ -90,5 +91,24 @@ public class RenderingSystem extends EntitySystem {
         for (Sprite sprite : spriteMap.get(entity).sprites) {
             batch.setShader(null);
             sprite.draw(batch);
-}       }
+        }
+        
+        if (!item){
+            float splash_x = spriteMap.get(entity).sprites.get(0).getX();
+            float splash_y = spriteMap.get(entity).sprites.get(0).getY();
+                    
+            if (entity.getComponent(LifeComponent.class) != null){
+                if (entity.getComponent(LifeComponent.class).hit == -1){
+                    game.res.shield_splash.setPosition(splash_x, splash_y);
+                    game.res.shield_splash.draw(batch);
+                }
+                if (entity.getComponent(LifeComponent.class).hit == 1){
+                    game.res.damage_splash.setPosition(splash_x, splash_y+5);
+                    //tint it red
+                    game.res.damage_splash.setColor(1,0,0,1);
+                    game.res.damage_splash.draw(batch);
+                } 
+            }
+        }
+    }
 }
