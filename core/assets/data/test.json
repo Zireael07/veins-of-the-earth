@@ -1,0 +1,5 @@
+{
+ sprite: kobold,         //same as name for now
+ name: kobold,
+ faction: enemy
+}

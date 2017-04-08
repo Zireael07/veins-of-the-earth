@@ -90,7 +90,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     
     public GameScreen(MyVeinsGame _game) {
         super(_game);
-        logic = new GameLogic();
+        logic = new GameLogic(_game);
         
         //ecs
         engine = logic.engine;
@@ -123,8 +123,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         viewport = new ScalingViewport(Scaling.none, logic.MAP_WIDTH*logic.ISO_WIDTH+5, logic.MAP_HEIGHT*logic.TILE_HEIGHT+5, camera);
         
         batch = new SpriteBatch();
+        
         //add player
-
         player = logic.CreatePlayer("Player", game.res.player_tex);
 
         //spawn some monsters
@@ -144,6 +144,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
         item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
         logic.CreateItem("leather armor", game.res.armor_tex, "body", item_x, item_y);
+        
+        //test
+        logic.testLoading();
         
         
         //Gdx.input.setInputProcessor(this);

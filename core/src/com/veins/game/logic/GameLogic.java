@@ -10,6 +10,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import com.veins.game.MyVeinsGame;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.LifeComponent;
@@ -40,6 +43,9 @@ public class GameLogic {
     public static final int TILE_WIDTH = 32;
     public static final int TILE_HEIGHT = 32;
     
+    MyVeinsGame game;
+    
+    
     public StatefulRNG rng;
     public Dice dice;
     
@@ -57,10 +63,10 @@ public class GameLogic {
     public ArrayList<String> messages;
     //public List<String> recent_messages;
     
-    public GameLogic()
+    public GameLogic(MyVeinsGame _game)
     {
         messages = new ArrayList<String>();
-        
+        game = _game;
         
         rng = new StatefulRNG();
         dice = new Dice();
@@ -202,5 +208,49 @@ public class GameLogic {
         Gdx.app.log("Spawn", "Spawned item at" + fx + ", " + fy);
         engine.addEntity(item);
         return item;
+    }
+    
+    public void testLoading(){
+    //test loading
+    JsonReader reader = new JsonReader();
+    JsonValue root = reader.parse(Gdx.files.internal("data/test.json"));
+    
+    Gdx.app.log("Dummy", "dummy");
+    
+    //print json to console
+    //System.out.println(root);
+    
+        //parse the JSON
+        String tilename = new String();
+        String name = new String();
+        String factionname = new String();
+        for (JsonValue child : root.iterator()) //returns a list of children
+        {   
+            Gdx.app.log("Loading JSON", "Reading " + child.name);
+            if ("name".equals(child.name)){
+                name = child.asString();
+                Gdx.app.log("Loading JSON", "We have a name entry " + name);
+                
+            }
+            if ("faction".equals(child.name)){
+                factionname = child.asString();
+                Gdx.app.log("Loading JSON", "We have a faction entry " + factionname);
+                
+            }
+                
+            if ("sprite".equals(child.name)){
+                tilename = child.asString();
+                Gdx.app.log("Loading JSON", "We have a sprite entry " + tilename);
+            }
+        } //end for
+        
+        //paranoia
+        if (!name.isEmpty() && !factionname.isEmpty())
+        {
+            //pick sprite
+            if ("kobold".equals(tilename)){
+                CreateActor(name, game.res.kobold_tex, factionname, 8, 8);
+            }
+        }
     }
 }
