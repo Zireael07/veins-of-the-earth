@@ -77,7 +77,7 @@ public class RenderingSystem extends EntitySystem {
             game.res.unit_marker.setPosition(marker_x, marker_y);
             
             //tint
-            if (entity.getComponent(FactionComponent.class).string == "enemy"){
+            if ("enemy".equals(entity.getComponent(FactionComponent.class).string)){
                 game.res.unit_marker.setColor(1,0,0,1);
             }
             else{
