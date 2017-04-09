@@ -215,8 +215,6 @@ public class GameLogic {
     JsonReader reader = new JsonReader();
     JsonValue root = reader.parse(Gdx.files.internal("data/test.json"));
     
-    Gdx.app.log("Dummy", "dummy");
-    
     //print json to console
     //System.out.println(root);
     
@@ -250,6 +248,53 @@ public class GameLogic {
             //pick sprite
             if ("kobold".equals(tilename)){
                 CreateActor(name, game.res.kobold_tex, factionname, 8, 8);
+            }
+        }
+    }
+    
+    public void itemtestLoading(){
+        JsonReader reader = new JsonReader();
+        JsonValue root = reader.parse(Gdx.files.internal("data/items_test.json"));
+    
+        //print json to console
+        System.out.println(root);
+        
+        //Gdx.app.log("Dummy", "dummy");
+        for (JsonValue table : root.iterator()) //returns a list of children
+        {   
+            JsonValue item = table.child;
+            Gdx.app.log("Loading JSON", "Reading " + item.asString());
+            
+            //parse the JSON
+            String name = new String();
+            String slotname = new String();
+            String spritename = new String();
+            for (JsonValue child : table.iterator())
+            {
+            
+                Gdx.app.log("Loading JSON", "Reading " + child.name);
+                if ("name".equals(child.name)){
+                    name = child.asString();
+                }
+                
+                if ("slot".equals(child.name)){
+                    slotname = child.asString();
+                }
+                
+                if ("sprite".equals(child.name)){
+                    spritename = child.asString();
+                }
+            }
+            
+            //paranoia
+            if (!name.isEmpty() && !spritename.isEmpty() && !slotname.isEmpty()){
+                //pick sprite
+                if ("longsword".equals(spritename)){
+                    CreateItem(name, game.res.sword_tex, slotname, 6,6);
+                }
+                if ("leather".equals(spritename)){
+                    CreateItem(name, game.res.armor_tex, slotname, 5,5);
+                }
             }
         }
     }

@@ -1,0 +1,12 @@
+[
+  {
+      name: longsword,
+      sprite: longsword, //same for now
+      slot: main_hand,
+  },
+  {
+      name: leather armor,
+      sprite: leather, //armor
+      slot: body,
+  }
+]

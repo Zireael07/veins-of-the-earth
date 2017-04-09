@@ -147,7 +147,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //test
         logic.testLoading();
-        
+        logic.itemtestLoading();
         
         //Gdx.input.setInputProcessor(this);
         //Setting the InputProcessor is ABSOLUTELY NEEDED TO HANDLE INPUT
