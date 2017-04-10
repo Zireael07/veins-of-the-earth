@@ -22,6 +22,7 @@ import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
+import com.veins.game.factory.EntityFactory;
 import java.util.ArrayList;
 import java.util.List;
 import squidpony.squidai.DijkstraMap;
@@ -51,6 +52,9 @@ public class GameLogic {
     
     public static int NUM_NPC = 4;
     
+    //factory
+    public EntityFactory factory;
+    
     //ecs
     public Engine engine;
     Entity player;
@@ -71,8 +75,8 @@ public class GameLogic {
         rng = new StatefulRNG();
         dice = new Dice();
         
-        engine = new Engine();
-    
+        factory = new EntityFactory(game);
+        engine = factory._engine; //new Engine();
     }
     
     //log messages
@@ -158,144 +162,12 @@ public class GameLogic {
          return point;
      }
     
-    //ECS
-    public Entity CreateActor(String name, TextureRegion tile, String faction){
-        Entity actor = new Entity();
-        actor.add(new PositionComponent());
-        actor.add(new SpriteComponent(tile));
-        actor.add(new NameComponent(name));
-        actor.add(new TurnsComponent());
-        actor.add(new LifeComponent());
-        actor.add(new FactionComponent(faction));
-        
-        engine.addEntity(actor);
-        return actor;
-    }
-    
-    public Entity CreateActor(String name, TextureRegion tile, String faction, int fx, int fy){
-        Entity actor = new Entity();
-        actor.add(new PositionComponent(fx, fy));
-        actor.add(new SpriteComponent(tile));
-        actor.add(new NameComponent(name));
-        actor.add(new TurnsComponent());
-        actor.add(new LifeComponent());
-        actor.add(new FactionComponent(faction));
-        
-        Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
-        
-        engine.addEntity(actor);
-        return actor;
-    }
-    
-    public Entity CreatePlayer(String name, TextureRegion tile){
-        player = CreateActor(name, tile, "player");
-        player.add(new PlayerComponent());
-        player.add(new InventoryComponent());
-        return player;
-    }
-    
     public Entity getPlayer(){
         return player;
     }
     
-    public Entity CreateItem(String name, TextureRegion tile, String slot, int fx, int fy){
-        Entity item = new Entity();
-        item.add(new PositionComponent(fx, fy));
-        item.add(new SpriteComponent(tile));
-        item.add(new NameComponent(name));
-        item.add(new SlotComponent(slot));
-        
-        Gdx.app.log("Spawn", "Spawned item at" + fx + ", " + fy);
-        engine.addEntity(item);
-        return item;
-    }
-    
-    public void testLoading(){
-    //test loading
-    JsonReader reader = new JsonReader();
-    JsonValue root = reader.parse(Gdx.files.internal("data/test.json"));
-    
-    //print json to console
-    //System.out.println(root);
-    
-        //parse the JSON
-        String tilename = new String();
-        String name = new String();
-        String factionname = new String();
-        for (JsonValue child : root.iterator()) //returns a list of children
-        {   
-            Gdx.app.log("Loading JSON", "Reading " + child.name);
-            if ("name".equals(child.name)){
-                name = child.asString();
-                Gdx.app.log("Loading JSON", "We have a name entry " + name);
-                
-            }
-            if ("faction".equals(child.name)){
-                factionname = child.asString();
-                Gdx.app.log("Loading JSON", "We have a faction entry " + factionname);
-                
-            }
-                
-            if ("sprite".equals(child.name)){
-                tilename = child.asString();
-                Gdx.app.log("Loading JSON", "We have a sprite entry " + tilename);
-            }
-        } //end for
-        
-        //paranoia
-        if (!name.isEmpty() && !factionname.isEmpty())
-        {
-            //pick sprite
-            if ("kobold".equals(tilename)){
-                CreateActor(name, game.res.kobold_tex, factionname, 8, 8);
-            }
-        }
-    }
-    
-    public void itemtestLoading(){
-        JsonReader reader = new JsonReader();
-        JsonValue root = reader.parse(Gdx.files.internal("data/items_test.json"));
-    
-        //print json to console
-        System.out.println(root);
-        
-        //Gdx.app.log("Dummy", "dummy");
-        for (JsonValue table : root.iterator()) //returns a list of children
-        {   
-            JsonValue item = table.child;
-            Gdx.app.log("Loading JSON", "Reading " + item.asString());
-            
-            //parse the JSON
-            String name = new String();
-            String slotname = new String();
-            String spritename = new String();
-            for (JsonValue child : table.iterator())
-            {
-            
-                Gdx.app.log("Loading JSON", "Reading " + child.name);
-                if ("name".equals(child.name)){
-                    name = child.asString();
-                }
-                
-                if ("slot".equals(child.name)){
-                    slotname = child.asString();
-                }
-                
-                if ("sprite".equals(child.name)){
-                    spritename = child.asString();
-                }
-            }
-            
-            //paranoia
-            if (!name.isEmpty() && !spritename.isEmpty() && !slotname.isEmpty()){
-                //pick sprite
-                if ("longsword".equals(spritename)){
-                    CreateItem(name, game.res.sword_tex, slotname, 6,6);
-                }
-                if ("leather".equals(spritename)){
-                    CreateItem(name, game.res.armor_tex, slotname, 5,5);
-                }
-            }
-        }
+    public Entity CreatePlayer(String name, TextureRegion tile){ 
+        player = factory.CreatePlayer(name, tile);
+        return player;
     }
 }

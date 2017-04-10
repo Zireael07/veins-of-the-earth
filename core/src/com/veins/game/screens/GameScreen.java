@@ -133,21 +133,21 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
             int act_x = logic.rng.between(0, logic.MAP_WIDTH-1);
             int act_y = logic.rng.between(0, logic.MAP_HEIGHT-1);
 
-            logic.CreateActor("kobold" + "#" + x, game.res.kobold_tex, "enemy", act_x, act_y);
+            logic.factory.CreateActor("kobold" + "#" + x, game.res.kobold_tex, "enemy", act_x, act_y);
         }
         
         //spawn an item
         int item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
         int item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
-        logic.CreateItem("longsword", game.res.sword_tex, "main_hand", item_x, item_y);
+        logic.factory.CreateItem("longsword", game.res.sword_tex, "main_hand", item_x, item_y);
         
         item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
         item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
-        logic.CreateItem("leather armor", game.res.armor_tex, "body", item_x, item_y);
+        logic.factory.CreateItem("leather armor", game.res.armor_tex, "body", item_x, item_y);
         
         //test
-        logic.testLoading();
-        logic.itemtestLoading();
+        logic.factory.testLoading();
+        logic.factory.itemtestLoading();
         
         //Gdx.input.setInputProcessor(this);
         //Setting the InputProcessor is ABSOLUTELY NEEDED TO HANDLE INPUT
