@@ -39,6 +39,7 @@ import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
+import com.veins.game.logic.Area;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
 import com.veins.game.systems.InventorySystem;
@@ -75,6 +76,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     GridGroup group_inv;
     
     //map
+    Area area;
     MapGenerator mapgen;
     IsometricTiledMapRenderer renderer;
     TiledMapTileLayer layer;
@@ -90,7 +92,9 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     
     public GameScreen(MyVeinsGame _game) {
         super(_game);
+        //set up
         logic = new GameLogic(_game);
+        area = new Area(logic, _game);
         
         //ecs
         engine = logic.engine;
@@ -102,17 +106,10 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         stage = new Stage();
         stage.setViewport(hud_viewport);
         
-        //map gen
-        mapgen = new MapGenerator(logic);
-        TiledMap map = mapgen.createMap();
+        //set game renderer
+        TiledMap map = area.map;
         renderer = new IsometricTiledMapRenderer(map);
         layer = (TiledMapTileLayer)map.getLayers().get(0);
-        
-        //char dungeon
-        logic.setDungeon(mapgen.createCharMap());
-        Gdx.app.log("Char dungeon", '\n' + mapgen.toString());
-        AIMap = new DijkstraMap(logic.getDungeon(), DijkstraMap.Measurement.CHEBYSHEV);
-        logic.setAIMap(AIMap);
         
         shape_renderer = new ShapeRenderer();
         
@@ -126,28 +123,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //add player
         player = logic.CreatePlayer("Player", game.res.player_tex);
-
-        //spawn some monsters
-        for (int x = 0; x < logic.NUM_NPC; x++)
-        {
-            int act_x = logic.rng.between(0, logic.MAP_WIDTH-1);
-            int act_y = logic.rng.between(0, logic.MAP_HEIGHT-1);
-
-            logic.factory.CreateActor("kobold" + "#" + x, game.res.kobold_tex, "enemy", act_x, act_y);
-        }
         
-        //spawn an item
-        int item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
-        int item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
-        logic.factory.CreateItem("longsword", game.res.sword_tex, "main_hand", item_x, item_y);
-        
-        item_x = logic.rng.between(1, logic.MAP_WIDTH-1);
-        item_y = logic.rng.between(1, logic.MAP_HEIGHT-1);
-        logic.factory.CreateItem("leather armor", game.res.armor_tex, "body", item_x, item_y);
-        
-        //test
-        logic.factory.testLoading();
-        logic.factory.itemtestLoading();
+        area.spawnStuff();
         
         //Gdx.input.setInputProcessor(this);
         //Setting the InputProcessor is ABSOLUTELY NEEDED TO HANDLE INPUT
