@@ -18,11 +18,13 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
  * @author AdmKasia
  */
 public class MapGenerator {
-    
+    //rendered map
     TiledMap map;
     Texture tiles;
+    
     GameLogic g_logic;
     
+    MapTile[][] map_inter;
     char[][] dungeon;
     
     //init the game logic ref
@@ -32,29 +34,46 @@ public class MapGenerator {
            
     
     public TiledMap createMap() {
+        //init internal map representation
+        map_inter = new MapTile[10][10];
+        
+        //drawing stuff
         tiles = new Texture(Gdx.files.internal("packed/terrain.png"));
         TextureRegion[][] splitTiles = TextureRegion.split(tiles, 54, 54);
         map = new TiledMap();
         MapLayers layers = map.getLayers();
         TiledMapTileLayer new_layer = new TiledMapTileLayer(g_logic.MAP_WIDTH, g_logic.MAP_HEIGHT, g_logic.ISO_WIDTH, g_logic.ISO_HEIGHT);
+       
+        //actual generation
         for (int x = 0; x < 10; x++) 
             {
                 for (int y = 0; y < 10; y++) 
                 {
+                        char chara = '.';
                         int ty = 0;
                         int tx;
                         if (x == 0 || x == 9)
                         {
                             tx = 1;
+                            chara = '#';
                         }
                         else
                         {
                             tx = 0; 
+                            chara = '.';
                         }
                         
-                        //set up cells
+                        //set up map tiles
+                        MapTile tile = new MapTile(x, y, tx, ty, chara);
+                        Gdx.app.log("Map gen", "Created a map tile @" + x + "," + y + " " + tx + " " + ty + " " + chara);
+                        
+                        //put them in the internal map
+                        putInterMap(tile, x, y);
+                        
+                        //set up renderer cells
                         TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-                        cell.setTile(new StaticTiledMapTile(splitTiles[ty][tx]));
+                        //y,x
+                        cell.setTile(new StaticTiledMapTile(splitTiles[tile.getTextureY()][tile.getTextureX()]));
                         new_layer.setCell(x, y, cell);
                 }
             }
@@ -67,6 +86,11 @@ public class MapGenerator {
     return map;
     }
     
+    public void putInterMap(MapTile tile, int x, int y){
+        map_inter[x][y] = tile;
+    }
+    
+    
     
     public void put(char elem, int x, int y) {
         dungeon[x][y] = elem;
@@ -78,7 +102,9 @@ public class MapGenerator {
             {
                 for (int y = 0; y < 10; y++) 
                 {
-                        if (x == 0 || x == 9)
+                        MapTile tile = map_inter[x][y];
+                        char draw = tile.getCharacter();
+                        if (draw == '#')
                         {
                             put('#', x, y);
                         }
