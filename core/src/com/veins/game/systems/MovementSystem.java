@@ -18,6 +18,7 @@ import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
+import com.veins.game.logic.MapTile;
 import java.util.ArrayList;
 import squidpony.squidmath.Coord;
 
@@ -34,10 +35,12 @@ public class MovementSystem extends EntitySystem {
     
     private GameLogic g_logic;
     private Engine g_engine;
+    MapTile[][] inter_map;
     
     public MovementSystem(int priority, GameLogic logic){
         super.priority = priority;
         g_logic = logic;
+        inter_map = g_logic.getInterMap();
     }
     
     public void addedToEngine(Engine engine){
@@ -128,7 +131,7 @@ public class MovementSystem extends EntitySystem {
                 String self_faction = entity.getComponent(FactionComponent.class).string;
                 String faction = entity_check.getComponent(FactionComponent.class).string;
                 Gdx.app.log("Faction", "Self: " + self_faction + " target " + faction);
-                if (faction != self_faction) {
+                if (!faction.equals(self_faction)) {
                     combatTest(entity, entity_check);
                 }
                 break;
@@ -146,7 +149,9 @@ public class MovementSystem extends EntitySystem {
         if (checkMove(entity, getPositionX(entity) + dx, getPositionY(entity) + dy) 
             && checkMoveActor(entity, getPositionX(entity) + dx, getPositionY(entity) + dy) 
             ){
+            setMapTile(null, getPositionX(entity), getPositionY(entity));
             setPosition(entity, getPositionX(entity) + dx, getPositionY(entity) + dy);
+            setMapTile(entity, getPositionX(entity), getPositionY(entity));
         }
     }
     
@@ -160,6 +165,16 @@ public class MovementSystem extends EntitySystem {
         Gdx.app.log("AI path", "move to " + tx + ", " + ty + " result " + dx + ", " + dy);
         
         attemptMove(entity, dx, dy);
+    }
+    
+    public void setMapTile(Entity entity, int tx, int ty){
+        inter_map[tx][ty].setActor(entity);
+        if (entity != null){
+            Gdx.app.log("Map tile", "Setting actor in tile " + tx + " " + ty);
+        }
+        else{
+            Gdx.app.log("Map tile", "Setting tile " + tx + " " + ty + " no actor");
+        }
     }
     
     
