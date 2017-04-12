@@ -46,6 +46,9 @@ public class GameLogic {
     public Engine engine;
     Entity player;
     
+    //internal map
+    MapTile[][] inter_map;
+    
     //Dijkstra
     char[][] dungeon;
     DijkstraMap g_AIMap;
@@ -70,6 +73,16 @@ public class GameLogic {
     public void addLog(String str){
         messages.add(str);
     }
+    
+    //internal map
+    public void setInterMap(MapTile[][] int_map){
+        inter_map = int_map;
+    }
+    
+    public MapTile[][] getInterMap(){
+        return inter_map;
+    }
+    
     
     //Dijkstra map
     public void setAIMap(DijkstraMap map)

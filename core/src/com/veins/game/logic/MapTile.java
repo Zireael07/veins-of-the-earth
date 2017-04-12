@@ -5,6 +5,7 @@
  */
 package com.veins.game.logic;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -21,6 +22,8 @@ public class MapTile {
     public TextureRegion texture;
     
     public char simple_char;
+    
+    Entity actor_ref;
     
     public MapTile(int x, int y, int tx, int ty, char chara){
         tex_reg_x = tx;
@@ -40,5 +43,13 @@ public class MapTile {
     
     public char getCharacter(){
         return simple_char;
+    }
+    
+    public void setActor(Entity entity){
+        actor_ref = entity;
+    }
+    
+    public Entity getActor(){
+        return actor_ref;
     }
 }

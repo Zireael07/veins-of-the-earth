@@ -82,6 +82,8 @@ public class MapGenerator {
             float y_off = g_logic.getYOffset();
             new_layer.setOffsetY(y_off);
             layers.add(new_layer);
+            
+            g_logic.setInterMap(map_inter);
 
     return map;
     }
