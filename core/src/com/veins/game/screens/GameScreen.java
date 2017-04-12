@@ -42,6 +42,7 @@ import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.Area;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapGenerator;
+import com.veins.game.logic.MapTile;
 import com.veins.game.systems.InventorySystem;
 import com.veins.game.systems.MovementSystem;
 import com.veins.game.systems.PositionSystem;
@@ -82,6 +83,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     TiledMapTileLayer layer;
     
     DijkstraMap AIMap;
+    MapTile[][] inter_map;
     
     //show border around tile
     ShapeRenderer shape_renderer;
@@ -121,8 +123,12 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         batch = new SpriteBatch();
         
+        inter_map = logic.getInterMap();
+        
         //add player
         player = logic.CreatePlayer("Player", game.res.player_tex);
+        inter_map[1][1].setActor(player);
+        
         
         area.spawnStuff();
         

@@ -5,6 +5,7 @@
  */
 package com.veins.game.logic;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -23,10 +24,12 @@ public class Area {
     MapGenerator mapgen;
     public TiledMap map;
     DijkstraMap AIMap;
+    MapTile[][] inter_map;
     
     public Area (GameLogic logic, MyVeinsGame game){
         g_logic = logic;
         _game = game;
+        
         //map gen
         mapgen = new MapGenerator(g_logic);
         map = mapgen.createMap();
@@ -37,16 +40,16 @@ public class Area {
         Gdx.app.log("Char dungeon", '\n' + mapgen.toString());
         AIMap = new DijkstraMap(logic.getDungeon(), DijkstraMap.Measurement.CHEBYSHEV);
         g_logic.setAIMap(AIMap);
+        
+        //inter map
+        inter_map = g_logic.getInterMap();
     }
     
     public void spawnStuff(){
         //spawn some monsters
         for (int x = 0; x < g_logic.NUM_NPC; x++)
         {
-            int act_x = g_logic.rng.between(0, g_logic.MAP_WIDTH-1);
-            int act_y = g_logic.rng.between(0, g_logic.MAP_HEIGHT-1);
-
-            g_logic.factory.CreateActor("kobold" + "#" + x, _game.res.kobold_tex, "enemy", act_x, act_y);
+            spawnActor(x);
         }
         
         //spawn an item
@@ -61,5 +64,19 @@ public class Area {
         //test
         g_logic.factory.testLoading();
         g_logic.factory.itemtestLoading();
+    }
+    
+    public void spawnActor(int x){
+        int act_x = g_logic.rng.between(0, g_logic.MAP_WIDTH-1);
+        int act_y = g_logic.rng.between(0, g_logic.MAP_HEIGHT-1);
+        
+        while (inter_map[act_x][act_y].getActor() != null){
+            Gdx.app.log("Spawn", "Rejecting location because existing actor");
+            act_x = g_logic.rng.between(0, g_logic.MAP_WIDTH-1);
+            act_y = g_logic.rng.between(0, g_logic.MAP_HEIGHT-1);
+        }
+        
+        Entity actor = g_logic.factory.CreateActor("kobold" + "#" + x, _game.res.kobold_tex, "enemy", act_x, act_y);
+        inter_map[act_x][act_y].setActor(actor);
     }
 }
