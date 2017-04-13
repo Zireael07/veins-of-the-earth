@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.NameComponent;
 import squidpony.squidai.DijkstraMap;
 
 /**
@@ -46,6 +47,10 @@ public class Area {
     }
     
     public void spawnStuff(){
+        //load data
+        g_logic.factory.testLoading();
+        g_logic.factory.itemtestLoading();
+
         //spawn some monsters
         for (int x = 0; x < g_logic.NUM_NPC; x++)
         {
@@ -55,15 +60,14 @@ public class Area {
         //spawn an item
         int item_x = g_logic.rng.between(1, g_logic.MAP_WIDTH-1);
         int item_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
-        g_logic.factory.CreateItem("longsword", _game.res.sword_tex, "main_hand", item_x, item_y);
+        //g_logic.factory.CreateItem("longsword", _game.res.sword_tex, "main_hand", item_x, item_y);
+        g_logic.factory.CreateItem("longsword", item_x, item_y);
         
         item_x = g_logic.rng.between(1, g_logic.MAP_WIDTH-1);
         item_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
-        g_logic.factory.CreateItem("leather armor", _game.res.armor_tex, "body", item_x, item_y);
-        
-        //test
-        g_logic.factory.testLoading();
-        g_logic.factory.itemtestLoading();
+        //g_logic.factory.CreateItem("leather armor", _game.res.armor_tex, "body", item_x, item_y);
+        g_logic.factory.CreateItem("leather armor", item_x, item_y);
+
     }
     
     public void spawnActor(int x){
@@ -76,7 +80,10 @@ public class Area {
             act_y = g_logic.rng.between(0, g_logic.MAP_HEIGHT-1);
         }
         
-        Entity actor = g_logic.factory.CreateActor("kobold" + "#" + x, _game.res.kobold_tex, "enemy", act_x, act_y);
+        //Entity actor = g_logic.factory.CreateActor("kobold" + "#" + x, _game.res.kobold_tex, "enemy", act_x, act_y);
+        Entity actor = g_logic.factory.CreateActor("kobold", act_x, act_y);
+        //named in order
+        actor.getComponent(NameComponent.class).string = "kobold" + "#" + x;
         inter_map[act_x][act_y].setActor(actor);
     }
 }

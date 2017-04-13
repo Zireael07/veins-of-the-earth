@@ -21,6 +21,7 @@ import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
+import java.util.HashMap;
 
 /**
  *
@@ -31,11 +32,15 @@ public class EntityFactory {
     MyVeinsGame _game;
     public Entity _player;
     
+    HashMap<String, Entity> loaded_entities;
+    
     public EntityFactory(MyVeinsGame game)
     {
         //engine = engine;
         _game = game;
         _engine = new Engine();
+        
+        loaded_entities = new HashMap<String, Entity>();
     }
 
     //ECS
@@ -52,18 +57,21 @@ public class EntityFactory {
         return actor;
     }
     
-    public Entity CreateActor(String name, TextureRegion tile, String faction, int fx, int fy){
+    public Entity CreateActor(String name, int fx, int fy){
+        Entity proto_actor = loaded_entities.get(name);
+        
         Entity actor = new Entity();
         actor.add(new PositionComponent(fx, fy));
-        actor.add(new SpriteComponent(tile));
-        actor.add(new NameComponent(name));
+        actor.add(new SpriteComponent(proto_actor.getComponent(SpriteComponent.class).sprites.get(0)));
+        actor.add(new NameComponent(proto_actor.getComponent(NameComponent.class).string));
         actor.add(new TurnsComponent());
         actor.add(new LifeComponent());
-        actor.add(new FactionComponent(faction));
+        actor.add(new FactionComponent(proto_actor.getComponent(FactionComponent.class).string));
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
         
         _engine.addEntity(actor);
+        
         return actor;
     }
     
@@ -74,17 +82,59 @@ public class EntityFactory {
         return _player;
     }
     
-    public Entity CreateItem(String name, TextureRegion tile, String slot, int fx, int fy){
+    public Entity CreateItem(String name, int fx, int fy){
+        Entity proto_item = loaded_entities.get(name);
+        
         Entity item = new Entity();
         item.add(new PositionComponent(fx, fy));
-        item.add(new SpriteComponent(tile));
-        item.add(new NameComponent(name));
-        item.add(new SlotComponent(slot));
+        item.add(new SpriteComponent(proto_item.getComponent(SpriteComponent.class).sprites.get(0)));
+        item.add(new NameComponent(proto_item.getComponent(NameComponent.class).string));
+        item.add(new SlotComponent(proto_item.getComponent(SlotComponent.class).string));
+        
         
         Gdx.app.log("Spawn", "Spawned item at" + fx + ", " + fy);
         _engine.addEntity(item);
         return item;
     }
+    
+    //Loading entities
+    public Entity LoadActor(String name, TextureRegion tile, String faction){
+        Entity actor = new Entity();
+        actor.add(new PositionComponent());
+        actor.add(new SpriteComponent(tile));
+        actor.add(new NameComponent(name));
+        actor.add(new TurnsComponent());
+        actor.add(new LifeComponent());
+        actor.add(new FactionComponent(faction));
+        Gdx.app.log("Loading", "Loaded actor" + name);
+        return actor;
+    }
+    
+    
+    public Entity LoadItem(String name, TextureRegion tile, String slot){
+        Entity item = new Entity();
+        item.add(new PositionComponent());
+        item.add(new SpriteComponent(tile));
+        item.add(new NameComponent(name));
+        item.add(new SlotComponent(slot));
+        Gdx.app.log("Loading", "Loaded item" + name);
+        return item;
+    }
+    
+    public void loadStoreActor(String name, TextureRegion tile, String faction){
+        Entity actor = LoadActor(name, tile, faction);
+        if (loaded_entities.get(name) == null){
+            loaded_entities.put(name, actor);
+        }
+    }
+    
+    public void loadStoreItem(String name, TextureRegion tile, String slot){
+        Entity item = LoadItem(name, tile, slot);
+        if (loaded_entities.get(name) == null){
+            loaded_entities.put(name, item);
+        }
+    }
+    
     
     public void testLoading(){
     //test loading
@@ -123,7 +173,8 @@ public class EntityFactory {
         {
             //pick sprite
             if ("kobold".equals(tilename)){
-                CreateActor(name, _game.res.kobold_tex, factionname, 8, 8);
+                //CreateActor(name, _game.res.kobold_tex, factionname, 8, 8);
+                loadStoreActor(name, _game.res.kobold_tex, factionname);
             }
         }
     }
@@ -166,12 +217,16 @@ public class EntityFactory {
             if (!name.isEmpty() && !spritename.isEmpty() && !slotname.isEmpty()){
                 //pick sprite
                 if ("longsword".equals(spritename)){
-                    CreateItem(name, _game.res.sword_tex, slotname, 6,6);
+                    //CreateItem(name, _game.res.sword_tex, slotname, 6,6);
+                    loadStoreItem(name, _game.res.sword_tex, slotname);
                 }
                 if ("leather".equals(spritename)){
-                    CreateItem(name, _game.res.armor_tex, slotname, 5,5);
+                    //CreateItem(name, _game.res.armor_tex, slotname, 5,5);
+                    loadStoreItem(name, _game.res.armor_tex, slotname);
                 }
             }
-        }
+        }//end for
+        
+        Gdx.app.log("Loading JSON", "Finished loading");
     }
 }

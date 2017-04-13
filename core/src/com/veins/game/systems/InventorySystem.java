@@ -172,10 +172,13 @@ public class InventorySystem extends EntitySystem {
             if (item != null){
                 removeObject(entity, "inven_1", item);
                 g_logic.factory.CreateItem(
+                        item.getComponent(NameComponent.class).string,
+                        sx, sy);
+                /*g_logic.factory.CreateItem(
                     item.getComponent(NameComponent.class).string, 
                     item.getComponent(SpriteComponent.class).sprites.get(0),
                     item.getComponent(SlotComponent.class).string,
-                    sx, sy);
+                    sx, sy);*/
             }
         }
         
