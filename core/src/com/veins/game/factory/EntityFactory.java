@@ -106,7 +106,19 @@ public class EntityFactory {
         actor.add(new TurnsComponent());
         actor.add(new LifeComponent());
         actor.add(new FactionComponent(faction));
-        Gdx.app.log("Loading", "Loaded actor" + name);
+        Gdx.app.log("Loading", "Loaded actor " + name);
+        return actor;
+    }
+    
+    public Entity LoadActor(String name, TextureRegion tile, String faction, int hp){
+        Entity actor = new Entity();
+        actor.add(new PositionComponent());
+        actor.add(new SpriteComponent(tile));
+        actor.add(new NameComponent(name));
+        actor.add(new TurnsComponent());
+        actor.add(new LifeComponent(hp));
+        actor.add(new FactionComponent(faction));
+        Gdx.app.log("Loading", "Loaded actor with hp " + name);
         return actor;
     }
     
@@ -117,12 +129,19 @@ public class EntityFactory {
         item.add(new SpriteComponent(tile));
         item.add(new NameComponent(name));
         item.add(new SlotComponent(slot));
-        Gdx.app.log("Loading", "Loaded item" + name);
+        Gdx.app.log("Loading", "Loaded item " + name);
         return item;
     }
     
     public void loadStoreActor(String name, TextureRegion tile, String faction){
         Entity actor = LoadActor(name, tile, faction);
+        if (loaded_entities.get(name) == null){
+            loaded_entities.put(name, actor);
+        }
+    }
+    
+    public void loadStoreActor(String name, TextureRegion tile, String faction, int hp){
+        Entity actor = LoadActor(name, tile, faction, hp);
         if (loaded_entities.get(name) == null){
             loaded_entities.put(name, actor);
         }
@@ -148,6 +167,7 @@ public class EntityFactory {
         String tilename = new String();
         String name = new String();
         String factionname = new String();
+        int hp = 0;
         for (JsonValue child : root.iterator()) //returns a list of children
         {   
             Gdx.app.log("Loading JSON", "Reading " + child.name);
@@ -166,15 +186,20 @@ public class EntityFactory {
                 tilename = child.asString();
                 Gdx.app.log("Loading JSON", "We have a sprite entry " + tilename);
             }
+            if ("hit_points".equals(child.name)){
+                hp = child.asInt();
+                Gdx.app.log("Loading JSON", "We have hit points " + hp);
+            }
         } //end for
         
         //paranoia
         if (!name.isEmpty() && !factionname.isEmpty())
         {
-            //pick sprite
-            if ("kobold".equals(tilename)){
-                //CreateActor(name, _game.res.kobold_tex, factionname, 8, 8);
-                loadStoreActor(name, _game.res.kobold_tex, factionname);
+            if (hp > 0){
+                //pick sprite
+                if ("kobold".equals(tilename)){
+                    loadStoreActor(name, _game.res.kobold_tex, factionname, hp);
+                }
             }
         }
     }
@@ -217,11 +242,9 @@ public class EntityFactory {
             if (!name.isEmpty() && !spritename.isEmpty() && !slotname.isEmpty()){
                 //pick sprite
                 if ("longsword".equals(spritename)){
-                    //CreateItem(name, _game.res.sword_tex, slotname, 6,6);
                     loadStoreItem(name, _game.res.sword_tex, slotname);
                 }
                 if ("leather".equals(spritename)){
-                    //CreateItem(name, _game.res.armor_tex, slotname, 5,5);
                     loadStoreItem(name, _game.res.armor_tex, slotname);
                 }
             }
