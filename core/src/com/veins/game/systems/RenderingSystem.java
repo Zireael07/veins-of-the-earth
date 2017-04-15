@@ -107,6 +107,10 @@ public class RenderingSystem extends EntitySystem {
                     //tint it red
                     game.res.damage_splash.setColor(1,0,0,1);
                     game.res.damage_splash.draw(batch);
+                    //add damage number
+                    String str = "1";
+                    
+                    game.res.font.draw(batch, str, splash_x+g_logic.ISO_WIDTH/4, splash_y+g_logic.ISO_HEIGHT/2+g_logic.ISO_HEIGHT/4);
                 } 
             }
         }

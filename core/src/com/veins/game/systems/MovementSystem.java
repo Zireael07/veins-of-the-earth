@@ -91,7 +91,9 @@ public class MovementSystem extends EntitySystem {
         //roll UNDER!
         if (roll < 55) {
             success = "Success!";
-            target.getComponent(LifeComponent.class).hit = 1;
+            LifeComponent LifeComp = target.getComponent(LifeComponent.class);
+            LifeComp.hit = 1;
+            LifeComp.hp = LifeComp.hp - 1;
         }else
         {
             success = "Miss!";
