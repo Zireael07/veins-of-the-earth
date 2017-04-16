@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.ActorStatsComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.LifeComponent;
@@ -44,6 +45,7 @@ public class EntityFactory {
     }
 
     //ECS
+    //no loading data, used for e.g. player
     public Entity CreateActor(String name, TextureRegion tile, String faction){
         Entity actor = new Entity();
         actor.add(new PositionComponent());
@@ -52,6 +54,7 @@ public class EntityFactory {
         actor.add(new TurnsComponent());
         actor.add(new LifeComponent());
         actor.add(new FactionComponent(faction));
+        actor.add(new ActorStatsComponent());
         
         _engine.addEntity(actor);
         return actor;
@@ -67,6 +70,7 @@ public class EntityFactory {
         actor.add(new TurnsComponent());
         actor.add(new LifeComponent());
         actor.add(new FactionComponent(proto_actor.getComponent(FactionComponent.class).string));
+        actor.add(new ActorStatsComponent());
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
         
