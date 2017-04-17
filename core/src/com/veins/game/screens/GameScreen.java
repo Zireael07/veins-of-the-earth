@@ -132,6 +132,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         area.spawnStuff();
         
+        Gdx.app.log("Dummy", "dummy");
+        
         //Gdx.input.setInputProcessor(this);
         //Setting the InputProcessor is ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, this));

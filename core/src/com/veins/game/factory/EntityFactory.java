@@ -32,6 +32,7 @@ public class EntityFactory {
     public Engine _engine;
     MyVeinsGame _game;
     public Entity _player;
+    int[] normalArray = { 13, 12, 11, 10, 9, 8 };
     
     HashMap<String, Entity> loaded_entities;
     
@@ -54,7 +55,7 @@ public class EntityFactory {
         actor.add(new TurnsComponent());
         actor.add(new LifeComponent());
         actor.add(new FactionComponent(faction));
-        actor.add(new ActorStatsComponent());
+        actor.add(new ActorStatsComponent(normalArray));
         
         _engine.addEntity(actor);
         return actor;
@@ -70,7 +71,7 @@ public class EntityFactory {
         actor.add(new TurnsComponent());
         actor.add(new LifeComponent());
         actor.add(new FactionComponent(proto_actor.getComponent(FactionComponent.class).string));
-        actor.add(new ActorStatsComponent());
+        actor.add(new ActorStatsComponent(normalArray));
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
         

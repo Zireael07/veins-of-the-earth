@@ -18,27 +18,27 @@ public class ActorStatsComponent implements Component {
     int Int;
     int Wis;
     int Cha;
-    int[] normalArray = { 13, 12, 11, 10, 9, 8 };
+    //int[] normalArray = { 13, 12, 11, 10, 9, 8 };
     //int[] heroicArray = {15, 14, 13, 12, 10, 8 };
     
-    public ActorStatsComponent(){
-        Str = normalArray[0];
-        Dex = normalArray[2];
-        Con = normalArray[1];
-        Int = normalArray[4];
-        Wis = normalArray[3];
-        Cha = normalArray[5];
+    public ActorStatsComponent(int[] array){
+        Str = array[0];
+        Dex = array[2];
+        Con = array[1];
+        Int = array[4];
+        Wis = array[3];
+        Cha = array[5];
     }
     
-    public ActorStatsComponent(String type){
+    public ActorStatsComponent(int[] array, String type){
 
         if ("standard".equals(type)){
-            Str = normalArray[0];
-            Dex = normalArray[2];
-            Con = normalArray[1];
-            Int = normalArray[4];
-            Wis = normalArray[3];
-            Cha = normalArray[5];
+            Str = array[0];
+            Dex = array[2];
+            Con = array[1];
+            Int = array[4];
+            Wis = array[3];
+            Cha = array[5];
         }
     }
 }
