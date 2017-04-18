@@ -16,15 +16,18 @@ public class LifeComponent implements Component {
     public int hit;
     public int hp;
     public int max_hp;
+    public int damage;
     
     public LifeComponent(){
         hit = 0;
+        damage = 0;
         hp = 10;
         max_hp = 10;
     }
     
     public LifeComponent(int life){
         hit = 0;
+        damage = 0;
         hp = life;
         max_hp = hp;
     }

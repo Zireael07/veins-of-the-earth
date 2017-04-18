@@ -98,17 +98,18 @@ public class RenderingSystem extends EntitySystem {
             float splash_y = spriteMap.get(entity).sprites.get(0).getY();
                     
             if (entity.getComponent(LifeComponent.class) != null){
-                if (entity.getComponent(LifeComponent.class).hit == -1){
+                LifeComponent LifeComp = entity.getComponent(LifeComponent.class);
+                if (LifeComp.hit == -1){
                     game.res.shield_splash.setPosition(splash_x, splash_y);
                     game.res.shield_splash.draw(batch);
                 }
-                if (entity.getComponent(LifeComponent.class).hit == 1){
+                if (LifeComp.hit == 1){
                     game.res.damage_splash.setPosition(splash_x, splash_y+5);
                     //tint it red
                     game.res.damage_splash.setColor(1,0,0,1);
                     game.res.damage_splash.draw(batch);
                     //add damage number
-                    String str = "1";
+                    String str = Integer.toString(LifeComp.damage);
                     
                     game.res.font.draw(batch, str, splash_x+g_logic.ISO_WIDTH/4, splash_y+g_logic.ISO_HEIGHT/2+g_logic.ISO_HEIGHT/4);
                 } 

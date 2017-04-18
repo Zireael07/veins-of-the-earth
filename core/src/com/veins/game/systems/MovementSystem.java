@@ -93,7 +93,8 @@ public class MovementSystem extends EntitySystem {
             success = "Success!";
             LifeComponent LifeComp = target.getComponent(LifeComponent.class);
             LifeComp.hit = 1;
-            LifeComp.hp = LifeComp.hp - 1;
+            LifeComp.damage = g_logic.dice.rollDice(1,2);
+            LifeComp.hp = LifeComp.hp - LifeComp.damage;
         }else
         {
             success = "Miss!";
