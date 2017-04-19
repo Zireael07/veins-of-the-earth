@@ -1,6 +1,15 @@
+[
 {
  sprite: kobold,         //same as name for now
  name: kobold,
  faction: enemy
  hit_points: 4 //test
 }
+
+{
+ sprite: kobold,
+ name: human,
+ faction: neutral
+ hit_points: 8
+}
+]

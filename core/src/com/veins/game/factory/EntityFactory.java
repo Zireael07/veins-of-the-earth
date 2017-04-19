@@ -166,37 +166,43 @@ public class EntityFactory {
     JsonValue root = reader.parse(Gdx.files.internal("data/test.json"));
     
     //print json to console
-    //System.out.println(root);
-    
-        //parse the JSON
-        String tilename = new String();
-        String name = new String();
-        String factionname = new String();
-        int hp = 0;
-        for (JsonValue child : root.iterator()) //returns a list of children
-        {   
-            Gdx.app.log("Loading JSON", "Reading " + child.name);
-            if ("name".equals(child.name)){
-                name = child.asString();
-                Gdx.app.log("Loading JSON", "We have a name entry " + name);
-                
-            }
-            if ("faction".equals(child.name)){
-                factionname = child.asString();
-                Gdx.app.log("Loading JSON", "We have a faction entry " + factionname);
-                
-            }
-                
-            if ("sprite".equals(child.name)){
-                tilename = child.asString();
-                Gdx.app.log("Loading JSON", "We have a sprite entry " + tilename);
-            }
-            if ("hit_points".equals(child.name)){
-                hp = child.asInt();
-                Gdx.app.log("Loading JSON", "We have hit points " + hp);
-            }
-        } //end for
+    System.out.println(root);
         
+        for (JsonValue table : root.iterator()) //returns a list of children
+        { 
+            JsonValue item = table.child;
+            Gdx.app.log("Loading JSON", "Reading " + item.asString());
+
+            //parse the JSON
+            String tilename = new String();
+            String name = new String();
+            String factionname = new String();
+            int hp = 0;
+        
+            for (JsonValue child : table.iterator()) //returns a list of children
+            {   
+                Gdx.app.log("Loading JSON", "Reading " + child.name);
+                if ("name".equals(child.name)){
+                    name = child.asString();
+                    Gdx.app.log("Loading JSON", "We have a name entry " + name);
+
+                }
+                if ("faction".equals(child.name)){
+                    factionname = child.asString();
+                    Gdx.app.log("Loading JSON", "We have a faction entry " + factionname);
+
+                }
+
+                if ("sprite".equals(child.name)){
+                    tilename = child.asString();
+                    Gdx.app.log("Loading JSON", "We have a sprite entry " + tilename);
+                }
+                if ("hit_points".equals(child.name)){
+                    hp = child.asInt();
+                    Gdx.app.log("Loading JSON", "We have hit points " + hp);
+                }
+            } //end for
+            
         //paranoia
         if (!name.isEmpty() && !factionname.isEmpty())
         {
@@ -207,6 +213,7 @@ public class EntityFactory {
                 }
             }
         }
+        }//end outer for
     }
     
     public void itemtestLoading(){
@@ -214,7 +221,7 @@ public class EntityFactory {
         JsonValue root = reader.parse(Gdx.files.internal("data/items_test.json"));
     
         //print json to console
-        System.out.println(root);
+        //System.out.println(root);
         
         //Gdx.app.log("Dummy", "dummy");
         for (JsonValue table : root.iterator()) //returns a list of children
