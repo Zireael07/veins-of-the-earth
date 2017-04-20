@@ -12,4 +12,18 @@
  faction: neutral
  hit_points: 8
 }
+
+{
+ sprite: kobold,
+ name: drow,
+ faction: enemy
+ hit_points: 6
+}
+
+{
+ sprite: kobold,
+ name: orc,
+ faction: enemy
+ hit_points: 8
+}
 ]
