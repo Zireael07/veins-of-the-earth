@@ -211,6 +211,12 @@ public class EntityFactory {
                 if ("kobold".equals(tilename)){
                     loadStoreActor(name, _game.res.kobold_tex, factionname, hp);
                 }
+                if ("drow".equals(tilename)){
+                    loadStoreActor(name, _game.res.drow_tex, factionname, hp);
+                }
+                if ("human".equals(tilename)){
+                    loadStoreActor(name, _game.res.human_tex, factionname, hp);
+                }
             }
         }
         }//end outer for

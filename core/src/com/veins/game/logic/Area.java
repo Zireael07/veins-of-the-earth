@@ -71,6 +71,7 @@ public class Area {
     }
     
     public void spawnActor(int x){
+        int id_spawn = g_logic.rng.between(0, 3);
         int act_x = g_logic.rng.between(0, g_logic.MAP_WIDTH-1);
         int act_y = g_logic.rng.between(0, g_logic.MAP_HEIGHT-1);
         
@@ -80,10 +81,25 @@ public class Area {
             act_y = g_logic.rng.between(0, g_logic.MAP_HEIGHT-1);
         }
         
-        //Entity actor = g_logic.factory.CreateActor("kobold" + "#" + x, _game.res.kobold_tex, "enemy", act_x, act_y);
-        Entity actor = g_logic.factory.CreateActor("kobold", act_x, act_y);
-        //named in order
-        actor.getComponent(NameComponent.class).string = "kobold" + "#" + x;
-        inter_map[act_x][act_y].setActor(actor);
+        //random pick
+        if (id_spawn == 0){
+            Entity actor = g_logic.factory.CreateActor("kobold", act_x, act_y);
+            //named in order
+            actor.getComponent(NameComponent.class).string = "kobold" + "#" + x;
+            inter_map[act_x][act_y].setActor(actor);
+        }
+        if (id_spawn == 1){
+            Entity actor = g_logic.factory.CreateActor("human", act_x, act_y);
+            //named in order
+            actor.getComponent(NameComponent.class).string = "human" + "#" + x;
+            inter_map[act_x][act_y].setActor(actor);
+        }
+        if (id_spawn == 2){
+            Entity actor = g_logic.factory.CreateActor("drow", act_x, act_y);
+            //named in order
+            actor.getComponent(NameComponent.class).string = "drow" + "#" + x;
+            inter_map[act_x][act_y].setActor(actor);
+        }
+        
     }
 }
