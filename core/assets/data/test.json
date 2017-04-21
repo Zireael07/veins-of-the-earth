@@ -7,14 +7,14 @@
 }
 
 {
- sprite: kobold,
+ sprite: human,
  name: human,
  faction: neutral
  hit_points: 8
 }
 
 {
- sprite: kobold,
+ sprite: drow,
  name: drow,
  faction: enemy
  hit_points: 6

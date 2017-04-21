@@ -21,6 +21,8 @@ public class Resources {
          TextureAtlas gameSprites;
          public TextureRegion player_tex;
          public TextureRegion kobold_tex;
+         public TextureRegion drow_tex;
+         public TextureRegion human_tex;
          public TextureRegion sword_tex;
          public TextureRegion armor_tex;
          public TextureRegion unit_marker_tex;
@@ -53,8 +55,11 @@ public class Resources {
          gameSprites = new TextureAtlas(Gdx.files.internal("packed/game.atlas"));
          player_tex = new TextureRegion(gameSprites.findRegion("human_m"));
          kobold_tex = new TextureRegion(gameSprites.findRegion("kobold"));
+         drow_tex = new TextureRegion(gameSprites.findRegion("drow_fighter"));
+         human_tex = new TextureRegion(gameSprites.findRegion("human"));
          sword_tex = new TextureRegion(gameSprites.findRegion("longsword"));
          armor_tex = new TextureRegion(gameSprites.findRegion("armor_studded"));
+         //markers
          unit_marker_tex = new TextureRegion(gameSprites.findRegion("unit_marker"));
          shield_splash_tex = new TextureRegion(gameSprites.findRegion("splash_shield"));
          damage_splash_tex = new TextureRegion(gameSprites.findRegion("splash_gray"));
