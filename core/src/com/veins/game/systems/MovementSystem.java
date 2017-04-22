@@ -12,6 +12,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.veins.game.components.ChatComponent;
 import com.veins.game.components.CombatComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.LifeComponent;
@@ -107,6 +108,18 @@ public class MovementSystem extends EntitySystem {
         g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);        
     }
     
+    public void talkTest(Entity entity, Entity target){
+        if (target.getComponent(ChatComponent.class) != null){
+           String target_str = target.getComponent(NameComponent.class).string;
+           String text = target.getComponent(ChatComponent.class).text;
+           
+           g_logic.addLog(target_str + " says " + text);
+        }
+        
+        
+    }
+    
+    
     public boolean checkMove(Entity entity, int fx, int fy){
         char[][] dunmap = g_logic.getDungeon();
         return (fx >= 0 &&
@@ -138,9 +151,16 @@ public class MovementSystem extends EntitySystem {
                 String self_faction = entity.getComponent(FactionComponent.class).string;
                 String faction = entity_check.getComponent(FactionComponent.class).string;
                 Gdx.app.log("Faction", "Self: " + self_faction + " target " + faction);
-                if (!faction.equals(self_faction)) {
+                if (str == "Player" && faction.equals("neutral")){
+                    talkTest(entity, entity_check);
+                }
+                else {
+                    if (!faction.equals(self_faction) && !faction.equals("neutral") && !self_faction.equals("neutral")) {
                     combatTest(entity, entity_check);
                 }
+                }
+                
+                //stop the loop
                 break;
             }
             else
