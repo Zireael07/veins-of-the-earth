@@ -12,6 +12,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.veins.game.components.CombatComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
@@ -93,7 +94,10 @@ public class MovementSystem extends EntitySystem {
             success = "Success!";
             LifeComponent LifeComp = target.getComponent(LifeComponent.class);
             LifeComp.hit = 1;
-            LifeComp.damage = g_logic.dice.rollDice(1,2);
+            CombatComponent CombatComp = entity.getComponent(CombatComponent.class);
+            int num_dice = CombatComp.damage_num;
+            int die = CombatComp.damage_dice;
+            LifeComp.damage = g_logic.dice.rollDice(num_dice,die);
             LifeComp.hp = LifeComp.hp - LifeComp.damage;
         }else
         {
