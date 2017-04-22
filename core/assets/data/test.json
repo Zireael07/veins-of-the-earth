@@ -15,6 +15,7 @@
  hit_points: 8
  damage_dice: 6
  damage_number: 1
+ text: Hello traveler
 }
 
 {

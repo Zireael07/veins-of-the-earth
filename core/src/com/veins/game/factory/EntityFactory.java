@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.ActorStatsComponent;
+import com.veins.game.components.ChatComponent;
 import com.veins.game.components.CombatComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.InventoryComponent;
@@ -63,6 +64,7 @@ public class EntityFactory {
         return actor;
     }
     
+    //spawn an actor using loaded data
     public Entity CreateActor(String name, int fx, int fy){
         Entity proto_actor = loaded_entities.get(name);
         
@@ -75,6 +77,11 @@ public class EntityFactory {
         actor.add(new FactionComponent(proto_actor.getComponent(FactionComponent.class).string));
         actor.add(new ActorStatsComponent(normalArray));
         actor.add(new CombatComponent(proto_actor.getComponent(CombatComponent.class).damage_num, proto_actor.getComponent(CombatComponent.class).damage_dice));
+        
+        //conditional
+        if (proto_actor.getComponent(ChatComponent.class) != null){
+            actor.add(new ChatComponent(proto_actor.getComponent(ChatComponent.class).text));
+        }
         
         Gdx.app.log("Spawn", "Spawned actor at" + fx + ", " + fy);
         
@@ -141,7 +148,27 @@ public class EntityFactory {
         actor.add(new LifeComponent(hp));
         actor.add(new FactionComponent(faction));
         actor.add(new CombatComponent(num_die, dam_die));
+        
         Gdx.app.log("Loading", "Loaded actor with defined damage " + name);
+        return actor;
+    }
+    
+     public Entity LoadActor(String name, TextureRegion tile, String faction, int hp, int dam_die, int num_die, String text){
+        Entity actor = new Entity();
+        actor.add(new PositionComponent());
+        actor.add(new SpriteComponent(tile));
+        actor.add(new NameComponent(name));
+        actor.add(new TurnsComponent());
+        actor.add(new LifeComponent(hp));
+        actor.add(new FactionComponent(faction));
+        actor.add(new CombatComponent(num_die, dam_die));
+        
+        //conditional component - text
+        if (faction.equals("neutral")){
+            actor.add(new ChatComponent(text));
+        }
+        
+        Gdx.app.log("Loading", "Loaded actor with defined text " + text);
         return actor;
     }
     
@@ -177,6 +204,14 @@ public class EntityFactory {
         }
     }
     
+    public void loadStoreActor(String name, TextureRegion tile, String faction, int hp, int dam_die, int num_die, String text){
+        Entity actor = LoadActor(name, tile, faction, hp, dam_die, num_die, text);
+        if (loaded_entities.get(name) == null){
+            loaded_entities.put(name, actor);
+        }
+    }
+    
+    //item
     public void loadStoreItem(String name, TextureRegion tile, String slot){
         Entity item = LoadItem(name, tile, slot);
         if (loaded_entities.get(name) == null){
@@ -205,6 +240,7 @@ public class EntityFactory {
             int hp = 0;
             int dam_die = 0;
             int num_die = 0;
+            String text = new String();
         
             for (JsonValue child : table.iterator()) //returns a list of children
             {   
@@ -236,6 +272,10 @@ public class EntityFactory {
                     num_die = child.asInt();
                     Gdx.app.log("Loading JSON", "We have damage die number " + num_die);
                 }
+                if ("text".equals(child.name)){
+                    text = child.asString();
+                    Gdx.app.log("Loading JSON", "We have text");
+                }
             } //end for
             
         //paranoia
@@ -243,15 +283,23 @@ public class EntityFactory {
         {
             if (hp > 0){
                 if (dam_die > 0 && num_die > 0){
-                    //pick sprite
-                    if ("kobold".equals(tilename)){
-                        loadStoreActor(name, _game.res.kobold_tex, factionname, hp, dam_die, num_die);
+                    if (!text.isEmpty()){
+                        if ("human".equals(tilename)){
+                            loadStoreActor(name, _game.res.human_tex, factionname, hp, dam_die, num_die, text);
+                        }
                     }
-                    if ("drow".equals(tilename)){
-                        loadStoreActor(name, _game.res.drow_tex, factionname, hp, dam_die, num_die);
-                    }
-                    if ("human".equals(tilename)){
-                        loadStoreActor(name, _game.res.human_tex, factionname, hp, dam_die, num_die);
+                    else{
+                        
+                        //pick sprite
+                        if ("kobold".equals(tilename)){
+                            loadStoreActor(name, _game.res.kobold_tex, factionname, hp, dam_die, num_die);
+                        }
+                        if ("drow".equals(tilename)){
+                            loadStoreActor(name, _game.res.drow_tex, factionname, hp, dam_die, num_die);
+                        }
+                        if ("human".equals(tilename)){
+                            loadStoreActor(name, _game.res.human_tex, factionname, hp, dam_die, num_die);
+                        }
                     }
                 }
                 else{
