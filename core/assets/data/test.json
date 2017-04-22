@@ -4,6 +4,8 @@
  name: kobold,
  faction: enemy
  hit_points: 4 //test
+ damage_dice: 6      //d6
+ damage_number: 1
 }
 
 {
@@ -11,6 +13,8 @@
  name: human,
  faction: neutral
  hit_points: 8
+ damage_dice: 6
+ damage_number: 1
 }
 
 {
@@ -18,6 +22,8 @@
  name: drow,
  faction: enemy
  hit_points: 6
+ damage_dice: 6
+ damage_number: 1
 }
 
 {
@@ -25,5 +31,7 @@
  name: orc,
  faction: enemy
  hit_points: 8
+ damage_dice: 8
+ damage_number: 1
 }
 ]
