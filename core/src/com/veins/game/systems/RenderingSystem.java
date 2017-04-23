@@ -14,13 +14,16 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.LifeComponent;
+import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.logic.GameLogic;
+import java.util.Comparator;
 
 /**
  *
@@ -37,6 +40,9 @@ public class RenderingSystem extends EntitySystem {
     private ImmutableArray<Entity> item_entities;
     
     private ComponentMapper<SpriteComponent> spriteMap = ComponentMapper.getFor(SpriteComponent.class);
+    
+    private Comparator<Entity> comparator;
+    private ComponentMapper<PositionComponent> posMap = ComponentMapper.getFor(PositionComponent.class);
 
     public RenderingSystem(int priority, SpriteBatch batch, GameLogic logic, MyVeinsGame _game) {
         super.priority = priority;
@@ -44,12 +50,34 @@ public class RenderingSystem extends EntitySystem {
         this.batch = batch;
         g_logic = logic;
         game = _game;
+        
+        
+        //sort
+        comparator = new Comparator<Entity>()
+        {
+            @Override
+            public int compare(Entity entity, Entity entity2) {
+                PositionComponent p1 = posMap.get(entity);
+                PositionComponent p2 = posMap.get(entity2);
+
+                if( p1.y < p2.y){
+                    return 1; // First bigger
+                } else if (p1.y > p2.y){
+                    return -1; // Second bigger
+                }else
+                    return 0; // They are the same
+            }
+        };
+        
     }
     
     public void addedToEngine(Engine engine){
        actor_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).exclude(SlotComponent.class).get());
         item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class, SlotComponent.class).get());
     }
+    
+    
+    
     
     public void update(float deltaTime){
          //items first
@@ -59,9 +87,15 @@ public class RenderingSystem extends EntitySystem {
             processEntity(entity, deltaTime, true);
         }
         //actors second
-        for (int i = 0; i < actor_entities.size(); i++)
+        
+        //sort
+        Array<Entity> temp = Array.with(actor_entities.toArray());
+        temp.sort(comparator); // Sort using the comparator
+        for (int i = 0; i < temp.size; i++)
+        //for (int i = 0; i < actor_entities.size(); i++)
         {
             Entity entity = actor_entities.get(i);
+            //Gdx.app.log("Render", "Drawing entity #" + i + " " + entity.getComponent(NameComponent.class).string);
             processEntity(entity, deltaTime, false);
         }
     }
