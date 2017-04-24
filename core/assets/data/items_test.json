@@ -3,6 +3,8 @@
       name: longsword,
       sprite: longsword, //same for now
       slot: main_hand,
+      damage_dice: 6      //d6
+      damage_number: 1
   },
   {
       name: leather armor,

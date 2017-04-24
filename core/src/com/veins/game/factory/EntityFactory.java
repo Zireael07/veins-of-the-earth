@@ -106,6 +106,11 @@ public class EntityFactory {
         item.add(new NameComponent(proto_item.getComponent(NameComponent.class).string));
         item.add(new SlotComponent(proto_item.getComponent(SlotComponent.class).string));
         
+        //conditional
+        if (proto_item.getComponent(CombatComponent.class) != null){
+            item.add(new CombatComponent(proto_item.getComponent(CombatComponent.class).damage_num, proto_item.getComponent(CombatComponent.class).damage_dice));
+        }
+        
         
         Gdx.app.log("Spawn", "Spawned item at" + fx + ", " + fy);
         _engine.addEntity(item);
@@ -183,6 +188,17 @@ public class EntityFactory {
         return item;
     }
     
+    public Entity LoadItem(String name, TextureRegion tile, String slot, int dam_die, int num_die){
+        Entity item = new Entity();
+        item.add(new PositionComponent());
+        item.add(new SpriteComponent(tile));
+        item.add(new NameComponent(name));
+        item.add(new SlotComponent(slot));
+        item.add(new CombatComponent(num_die, dam_die));
+        Gdx.app.log("Loading", "Loaded item with defined damage " + name);
+        return item;
+    }
+    
     public void loadStoreActor(String name, TextureRegion tile, String faction){
         Entity actor = LoadActor(name, tile, faction);
         if (loaded_entities.get(name) == null){
@@ -219,6 +235,13 @@ public class EntityFactory {
         }
     }
     
+    public void loadStoreItem(String name, TextureRegion tile, String slot, int dam_die, int num_die){
+        Entity item = LoadItem(name, tile, slot, dam_die, num_die);
+        if (loaded_entities.get(name) == null){
+            loaded_entities.put(name, item);
+        }
+    }
+    
     
     public void testLoading(){
     //test loading
@@ -226,7 +249,7 @@ public class EntityFactory {
     JsonValue root = reader.parse(Gdx.files.internal("data/test.json"));
     
     //print json to console
-    System.out.println(root);
+    //System.out.println(root);
         
         for (JsonValue table : root.iterator()) //returns a list of children
         { 
@@ -336,6 +359,9 @@ public class EntityFactory {
             String name = new String();
             String slotname = new String();
             String spritename = new String();
+            int dam_die = 0;
+            int num_die = 0;
+            
             for (JsonValue child : table.iterator())
             {
             
@@ -351,16 +377,31 @@ public class EntityFactory {
                 if ("sprite".equals(child.name)){
                     spritename = child.asString();
                 }
+                if ("damage_dice".equals(child.name)){
+                    dam_die = child.asInt();
+                    Gdx.app.log("Loading JSON", "We have damage die " + dam_die);
+                }
+                if ("damage_number".equals(child.name)){
+                    num_die = child.asInt();
+                    Gdx.app.log("Loading JSON", "We have damage die number " + num_die);
+                }
             }
             
             //paranoia
             if (!name.isEmpty() && !spritename.isEmpty() && !slotname.isEmpty()){
-                //pick sprite
-                if ("longsword".equals(spritename)){
-                    loadStoreItem(name, _game.res.sword_tex, slotname);
+                if (dam_die > 0 && num_die > 0){
+                    if ("longsword".equals(spritename)){
+                        loadStoreItem(name, _game.res.sword_tex, slotname, dam_die, num_die);
+                    }
                 }
-                if ("leather".equals(spritename)){
-                    loadStoreItem(name, _game.res.armor_tex, slotname);
+                else{
+                    //pick sprite
+                    if ("longsword".equals(spritename)){
+                        loadStoreItem(name, _game.res.sword_tex, slotname);
+                    }
+                    if ("leather".equals(spritename)){
+                        loadStoreItem(name, _game.res.armor_tex, slotname);
+                    }
                 }
             }
         }//end for
