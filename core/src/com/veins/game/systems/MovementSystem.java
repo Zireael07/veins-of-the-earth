@@ -15,6 +15,7 @@ import com.badlogic.gdx.Gdx;
 import com.veins.game.components.ChatComponent;
 import com.veins.game.components.CombatComponent;
 import com.veins.game.components.FactionComponent;
+import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
@@ -22,6 +23,7 @@ import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapTile;
 import java.util.ArrayList;
+import java.util.HashMap;
 import squidpony.squidmath.Coord;
 
 /**
@@ -84,7 +86,31 @@ public class MovementSystem extends EntitySystem {
         setPositionY(entity, y);
     }
     
-    //test
+    //test combat
+    public int[] getDamage(Entity entity){
+        CombatComponent CombatComp = entity.getComponent(CombatComponent.class);
+        
+        //if we have an inventory
+        if (entity.getComponent(InventoryComponent.class) != null){
+            HashMap<String, Entity> items = entity.getComponent(InventoryComponent.class).items_map;
+            Entity item = items.get("main_hand");
+            //if we have a weapon
+            if (item != null){
+                if (item.getComponent(CombatComponent.class) !=null){
+                    CombatComp = item.getComponent(CombatComponent.class);
+                }
+            }
+        }
+        
+        int num_dice = CombatComp.damage_num;
+        int die = CombatComp.damage_dice;
+        int[] a = {num_dice, die};
+        
+        
+        return a;
+    }
+    
+    
     public void combatTest(Entity entity, Entity target){
         String str = entity.getComponent(NameComponent.class).string;
         String target_str = target.getComponent(NameComponent.class).string;
@@ -95,17 +121,19 @@ public class MovementSystem extends EntitySystem {
             success = "Success!";
             LifeComponent LifeComp = target.getComponent(LifeComponent.class);
             LifeComp.hit = 1;
-            CombatComponent CombatComp = entity.getComponent(CombatComponent.class);
-            int num_dice = CombatComp.damage_num;
-            int die = CombatComp.damage_dice;
-            LifeComp.damage = g_logic.dice.rollDice(num_dice,die);
+            int[] dam = getDamage(entity);
+            LifeComp.damage = g_logic.dice.rollDice(dam[0],dam[1]);
             LifeComp.hp = LifeComp.hp - LifeComp.damage;
         }else
         {
             success = "Miss!";
             target.getComponent(LifeComponent.class).hit = -1;
         }
-        g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);        
+        g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);      
+        if (roll < 55){
+            int[] dam = getDamage(entity);
+            g_logic.addLog(str + " deals " + target.getComponent(LifeComponent.class).damage + " ("+ dam[0] + "d"+ dam[1] + ")damage to " + target_str);
+        }
     }
     
     public void talkTest(Entity entity, Entity target){
