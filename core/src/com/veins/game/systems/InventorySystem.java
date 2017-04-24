@@ -94,6 +94,20 @@ public class InventorySystem extends EntitySystem {
         }
     }
     
+    public void logMessage(Entity entity, String slot, Entity item){
+        String name = entity.getComponent(NameComponent.class).string;
+        String item_name = item.getComponent(NameComponent.class).string;
+        if (slot.contains("inven")){
+            g_logic.addLog(name + " picked up " + item_name);
+        }
+        else
+        {
+            g_logic.addLog(name + " wears " + item_name);
+        }
+    }
+    
+    
+    
     public boolean addObject(Entity entity, String slot, Entity item){
         Gdx.app.log("Inventory", "Added entity to slot " + slot);
         
@@ -102,9 +116,7 @@ public class InventorySystem extends EntitySystem {
             HashMap items = entity.getComponent(InventoryComponent.class).items_map;
             if (items.get(slot) == null){
                 items.put(slot, item);
-                String name = entity.getComponent(NameComponent.class).string;
-                String item_name = item.getComponent(NameComponent.class).string;
-                g_logic.addLog(name + " picked up " + item_name);
+                logMessage(entity, slot, item);
                 return true;
             }
             else
