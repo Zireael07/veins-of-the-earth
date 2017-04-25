@@ -35,7 +35,7 @@ public class MapGenerator {
     
     public TiledMap createMap() {
         //init internal map representation
-        map_inter = new MapTile[10][10];
+        map_inter = new MapTile[g_logic.MAP_WIDTH][g_logic.MAP_HEIGHT];
         
         //drawing stuff
         tiles = new Texture(Gdx.files.internal("packed/terrain.png"));
@@ -45,14 +45,14 @@ public class MapGenerator {
         TiledMapTileLayer new_layer = new TiledMapTileLayer(g_logic.MAP_WIDTH, g_logic.MAP_HEIGHT, g_logic.ISO_WIDTH, g_logic.ISO_HEIGHT);
        
         //actual generation
-        for (int x = 0; x < 10; x++) 
+        for (int x = 0; x < g_logic.MAP_WIDTH; x++) 
             {
-                for (int y = 0; y < 10; y++) 
+                for (int y = 0; y < g_logic.MAP_HEIGHT; y++) 
                 {
                         char chara = '.';
                         int ty = 0;
                         int tx;
-                        if (x == 0 || x == 9)
+                        if (x == 0 || x == g_logic.MAP_WIDTH-1)
                         {
                             tx = 1;
                             chara = '#';
@@ -99,10 +99,10 @@ public class MapGenerator {
     }
     
     public char[][] createCharMap(){
-        dungeon = new char[10][10];
-        for (int x = 0; x < 10; x++) 
+        dungeon = new char[g_logic.MAP_WIDTH][g_logic.MAP_HEIGHT];
+        for (int x = 0; x < g_logic.MAP_WIDTH; x++) 
             {
-                for (int y = 0; y < 10; y++) 
+                for (int y = 0; y < g_logic.MAP_HEIGHT; y++) 
                 {
                         MapTile tile = map_inter[x][y];
                         char draw = tile.getCharacter();
@@ -120,14 +120,14 @@ public class MapGenerator {
     }
     
     public String toString() {
-        char[][] trans = new char[10][10];
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
+        char[][] trans = new char[g_logic.MAP_HEIGHT][g_logic.MAP_WIDTH];
+        for (int x = 0; x < g_logic.MAP_HEIGHT; x++) {
+            for (int y = 0; y < g_logic.MAP_WIDTH; y++) {
                 trans[y][x] = dungeon[x][y];
             }
         }
         StringBuffer sb = new StringBuffer();
-        for (int row = 0; row < 10; row++) {
+        for (int row = 0; row < g_logic.MAP_HEIGHT; row++) {
             sb.append(trans[row]);
             sb.append('\n');
         }
