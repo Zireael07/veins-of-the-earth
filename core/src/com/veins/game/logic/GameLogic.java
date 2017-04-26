@@ -21,8 +21,12 @@ import squidpony.squidmath.StatefulRNG;
  * @author AdmKasia
  */
 public class GameLogic {
-    public static final int MAP_WIDTH = 10;
-    public static final int MAP_HEIGHT = 10;
+    public static final int MAP_WIDTH = 20;
+    public static final int MAP_HEIGHT = 20;
+    
+    //cam
+    public static final int CAM_WIDTH = 10;
+    public static final int CAM_HEIGHT = 10;
     
     //iso
     public static final int ISO_WIDTH = 54;

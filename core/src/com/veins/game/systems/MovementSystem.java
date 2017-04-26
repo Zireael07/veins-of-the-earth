@@ -200,14 +200,16 @@ public class MovementSystem extends EntitySystem {
         return res;
     }
     
-    public void attemptMove(Entity entity, int dx, int dy){
+    public boolean attemptMove(Entity entity, int dx, int dy){
         if (checkMove(entity, getPositionX(entity) + dx, getPositionY(entity) + dy) 
             && checkMoveActor(entity, getPositionX(entity) + dx, getPositionY(entity) + dy) 
             ){
             setMapTile(null, getPositionX(entity), getPositionY(entity));
             setPosition(entity, getPositionX(entity) + dx, getPositionY(entity) + dy);
             setMapTile(entity, getPositionX(entity), getPositionY(entity));
+            return true;
         }
+        return false;
     }
     
     public void moveTo(Entity entity, int tx, int ty){

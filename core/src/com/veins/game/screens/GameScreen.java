@@ -116,7 +116,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         shape_renderer = new ShapeRenderer();
         
         //camera stuffs
-        camera = new OrthographicCamera(logic.MAP_WIDTH*logic.ISO_WIDTH, logic.MAP_HEIGHT*logic.TILE_HEIGHT);
+        camera = new OrthographicCamera(logic.CAM_WIDTH*logic.ISO_WIDTH, logic.CAM_HEIGHT*logic.TILE_HEIGHT);
         camera.translate(camera.viewportWidth/2,camera.viewportHeight/2);
         //let's have some padding
         viewport = new ScalingViewport(Scaling.none, logic.MAP_WIDTH*logic.ISO_WIDTH+5, logic.MAP_HEIGHT*logic.TILE_HEIGHT+5, camera);
@@ -251,31 +251,35 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         {
             case Input.Keys.RIGHT:
                 if (player.getComponent(TurnsComponent.class).blocking){
-                    engine.getSystem(MovementSystem.class).attemptMove(player, 1, 0);
+                    boolean move = engine.getSystem(MovementSystem.class).attemptMove(player, 1, 0);
                     engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                    if (move)
+                    camera.translate(0.5f*logic.ISO_WIDTH, -0.5f*logic.ISO_HEIGHT);
                 }
-                //player.AttemptMove(1,0);
                 break;
             case Input.Keys.LEFT:
                 if (player.getComponent(TurnsComponent.class).blocking){
-                    engine.getSystem(MovementSystem.class).attemptMove(player, -1, 0);
+                    boolean move = engine.getSystem(MovementSystem.class).attemptMove(player, -1, 0);
                     engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                    if (move)
+                    camera.translate(-0.5f*logic.ISO_WIDTH, 0.5f*logic.ISO_HEIGHT);
                 }
-                //player.AttemptMove(-1,0);
                 break;
             case Input.Keys.UP:
                 if (player.getComponent(TurnsComponent.class).blocking){
-                    engine.getSystem(MovementSystem.class).attemptMove(player, 0, 1);
+                    boolean move = engine.getSystem(MovementSystem.class).attemptMove(player, 0, 1);
                     engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                    if (move)
+                    camera.translate(0.5f*logic.ISO_WIDTH, 0.5f*logic.ISO_HEIGHT);
                 }
-                //player.AttemptMove(0,1);
                 break;
             case Input.Keys.DOWN:
                 if (player.getComponent(TurnsComponent.class).blocking){
-                    engine.getSystem(MovementSystem.class).attemptMove(player, 0, -1);
+                    boolean move = engine.getSystem(MovementSystem.class).attemptMove(player, 0, -1);
                     engine.getSystem(TurnTimeSystem.class).UnblockTurns(player);
+                    if (move)
+                    camera.translate(-0.5f*logic.ISO_WIDTH, -0.5f*logic.ISO_HEIGHT);
                 }
-                //player.AttemptMove(0, -1);
                 break;
             case Input.Keys.G:
                 if (player.getComponent(TurnsComponent.class).blocking){
