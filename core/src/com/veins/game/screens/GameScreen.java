@@ -22,6 +22,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -315,15 +316,28 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     public boolean keyTyped(char character) {
         return false;
     }
-
+    
+    //utility functions
+    public Vector3 screentoWorld(int screenX, int screenY){
+        Vector3 screenCoordinates = new Vector3(screenX,screenY,0);
+      //remember to take viewport into account
+      Vector3 worldCoordinates = camera.unproject(screenCoordinates, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
+      //Gdx.app.log("Mouse Event","Projected at " + worldCoordinates.x + "," + worldCoordinates.y);
+      return worldCoordinates;
+    }
+    
+    public Vector2 screentoStage(int screenX, int screenY){
+        int y = Gdx.graphics.getHeight() - screenY;
+        Vector2 stageCoords = new Vector2(screenX, y);
+        return stageCoords;
+    }
+    
+    
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Gdx.app.log("Mouse Event","Click at " + screenX + "," + screenY);
       
-      Vector3 screenCoordinates = new Vector3(screenX,screenY,0);
-      //remember to take viewport into account
-      Vector3 worldCoordinates = camera.unproject(screenCoordinates, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
-      Gdx.app.log("Mouse Event","Projected at " + worldCoordinates.x + "," + worldCoordinates.y);
+        Vector3 worldCoordinates = screentoWorld(screenX, screenY);
    
       Vector3 outputPos = logic.worldToIso(worldCoordinates, true);
      
@@ -374,18 +388,13 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        Vector3 cs = new Vector3();
-        Vector3 world = new Vector3();
-        Vector3 screenCoords = new Vector3(screenX, screenY, 0);
-        camera.unproject(screenCoords, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
-        world.set(screenCoords);
+        Vector3 worldCoordinates = screentoWorld(screenX, screenY);
         
-        cs.set(world.x, world.y, 0);
-        
-	isoPos.set(logic.worldToIso(cs, true));
+	isoPos.set(logic.worldToIso(worldCoordinates, true));
         //set the coords label
-        coords_label.setX(screenX+20);
-        coords_label.setY((Gdx.graphics.getHeight()-screenY)-30);
+        Vector2 stageCoords = screentoStage(screenX, screenY);
+        coords_label.setX(stageCoords.x+20);
+        coords_label.setY(stageCoords.y-30);
             
         //coords_label.setX(world.x+60);
         //coords_label.setY(world.y+60);
