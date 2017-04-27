@@ -375,14 +375,20 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         Vector3 cs = new Vector3();
-        Vector3 temp = new Vector3();
-        camera.unproject(temp.set(screenX, screenY, 0), viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
-        cs.set(temp.x, temp.y, 0);
+        Vector3 world = new Vector3();
+        Vector3 screenCoords = new Vector3(screenX, screenY, 0);
+        camera.unproject(screenCoords, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
+        world.set(screenCoords);
+        
+        cs.set(world.x, world.y, 0);
         
 	isoPos.set(logic.worldToIso(cs, true));
         //set the coords label
-        coords_label.setX(temp.x+60);
-        coords_label.setY(temp.y+60);
+        coords_label.setX(screenX+20);
+        coords_label.setY((Gdx.graphics.getHeight()-screenY)-30);
+            
+        //coords_label.setX(world.x+60);
+        //coords_label.setY(world.y+60);
         coords_label.setText((int) isoPos.x + ", " + (int) isoPos.y);
         
         //if entity at x,y show name
