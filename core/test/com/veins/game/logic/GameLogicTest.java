@@ -73,7 +73,7 @@ public class GameLogicTest {
         Vector3 input = new Vector3(100, 100, 0);
         Vector3 iso = instance.worldToIso(input, false);
         Vector3 expResult = new Vector3(100, 100, 0);
-        Vector3 result = instance.IsotoWorld(iso);
+        Vector3 result = instance.IsotoWorld(iso, true);
         assertEquals(expResult, result);
     }
     
