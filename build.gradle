@@ -57,6 +57,8 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.kotcrab.vis:vis-ui:$visuiVersion"
+        
+        testCompile 'junit:junit:4.12'
     }
 }
 
