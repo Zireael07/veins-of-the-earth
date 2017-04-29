@@ -77,7 +77,7 @@ public class PositionSystem extends EntitySystem {
         
         if (positionCom != null){
             Vector3 gridactorPos = new Vector3(positionCom.x, positionCom.y, 0);
-            Vector3 isoTile = g_logic.IsotoWorld(gridactorPos);
+            Vector3 isoTile = g_logic.IsotoWorld(gridactorPos, false);
             
             if (item){ 
                 int object_x = (int) isoTile.x+g_logic.ISO_WIDTH/4;

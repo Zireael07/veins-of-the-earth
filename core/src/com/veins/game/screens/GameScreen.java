@@ -192,7 +192,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         TiledMapTileLayer.Cell cell = layer.getCell((int)isoPos.x, (int)isoPos.y);
 	if (cell != null) {
             
-            worldPos = logic.IsotoWorld(isoPos);
+            worldPos = logic.IsotoWorld(isoPos, false);
             
             float x1 = worldPos.x;
             float y2 = worldPos.y;

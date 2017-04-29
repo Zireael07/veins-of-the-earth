@@ -148,7 +148,7 @@ public class GameLogic {
     return point;
     }
     
-    public Vector3 IsotoWorld(Vector3 iso){
+    public Vector3 IsotoWorld(Vector3 iso, boolean round){
          //Gdx.app.log("Iso", "iso is" + iso);
          Vector3 point = new Vector3();
          Vector3 origin = new Vector3 (0, -getYOffset()+ISO_HEIGHT/2, 0);
@@ -177,6 +177,12 @@ public class GameLogic {
          //Gdx.app.log("IsotoWorld", "target is" + target);
          
          point.set(target);
+         //round if asked to
+        if (round){
+            point.x = Math.round(point.x);
+            point.y = Math.round(point.y);
+        }
+         
          
          return point;
      }
