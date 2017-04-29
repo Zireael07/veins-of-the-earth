@@ -67,3 +67,4 @@ build/
 
 ## Generated on every run of the game
 core/assets/packed/
+core/nbproject/
