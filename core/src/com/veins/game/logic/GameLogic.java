@@ -7,6 +7,7 @@ package com.veins.game.logic;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.veins.game.MyVeinsGame;
@@ -31,6 +32,9 @@ public class GameLogic {
     //iso
     public static final int ISO_WIDTH = 54;
     public static final int ISO_HEIGHT = 27;
+    //less calculations
+    public static final int ISO_WIDTH_HALF = 27;
+    public static final float ISO_HEIGHT_HALF = 13.5f;
     
     public static final int TILE_WIDTH = 32;
     public static final int TILE_HEIGHT = 32;
@@ -119,10 +123,21 @@ public class GameLogic {
      private Vector3 worldPos = new Vector3();
      //convert world position to isometric position
     public Vector3 worldToIso(Vector3 point, boolean round) {
+        //System.out.println("World to iso " + "Input is " + point);
         point.x /= ISO_WIDTH;
+        //System.out.println("World to iso " + "Point x after dividing by width is " + point.x);
         point.y = point.y + getYOffset();
-        point.y = (point.y - ISO_HEIGHT / 2) / ISO_HEIGHT + point.x;
+        //test
+        /*System.out.println("World to iso " + "Point y after offset is " + point.y);
+        point.y = (point.y - ISO_HEIGHT_HALF);
+        System.out.println("World to iso " + "Point y after subtracting half height is " + point.y);
+        point.y /= ISO_HEIGHT;
+        System.out.println("World to iso " + "Point y after dividing by height is " + point.y);
+        point.y = point.y + point.x;*/
+        point.y = (point.y - ISO_HEIGHT_HALF) / ISO_HEIGHT + point.x;
+        //System.out.println("World to iso " + "Point y after adding x is " + point.y);
         point.x -= point.y - point.x;
+        //System.out.println("World to iso " + "Point x is " + point.x);
         //round if asked to
         if (round){
             point.x = (int)point.x;

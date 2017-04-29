@@ -54,7 +54,12 @@ public class GameLogicTest {
         boolean round = true;
         Vector3 expResult = new Vector3(1.0f, 1.0f, 0.0f);
         Vector3 result = instance.worldToIso(point, round);
+        //check other case
+        Vector3 point2 = new Vector3(620, 390, 0);
+        Vector3 result2 = instance.worldToIso(point2, round);
+        Vector3 expResult2 = new Vector3(7.0f, 15.0f, 0.0f);
         assertEquals(expResult, result);
+        assertEquals(expResult2, result2);
     }
 
     /**
