@@ -338,7 +338,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         Gdx.app.log("Mouse Event","Click at " + screenX + "," + screenY);
       
         Vector3 worldCoordinates = screentoWorld(screenX, screenY);
-   
+        Gdx.app.log("Mouse Event", "World Coordinates " + worldCoordinates);
+        
       Vector3 outputPos = logic.worldToIso(worldCoordinates, true);
      
       Gdx.app.log("Mouse Event", "Tile coords " + outputPos);
