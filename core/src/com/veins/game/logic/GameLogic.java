@@ -122,6 +122,7 @@ public class GameLogic {
     private Vector3 isoPos = new Vector3();
      private Vector3 worldPos = new Vector3();
      //convert world position to isometric position
+     //found in a gist: https://gist.github.com/backburn/5e29660a767afe5676c8
     public Vector3 worldToIso(Vector3 point, boolean round) {
         //System.out.println("World to iso " + "Input is " + point);
         point.x /= ISO_WIDTH;
@@ -148,6 +149,7 @@ public class GameLogic {
     return point;
     }
     
+    //method from wildbunny.co.uk - isometric coordinates the modern way
     public Vector3 IsotoWorld(Vector3 iso, boolean round){
          //Gdx.app.log("Iso", "iso is" + iso);
          Vector3 point = new Vector3();

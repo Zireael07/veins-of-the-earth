@@ -344,8 +344,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
      
       Gdx.app.log("Mouse Event", "Tile coords " + outputPos);
       
-      if (outputPos.x > 0 && outputPos.x <= logic.MAP_WIDTH
-          && outputPos.y > 0 && outputPos.y <= logic.MAP_HEIGHT){
+      if (outputPos.x > -1 && outputPos.x <= logic.MAP_WIDTH
+          && outputPos.y > -1 && outputPos.y <= logic.MAP_HEIGHT){
           
           Gdx.app.log("Player path", "Pathing to " + (int)outputPos.x + " ," + (int) outputPos.y);
           
