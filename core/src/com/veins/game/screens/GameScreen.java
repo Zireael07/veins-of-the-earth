@@ -303,6 +303,16 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                     displayInventory();
 
                 break;
+            case Input.Keys.TAB:
+                    Gdx.app.log("Input", "Switching labels on");
+                    if (logic.getShowLabels()){
+                        logic.setShowLabels(false);
+                    }
+                    else
+                    {
+                        logic.setShowLabels(true);
+                    }
+                break;
         }
         return false;
     }

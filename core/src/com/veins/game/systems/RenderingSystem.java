@@ -148,6 +148,16 @@ public class RenderingSystem extends EntitySystem {
                     game.res.font.draw(batch, str, splash_x+g_logic.ISO_WIDTH/4, splash_y+g_logic.ISO_HEIGHT/2+g_logic.ISO_HEIGHT/4);
                 } 
             }
+        }//end splash drawing
+        
+        if (g_logic.getShowLabels()){
+            float sprite_x = spriteMap.get(entity).sprites.get(0).getX();
+            float sprite_y = spriteMap.get(entity).sprites.get(0).getY();
+            
+            //draw name
+            String str = entity.getComponent(NameComponent.class).string;
+            
+            game.res.font.draw(batch, str, sprite_x+g_logic.ISO_WIDTH*0.4f, sprite_y+g_logic.ISO_HEIGHT*1.5f);
         }
     }
 }

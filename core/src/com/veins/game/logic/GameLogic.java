@@ -65,6 +65,9 @@ public class GameLogic {
     public ArrayList<String> messages;
     //public List<String> recent_messages;
     
+    //labels
+    boolean showLabels = false;
+    
     public GameLogic(MyVeinsGame _game)
     {
         messages = new ArrayList<String>();
@@ -80,6 +83,14 @@ public class GameLogic {
     //log messages
     public void addLog(String str){
         messages.add(str);
+    }
+    
+    public void setShowLabels(boolean bool){
+        showLabels = bool;
+    }
+    
+    public boolean getShowLabels(){
+        return showLabels;
     }
     
     //internal map
