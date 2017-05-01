@@ -243,12 +243,16 @@ public class EntityFactory {
     }
     
     
-    public void testLoading(){
+    public void testLoading(String file){
     //test loading
     JsonReader reader = new JsonReader();
-    JsonValue root = reader.parse(Gdx.files.internal("data/test.json"));
+    JsonValue root = reader.parse(Gdx.files.internal(file));
     
-    //print json to console
+    parseActorJSON(root);
+    }
+    
+    public void parseActorJSON(JsonValue root){
+        //print json to console
     //System.out.println(root);
         
         for (JsonValue table : root.iterator()) //returns a list of children
@@ -341,6 +345,7 @@ public class EntityFactory {
         }
         }//end outer for
     }
+    
     
     public void itemtestLoading(){
         JsonReader reader = new JsonReader();

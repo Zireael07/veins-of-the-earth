@@ -48,7 +48,7 @@ public class Area {
     
     public void spawnStuff(){
         //load data
-        g_logic.factory.testLoading();
+        g_logic.factory.testLoading("data/test.json");
         g_logic.factory.itemtestLoading();
 
         //spawn some monsters
