@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.ChatComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
@@ -147,8 +148,20 @@ public class RenderingSystem extends EntitySystem {
                     
                     game.res.font.draw(batch, str, splash_x+g_logic.ISO_WIDTH/4, splash_y+g_logic.ISO_HEIGHT/2+g_logic.ISO_HEIGHT/4);
                 } 
+            }//end splash drawing
+            
+            if (entity.getComponent(ChatComponent.class) !=null){
+                ChatComponent ChatComp = entity.getComponent(ChatComponent.class);
+                if (ChatComp.chatted == true){
+                    float sprite_x = spriteMap.get(entity).sprites.get(0).getX();
+                    float sprite_y = spriteMap.get(entity).sprites.get(0).getY();
+                    //show one-liner
+                    String oneline = ChatComp.text;
+                    game.res.font.draw(batch, oneline, sprite_x-g_logic.ISO_WIDTH/2, sprite_y + g_logic.ISO_HEIGHT*2);
+                }
             }
-        }//end splash drawing
+            
+        }//end actor only stuff
         
         if (g_logic.getShowLabels()){
             float sprite_x = spriteMap.get(entity).sprites.get(0).getX();

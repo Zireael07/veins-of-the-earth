@@ -13,8 +13,10 @@ import com.badlogic.ashley.core.Component;
  */
 public class ChatComponent implements Component {
     public String text;
+    public boolean chatted;
     
     public ChatComponent(String in){
         text = in;
+        chatted = false;
     }
 }

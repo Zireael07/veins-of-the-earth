@@ -18,6 +18,7 @@ import com.veins.game.components.FactionComponent;
 import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
+import com.veins.game.components.PlayerComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
@@ -138,10 +139,15 @@ public class MovementSystem extends EntitySystem {
     
     public void talkTest(Entity entity, Entity target){
         if (target.getComponent(ChatComponent.class) != null){
-           String target_str = target.getComponent(NameComponent.class).string;
-           String text = target.getComponent(ChatComponent.class).text;
-           
-           g_logic.addLog(target_str + " says " + text);
+            //if player
+            if (entity.getComponent(PlayerComponent.class) != null){
+                String target_str = target.getComponent(NameComponent.class).string;
+                String text = target.getComponent(ChatComponent.class).text;
+                //set flag to draw one-liner on screen
+                target.getComponent(ChatComponent.class).chatted = true;
+
+                g_logic.addLog(target_str + " says " + text);
+            }
         }
         
         
@@ -180,6 +186,7 @@ public class MovementSystem extends EntitySystem {
                 String faction = entity_check.getComponent(FactionComponent.class).string;
                 Gdx.app.log("Faction", "Self: " + self_faction + " target " + faction);
                 if (str == "Player" && faction.equals("neutral")){
+                    //Gdx.app.log("Movement", "Triggering talk");
                     talkTest(entity, entity_check);
                 }
                 else {
