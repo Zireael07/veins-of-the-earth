@@ -15,6 +15,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.ChatComponent;
 import com.veins.game.components.FactionComponent;
@@ -151,13 +153,25 @@ public class RenderingSystem extends EntitySystem {
             }//end splash drawing
             
             if (entity.getComponent(ChatComponent.class) !=null){
-                ChatComponent ChatComp = entity.getComponent(ChatComponent.class);
+                final ChatComponent ChatComp = entity.getComponent(ChatComponent.class);
                 if (ChatComp.chatted == true){
                     float sprite_x = spriteMap.get(entity).sprites.get(0).getX();
                     float sprite_y = spriteMap.get(entity).sprites.get(0).getY();
                     //show one-liner
                     String oneline = ChatComp.text;
                     game.res.font.draw(batch, oneline, sprite_x-g_logic.ISO_WIDTH/2, sprite_y + g_logic.ISO_HEIGHT*2);
+                    
+                    Timer line_timer = new Timer();
+                    line_timer.clear();
+                    //task to remove text after 5 seconds
+                     line_timer.schedule(new Task() {
+            
+                    @Override
+                    public void run() {
+                       ChatComp.chatted = false;
+                    }
+
+                    }, 4);
                 }
             }
             
