@@ -102,7 +102,7 @@ public class InventorySlotButton extends VisImageButton {
                             
                             InventorySlotButton check_slot = (InventorySlotButton) group.getChildren().get(i);
                                 
-                            if (check_slot.slot == check_string){
+                            if (check_slot.slot.equals(check_string)){
                                 Gdx.app.log("Inventory slot", "Found slot with string " + check_string);
                                 //actually update the slot
                                 VisImageButtonStyle style_check = check_slot.createStyle(check_slot.slot);
