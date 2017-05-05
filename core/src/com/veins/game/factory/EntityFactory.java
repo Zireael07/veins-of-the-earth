@@ -15,6 +15,7 @@ import com.veins.game.MyVeinsGame;
 import com.veins.game.components.ActorStatsComponent;
 import com.veins.game.components.ChatComponent;
 import com.veins.game.components.CombatComponent;
+import com.veins.game.components.EffectsComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.LifeComponent;
@@ -59,6 +60,7 @@ public class EntityFactory {
         actor.add(new FactionComponent(faction));
         actor.add(new ActorStatsComponent(normalArray));
         actor.add(new CombatComponent());
+        actor.add(new EffectsComponent());
         
         _engine.addEntity(actor);
         return actor;
@@ -77,6 +79,7 @@ public class EntityFactory {
         actor.add(new FactionComponent(proto_actor.getComponent(FactionComponent.class).string));
         actor.add(new ActorStatsComponent(normalArray));
         actor.add(new CombatComponent(proto_actor.getComponent(CombatComponent.class).damage_num, proto_actor.getComponent(CombatComponent.class).damage_dice));
+        actor.add(new EffectsComponent());
         
         //conditional
         if (proto_actor.getComponent(ChatComponent.class) != null){
