@@ -11,8 +11,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.EffectsComponent;
+import com.veins.game.components.LifeComponent;
+import com.veins.game.effects.EffectInterface;
+import com.veins.game.effects.NumericEffect;
 import com.veins.game.factory.EntityFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidmath.Dice;
 import squidpony.squidmath.StatefulRNG;
@@ -208,4 +213,35 @@ public class GameLogic {
         player = factory.CreatePlayer(name, tile);
         return player;
     }
+    
+    //stats stuff
+    
+    //caller needs to make sure we have LifeComponent
+    public int getHP(Entity entity){
+        int base_hp = entity.getComponent(LifeComponent.class).hp;
+        int ret = base_hp;
+        //do we have effects?
+        if (entity.getComponent(EffectsComponent.class) != null){
+            HashMap<String, EffectInterface> effects = entity.getComponent(EffectsComponent.class).getEffects();
+            if (effects.size() > 0){
+                for (EffectInterface value : effects.values()) {
+                    //we're only interested in numeric effects
+                    if (value instanceof NumericEffect){
+                        //cast to numeric effect
+                        NumericEffect effect = (NumericEffect)value;
+                            ret = base_hp + effect.getValue();
+                    }
+                }
+                        
+            }
+            else {
+                ret = base_hp;
+            }
+        }//end of effects block
+        else {
+           ret = base_hp;
+        }
+        return ret;
+    }
+    
 }

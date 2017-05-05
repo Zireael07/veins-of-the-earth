@@ -19,6 +19,7 @@ import com.veins.game.components.RemoveComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.logic.GameLogic;
+import com.veins.game.effects.NumericEffect;
 import java.util.HashMap;
 
 /**
@@ -162,6 +163,9 @@ public class InventorySystem extends EntitySystem {
         
         if (added){
             removeObject(entity, old_slot, item);
+            //test
+            NumericEffect effect = new NumericEffect("Life-boost", "LifeComponent-hp", 5);
+            effect.apply(entity);
         }
         
     }

@@ -117,10 +117,10 @@ public class MovementSystem extends EntitySystem {
         String target_str = target.getComponent(NameComponent.class).string;
         int roll = g_logic.dice.rollDice(1, 100);
         String success = "";
+        LifeComponent LifeComp = target.getComponent(LifeComponent.class);
         //roll UNDER!
         if (roll < 55) {
             success = "Success!";
-            LifeComponent LifeComp = target.getComponent(LifeComponent.class);
             LifeComp.hit = 1;
             int[] dam = getDamage(entity);
             LifeComp.damage = g_logic.dice.rollDice(dam[0],dam[1]);
@@ -128,12 +128,17 @@ public class MovementSystem extends EntitySystem {
         }else
         {
             success = "Miss!";
-            target.getComponent(LifeComponent.class).hit = -1;
+            LifeComp.hit = -1;
+            
         }
         g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);      
         if (roll < 55){
             int[] dam = getDamage(entity);
-            g_logic.addLog(str + " deals " + target.getComponent(LifeComponent.class).damage + " ("+ dam[0] + "d"+ dam[1] + ")damage to " + target_str);
+            g_logic.addLog(str + " deals " + LifeComp.damage + " ("+ dam[0] + "d"+ dam[1] + ") damage to " + target_str);
+        }
+        else{
+            //test
+            g_logic.addLog(target_str + "'s hit points are " + g_logic.getHP(target));
         }
     }
     
