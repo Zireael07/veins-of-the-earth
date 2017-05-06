@@ -50,9 +50,7 @@ public class InventorySlotButton extends VisImageButton {
         item_image = null;
                 
         //set item
-        if (item_ref != null){
-            item_image = new SpriteDrawable(item_ref.getComponent(SpriteComponent.class).sprites.get(0)); //imageItem;
-        }
+        setItemImage(item_ref);
         
         //update image
         VisImageButtonStyle style = createStyle(slot);
@@ -81,6 +79,8 @@ public class InventorySlotButton extends VisImageButton {
                         menu_window.hide();
                         //try to wear the item
                         engine_ref.getSystem(InventorySystem.class).doWear(player_ref, slot, item_ref);
+                        //force unset item image to prevent weirdness
+                        unsetItemImage();
                         //update the slot
                         VisImageButtonStyle style = createStyle(slot);
                         if (style != null)
@@ -96,7 +96,7 @@ public class InventorySlotButton extends VisImageButton {
                             //Gdx.app.log("Group", "We have a group" + group.getName());
                         
                         for (int i = 0; i < group.getChildren().size; i++) {
-                            Gdx.app.log("Inventory slot", "Looping over group's children #" + i);
+                            //Gdx.app.log("Inventory slot", "Looping over group's children #" + i);
                             //paranoia
                             if ((group.getChildren().get(i) instanceof InventorySlotButton)){
                             
@@ -104,12 +104,18 @@ public class InventorySlotButton extends VisImageButton {
                                 
                             if (check_slot.slot.equals(check_string)){
                                 Gdx.app.log("Inventory slot", "Found slot with string " + check_string);
+                                //Gdx.app.log("Inventory slot", "Slot is " + check_slot.slot);
+                                
+                                //provide necessary data to the target slot
+                                check_slot.item_ref = item_ref;
+                                check_slot.setItemImage(item_ref);
+                                
                                 //actually update the slot
                                 VisImageButtonStyle style_check = check_slot.createStyle(check_slot.slot);
                                 if (style_check !=null){
                                     
                                     check_slot.setStyle(style_check);
-                                    Gdx.app.log("Inventory slot", "We have a style for target");
+                                    //Gdx.app.log("Inventory slot", "We have a style for target");
                                     break;
                                 }
                                 
@@ -133,6 +139,17 @@ public class InventorySlotButton extends VisImageButton {
             }
         });
     }
+    
+    void setItemImage(Entity item_ref){
+        if (item_ref != null){
+            item_image = new SpriteDrawable(item_ref.getComponent(SpriteComponent.class).sprites.get(0)); //imageItem;
+        }
+    }
+    
+    void unsetItemImage(){
+        item_image = null;
+    }
+    
     
     private VisImageButtonStyle createStyle(String slot) {
         Drawable image;
