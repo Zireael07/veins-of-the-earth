@@ -255,13 +255,14 @@ public class MovementSystem extends EntitySystem {
        String str = entity.getComponent(NameComponent.class).string;
        
        
-       if (str == "Player"){       
+       if ("Player".equals(str)){       
        }
        else
        {
            if (turnsCom.blocking){
                Coord start = Coord.get(getPositionX(entity), getPositionY(entity));
-               Coord target = Coord.get(getPositionX(g_logic.getPlayer()), getPositionY(g_logic.getPlayer()));
+               //Coord target = Coord.get(getPositionX(g_logic.getPlayer()), getPositionY(g_logic.getPlayer()));
+               Coord target = getTarget(entity);
                
                if (getPositionX(entity) == getPositionX(g_logic.getPlayer()) && getPositionY(entity) == getPositionY(g_logic.getPlayer())) 
                {
@@ -299,4 +300,21 @@ public class MovementSystem extends EntitySystem {
        }     
     }
     
+    public Coord getTarget(Entity entity){
+        int target_x = 1;
+        int target_y = 1;
+        String faction = entity.getComponent(FactionComponent.class).string;
+        if (faction.equals("neutral")){
+            Gdx.app.log("Target", "Random target for neutral AI");
+            target_x = g_logic.rng.between(1, g_logic.MAP_WIDTH-1);
+            target_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
+        }
+        else
+        {
+            target_x = getPositionX(g_logic.getPlayer());
+            target_y = getPositionY(g_logic.getPlayer());
+        }
+        
+        return Coord.get(target_x, target_y);
+    }
 }
