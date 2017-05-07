@@ -35,6 +35,9 @@ public class InventorySystem extends EntitySystem {
     private GameLogic g_logic;
     private Engine g_engine;
     
+    //test
+    NumericEffect effect;
+    
     public InventorySystem(int priority, GameLogic logic){
         super.priority = priority;
         g_logic = logic;
@@ -164,7 +167,7 @@ public class InventorySystem extends EntitySystem {
         if (added){
             removeObject(entity, old_slot, item);
             //test
-            NumericEffect effect = new NumericEffect("Life-boost", "LifeComponent-hp", 5);
+            effect = new NumericEffect("Life-boost", "LifeComponent-hp", 5);
             effect.apply(entity);
         }
         
@@ -172,12 +175,13 @@ public class InventorySystem extends EntitySystem {
     
     public void doTakeOff(Entity entity, String slot, String old_slot, Entity item){
         String item_name = item.getComponent(NameComponent.class).string;
-        Gdx.app.log("Inventory", "trying to take off item " + item_name + " tp slot " + slot);
+        Gdx.app.log("Inventory", "trying to take off item " + item_name + " to slot " + slot);
         
         boolean added = addObject(entity, slot, item);
         
         if (added){
             removeObject(entity, old_slot, item);
+            effect.remove(entity);
         }
     }
     
