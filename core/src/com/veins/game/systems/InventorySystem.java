@@ -170,6 +170,19 @@ public class InventorySystem extends EntitySystem {
         
     }
     
+    public void doTakeOff(Entity entity, String slot, String old_slot, Entity item){
+        String item_name = item.getComponent(NameComponent.class).string;
+        Gdx.app.log("Inventory", "trying to take off item " + item_name + " tp slot " + slot);
+        
+        boolean added = addObject(entity, slot, item);
+        
+        if (added){
+            removeObject(entity, old_slot, item);
+        }
+    }
+    
+    
+    
     public Entity getObject(Entity entity, String slot){
         Entity res;
         if (entity.getComponent(InventoryComponent.class).items_map.containsKey(slot)){

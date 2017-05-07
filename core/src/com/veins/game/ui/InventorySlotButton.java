@@ -19,9 +19,11 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.systems.InventorySystem;
+import java.util.HashMap;
 
 /**
  *
@@ -124,16 +126,86 @@ public class InventorySlotButton extends VisImageButton {
                         }
                         }
                     }
-                    });
+                    }); //wear button listener
                 
+                    VisTextButton takeoff_button = new VisTextButton("Take off");
+                    takeoff_button.addListener(new ChangeListener()
+                    {
+                        @Override
+                        public void changed (ChangeEvent event, Actor actor) {
+                        Gdx.app.log("Button", "Clicked the takeoff button");
+                        menu_window.hide();
+                        
+                        //find the first empty inventory slot
+                        HashMap items = player_ref.getComponent(InventoryComponent.class).items_map;
+                            int index = 0;
                             
+                            while (index < 20 && items.get("inven_"+(index+1)) != null) {
+                                index++;
+                            }
+                        
+                        String new_slot = "inven_"+(index+1);
+                        //try to take off the item
+                        engine_ref.getSystem(InventorySystem.class).doTakeOff(player_ref, new_slot, slot, item_ref);
+                        //force unset item image to prevent weirdness
+                        unsetItemImage();
+                        //update the slot
+                        VisImageButtonStyle style = createStyle(slot);
+                        if (style != null)
+                        {
+                            setStyle(style);
+                        }
+                        //find and try to update target slot
+                        String check_string = new_slot;
+                        Array<Actor> groups = getParent().getParent().getChildren();
+                        //group 0 is window label, 1 is equipment
+                        Group group = (Group) groups.get(3);
+                        
+                        if (group != null){
+                            //Gdx.app.log("Group", "We have a group" + group.getName());
+                            
+                            
+                        for (int i = 0; i < group.getChildren().size; i++) {
+                            //Gdx.app.log("Inventory slot", "Looping over group's children #" + i);
+                            //paranoia
+                            if ((group.getChildren().get(i) instanceof InventorySlotButton)){
+                            
+                            InventorySlotButton check_slot = (InventorySlotButton) group.getChildren().get(i);
+                              
+                            
+                            if (check_slot.slot.equals(check_string)){
+                                Gdx.app.log("Inventory slot", "Found slot with string " + check_string);
+                                //Gdx.app.log("Inventory slot", "Slot is " + check_slot.slot);
+                                
+                                //provide necessary data to the target slot
+                                check_slot.item_ref = item_ref;
+                                check_slot.setItemImage(item_ref);
+                                
+                                //actually update the slot
+                                VisImageButtonStyle style_check = check_slot.createStyle(check_slot.slot);
+                                if (style_check !=null){
+                                    
+                                    check_slot.setStyle(style_check);
+                                    //Gdx.app.log("Inventory slot", "We have a style for target");
+                                    break;
+                                }
+                                
+                            }
+                            }
+                        }
+                        }
+                    }
+                    }); //takeoff button listener
+                    
+                    
                     //Gdx.app.log("Item menu", "Item menu pos " + x + " ," + y);
                     menu_window.setPosition(50, 50);
                     menu_window.add(wear_button).row();
+                    menu_window.add(takeoff_button).row();
                     menu_window.pack();
                     menu_window.setModal(true);
                     menu_window.closeOnEscape();
-
+                                        
                     stage_ref.addActor(menu_window);
                }//end of if item
             }
