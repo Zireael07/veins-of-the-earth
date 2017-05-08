@@ -216,6 +216,17 @@ public class GameLogic {
     
     //stats stuff
     
+    public int[] generateStats(){
+        int[] ret = new int[6];
+        for (int i = 0; i < 6; i++) {
+            int val = dice.rollDice(3, 6);
+            ret[i] = val;
+        }
+        
+        return ret;
+    }
+    
+    
     //caller needs to make sure we have LifeComponent
     public int getHP(Entity entity){
         int base_hp = entity.getComponent(LifeComponent.class).hp;

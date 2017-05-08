@@ -158,7 +158,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //ui elements
         //debugging
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
         coords_label = new VisLabel("");
         stage.addActor(coords_label);
         
@@ -167,6 +167,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         message_table.setPosition(70, 70);
         message_table.setSize(40, 20);
         message_table.columnDefaults(0).left();
+        
+        displayCharacterCreation();
     }
     
     
@@ -447,5 +449,51 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         InventoryWindow inven_window = new InventoryWindow(stage, player, game, engine);
         
         stage.addActor(inven_window); 
+    }
+    
+    public void displayCharacterCreation(){
+        VisWindow creation_window = new VisWindow("Character Creation");
+        
+        creation_window.columnDefaults(0).left();
+        
+        VisLabel Str = new VisLabel("STR");
+        VisLabel Dex = new VisLabel("DEX");
+        VisLabel Con = new VisLabel("CON");
+        VisLabel Int = new VisLabel("INT");
+        VisLabel Wis = new VisLabel("WIS");
+        VisLabel Cha = new VisLabel("CHA");
+        
+        VisTable labels = new VisTable();
+        
+        labels.add(Str).row();
+        labels.add(Dex).row();
+        labels.add(Con).row();
+        labels.add(Int).row();
+        labels.add(Wis).row();
+        labels.add(Cha).row();
+        
+        int[] stats = logic.generateStats();
+        
+        VisTable source_vals = new VisTable();
+        
+        //for every stat, generate a label
+        for (int i = 0; i < stats.length; i++) {
+            VisLabel stat = new VisLabel(Integer.toString(stats[i]));
+            source_vals.add(stat).row();
+        }
+        
+        creation_window.add(labels);
+        creation_window.add(source_vals).row();
+        
+        //creation_window.setCenterOnAdd(true);
+        creation_window.setHeight(400);
+        creation_window.setWidth(400);
+        //creation_window.pack();
+        
+        //test purposes
+        creation_window.closeOnEscape();
+        
+        stage.addActor(creation_window);
+        creation_window.setPosition(Gdx.graphics.getWidth()-450, Gdx.graphics.getHeight()/2);
     }
 }
