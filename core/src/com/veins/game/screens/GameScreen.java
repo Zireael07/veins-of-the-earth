@@ -25,18 +25,13 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.kotcrab.vis.ui.layout.GridGroup;
-import com.kotcrab.vis.ui.widget.Separator;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.veins.game.MyVeinsGame;
-import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.TurnsComponent;
@@ -50,7 +45,7 @@ import com.veins.game.systems.PositionSystem;
 import com.veins.game.systems.RemovalSystem;
 import com.veins.game.systems.RenderingSystem;
 import com.veins.game.systems.TurnTimeSystem;
-import com.veins.game.ui.InventorySlotButton;
+import com.veins.game.ui.CharacterCreationWindow;
 import com.veins.game.ui.InventoryWindow;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,7 +153,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         //ui elements
         //debugging
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
         coords_label = new VisLabel("");
         stage.addActor(coords_label);
         
@@ -452,46 +447,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
     }
     
     public void displayCharacterCreation(){
-        VisWindow creation_window = new VisWindow("Character Creation");
-        
-        creation_window.columnDefaults(0).left();
-        
-        VisLabel Str = new VisLabel("STR");
-        VisLabel Dex = new VisLabel("DEX");
-        VisLabel Con = new VisLabel("CON");
-        VisLabel Int = new VisLabel("INT");
-        VisLabel Wis = new VisLabel("WIS");
-        VisLabel Cha = new VisLabel("CHA");
-        
-        VisTable labels = new VisTable();
-        
-        labels.add(Str).row();
-        labels.add(Dex).row();
-        labels.add(Con).row();
-        labels.add(Int).row();
-        labels.add(Wis).row();
-        labels.add(Cha).row();
-        
-        int[] stats = logic.generateStats();
-        
-        VisTable source_vals = new VisTable();
-        
-        //for every stat, generate a label
-        for (int i = 0; i < stats.length; i++) {
-            VisLabel stat = new VisLabel(Integer.toString(stats[i]));
-            source_vals.add(stat).row();
-        }
-        
-        creation_window.add(labels);
-        creation_window.add(source_vals).row();
-        
-        //creation_window.setCenterOnAdd(true);
-        creation_window.setHeight(400);
-        creation_window.setWidth(400);
-        //creation_window.pack();
-        
-        //test purposes
-        creation_window.closeOnEscape();
+        CharacterCreationWindow creation_window = new CharacterCreationWindow(player, logic);
         
         stage.addActor(creation_window);
         creation_window.setPosition(Gdx.graphics.getWidth()-450, Gdx.graphics.getHeight()/2);
