@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.ActorStatsComponent;
 import com.veins.game.components.EffectsComponent;
 import com.veins.game.components.LifeComponent;
 import com.veins.game.effects.EffectInterface;
@@ -226,6 +227,17 @@ public class GameLogic {
         return ret;
     }
     
+    //set stats
+    public void setStats(Entity entity, int[] stats){
+        ActorStatsComponent statsComp = entity.getComponent(ActorStatsComponent.class);
+        
+        statsComp.setStr(stats[0]);
+        statsComp.setDex(stats[1]);
+        statsComp.setCon(stats[2]);
+        statsComp.setInt(stats[3]);
+        statsComp.setWis(stats[4]);
+        statsComp.setCha(stats[5]);
+    }
     
     //caller needs to make sure we have LifeComponent
     public int getHP(Entity entity){

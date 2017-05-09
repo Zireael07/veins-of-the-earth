@@ -6,6 +6,7 @@
 package com.veins.game.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.Gdx;
 
 /**
  *
@@ -40,5 +41,35 @@ public class ActorStatsComponent implements Component {
             Wis = array[3];
             Cha = array[5];
         }
+    }
+    
+    public void setStr(int val){
+        Str = val;
+        Gdx.app.log("Stats", "setting Str to " + val);
+    }
+    
+    public void setDex(int val){
+        Dex = val;
+        Gdx.app.log("Stats", "setting Dex to " + val);
+    }
+    
+    public void setCon(int val){
+        Con = val;
+        Gdx.app.log("Stats", "setting Con to " + val);
+    }
+    
+    public void setInt(int val){
+        Int = val;
+        Gdx.app.log("Stats", "setting Int to " + val);
+    }
+    
+    public void setWis(int val){
+        Wis = val;
+        Gdx.app.log("Stats", "setting Wis to " + val);
+    }
+    
+    public void setCha(int val){
+        Cha = val;
+        Gdx.app.log("Stats", "setting Cha to " + val);
     }
 }
