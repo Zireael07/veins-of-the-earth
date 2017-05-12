@@ -147,6 +147,11 @@ public class MovementSystem extends EntitySystem {
             if (LifeComp.hp < 0){
                 target.add(new RemoveComponent());
                 g_logic.addLog(str + " kills " + target_str + "!");
+                
+                //debug
+                if (target.getComponent(PlayerComponent.class) != null){
+                    g_logic.addLog("Player was killed!");
+                }
             }
             
         }else

@@ -24,16 +24,20 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
+import com.veins.game.components.RemoveComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.Area;
 import com.veins.game.logic.GameLogic;
@@ -228,6 +232,11 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
              }
             }
         
+        //game over
+        if (player.getComponent(RemoveComponent.class) != null){
+            showGameOver();
+        }
+        
         stage.getViewport().apply();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -237,7 +246,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
      public void dispose(){
          batch.dispose();
          stage.dispose();
-         Gdx.input.setInputProcessor(null);
+         //Gdx.input.setInputProcessor(null);
      }
     
      //initing some stuff we absolutely need to function
@@ -451,5 +460,29 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         stage.addActor(creation_window);
         creation_window.setPosition(Gdx.graphics.getWidth()-450, Gdx.graphics.getHeight()/2);
+    }
+    
+    public void showGameOver(){
+        VisWindow game_over_window = new VisWindow("Game Over");
+        
+        VisTextButton ok_button = new VisTextButton("Ok");
+        
+        ok_button.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed (ChangeListener.ChangeEvent event, Actor actor) {
+                //back to main menu
+                game.setScreen(new MenuScreen(game));
+                dispose();
+                }
+        });
+        
+        game_over_window.add(ok_button);
+        
+        game_over_window.setCenterOnAdd(true);
+        game_over_window.setModal(true);
+        stage.addActor(game_over_window);
+        
+        
     }
 }
