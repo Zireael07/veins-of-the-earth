@@ -20,6 +20,7 @@ import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PlayerComponent;
 import com.veins.game.components.PositionComponent;
+import com.veins.game.components.RemoveComponent;
 import com.veins.game.components.TurnsComponent;
 import com.veins.game.logic.GameLogic;
 import com.veins.game.logic.MapTile;
@@ -118,27 +119,40 @@ public class MovementSystem extends EntitySystem {
         int roll = g_logic.dice.rollDice(1, 100);
         String success = "";
         LifeComponent LifeComp = target.getComponent(LifeComponent.class);
-        //roll UNDER!
+        
         if (roll < 55) {
             success = "Success!";
+        }
+        else
+        {
+            success = "Miss";
+        }
+        
+        
+        g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);
+        
+        //roll UNDER!
+        if (roll < 55) {
+            //success = "Success!";
             LifeComp.hit = 1;
             int[] dam = getDamage(entity);
             LifeComp.damage = g_logic.dice.rollDice(dam[0],dam[1]);
             LifeComp.hp = LifeComp.hp - LifeComp.damage;
+            
+            g_logic.addLog(str + " deals " + LifeComp.damage + " ("+ dam[0] + "d"+ dam[1] + ") damage to " + target_str);
+            
+            g_logic.addLog(target_str + "'s hit points are " + g_logic.getHP(target));
+            
+            //death
+            if (LifeComp.hp < 0){
+                target.add(new RemoveComponent());
+                g_logic.addLog(str + " kills " + target_str + "!");
+            }
+            
         }else
         {
-            success = "Miss!";
+            //success = "Miss!";
             LifeComp.hit = -1;
-            
-        }
-        g_logic.addLog(str + " attacks " + target_str + ": 1d100 roll " + roll + " result: " + success);      
-        if (roll < 55){
-            int[] dam = getDamage(entity);
-            g_logic.addLog(str + " deals " + LifeComp.damage + " ("+ dam[0] + "d"+ dam[1] + ") damage to " + target_str);
-        }
-        else{
-            //test
-            g_logic.addLog(target_str + "'s hit points are " + g_logic.getHP(target));
         }
     }
     
