@@ -49,7 +49,9 @@ public class MenuScreen extends DefaultScreen {
             
             Gdx.input.setInputProcessor(stage);
             
-            VisUI.load();
+            if (!VisUI.isLoaded()){
+                VisUI.load();
+            }
             
             // Create a table that fills the screen. Everything else will go inside this table.
             Table table = new Table();
