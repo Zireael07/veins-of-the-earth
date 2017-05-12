@@ -56,7 +56,7 @@ public class EntityFactory {
         actor.add(new SpriteComponent(tile));
         actor.add(new NameComponent(name));
         actor.add(new TurnsComponent());
-        actor.add(new LifeComponent());
+        actor.add(new LifeComponent(20)); //give the player more hp
         actor.add(new FactionComponent(faction));
         actor.add(new ActorStatsComponent(normalArray));
         actor.add(new CombatComponent());
@@ -75,7 +75,12 @@ public class EntityFactory {
         actor.add(new SpriteComponent(proto_actor.getComponent(SpriteComponent.class).sprites.get(0)));
         actor.add(new NameComponent(proto_actor.getComponent(NameComponent.class).string));
         actor.add(new TurnsComponent());
-        actor.add(new LifeComponent());
+        if (proto_actor.getComponent(LifeComponent.class) != null){
+            actor.add(new LifeComponent(proto_actor.getComponent(LifeComponent.class).hp));
+        }
+        else{
+            actor.add(new LifeComponent());
+        }
         actor.add(new FactionComponent(proto_actor.getComponent(FactionComponent.class).string));
         actor.add(new ActorStatsComponent(normalArray));
         actor.add(new CombatComponent(proto_actor.getComponent(CombatComponent.class).damage_num, proto_actor.getComponent(CombatComponent.class).damage_dice));
