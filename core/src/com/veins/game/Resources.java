@@ -23,8 +23,11 @@ public class Resources {
          public TextureRegion kobold_tex;
          public TextureRegion drow_tex;
          public TextureRegion human_tex;
+         public TextureRegion goblin_tex;
+         //items
          public TextureRegion sword_tex;
          public TextureRegion armor_tex;
+         //misc
          public TextureRegion unit_marker_tex;
          public Sprite unit_marker;
          public TextureRegion shield_splash_tex;
@@ -57,6 +60,7 @@ public class Resources {
          kobold_tex = new TextureRegion(gameSprites.findRegion("kobold"));
          drow_tex = new TextureRegion(gameSprites.findRegion("drow_fighter"));
          human_tex = new TextureRegion(gameSprites.findRegion("human"));
+         goblin_tex = new TextureRegion(gameSprites.findRegion("goblin"));
          sword_tex = new TextureRegion(gameSprites.findRegion("longsword"));
          armor_tex = new TextureRegion(gameSprites.findRegion("armor_studded"));
          //markers

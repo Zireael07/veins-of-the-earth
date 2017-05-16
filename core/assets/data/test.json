@@ -9,6 +9,15 @@
 }
 
 {
+ sprite: goblin,         //same as name for now
+ name: goblin,
+ faction: enemy
+ hit_points: 5 //test
+ damage_dice: 6      //d6
+ damage_number: 1
+}
+
+{
  sprite: human,
  name: human,
  faction: neutral
