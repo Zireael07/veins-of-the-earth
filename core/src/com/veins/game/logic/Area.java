@@ -71,7 +71,7 @@ public class Area {
     }
     
     public void spawnActor(int x){
-        int id_spawn = g_logic.rng.between(0, 3);
+        int id_spawn = g_logic.rng.between(0, 4);
         int act_x = g_logic.rng.between(0, g_logic.MAP_WIDTH-1);
         int act_y = g_logic.rng.between(0, g_logic.MAP_HEIGHT-1);
         
@@ -95,11 +95,16 @@ public class Area {
             inter_map[act_x][act_y].setActor(actor);
         }
         if (id_spawn == 2){
+            Entity actor = g_logic.factory.CreateActor("goblin", act_x, act_y);
+            //named in order
+            actor.getComponent(NameComponent.class).string = "goblin" + "#" + x;
+            inter_map[act_x][act_y].setActor(actor);
+        }
+        if (id_spawn == 3){
             Entity actor = g_logic.factory.CreateActor("drow", act_x, act_y);
             //named in order
             actor.getComponent(NameComponent.class).string = "drow" + "#" + x;
             inter_map[act_x][act_y].setActor(actor);
         }
-        
     }
 }

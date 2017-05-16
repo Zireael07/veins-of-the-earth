@@ -335,6 +335,9 @@ public class EntityFactory {
                         if ("human".equals(tilename)){
                             loadStoreActor(name, _game.res.human_tex, factionname, hp, dam_die, num_die);
                         }
+                        if ("goblin".equals(tilename)){
+                            loadStoreActor(name, _game.res.goblin_tex, factionname, hp, dam_die, num_die);
+                        }
                     }
                 }
                 else{
