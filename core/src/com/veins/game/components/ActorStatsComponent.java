@@ -72,4 +72,35 @@ public class ActorStatsComponent implements Component {
         Cha = val;
         Gdx.app.log("Stats", "setting Cha to " + val);
     }
+    
+    //getters
+    public int getStr(){
+        return Str;
+        //Gdx.app.log("Stats", "setting Str to " + val);
+    }
+    
+    public int getDex(){
+        return Dex;
+        //Gdx.app.log("Stats", "setting Dex to " + val);
+    }
+    
+    public int getCon(){
+        return Con;
+        //Gdx.app.log("Stats", "setting Con to " + val);
+    }
+    
+    public int getInt(){
+        return Int;
+        //Gdx.app.log("Stats", "setting Int to " + val);
+    }
+    
+    public int getWis(){
+        return Wis;
+        //Gdx.app.log("Stats", "setting Wis to " + val);
+    }
+    
+    public int getCha(){
+        return Cha;
+        //Gdx.app.log("Stats", "setting Cha to " + val);
+    }
 }
