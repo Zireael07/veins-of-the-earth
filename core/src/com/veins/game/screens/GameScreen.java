@@ -35,6 +35,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.veins.game.MyVeinsGame;
+import com.veins.game.components.ActorStatsComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.RemoveComponent;
@@ -320,6 +321,8 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
                         logic.setShowLabels(true);
                     }
                 break;
+            case Input.Keys.C:
+                displayCharacterSheet(player);
         }
         return false;
     }
@@ -460,6 +463,45 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         stage.addActor(creation_window);
         creation_window.setPosition(Gdx.graphics.getWidth()-450, Gdx.graphics.getHeight()/2);
+    }
+    
+    public void displayCharacterSheet(Entity player){
+        VisWindow character_sheet_window = new VisWindow("Character Sheet");
+        
+        character_sheet_window.columnDefaults(0).left();
+        
+        ActorStatsComponent statsComp = player.getComponent(ActorStatsComponent.class);
+        
+        int Str_val = statsComp.getStr();
+        int Dex_val = statsComp.getDex();
+        int Con_val = statsComp.getCon();
+        int Int_val = statsComp.getInt();
+        int Wis_val = statsComp.getWis();
+        int Cha_val = statsComp.getCha();
+        
+        VisLabel Str = new VisLabel("STR: " + Str_val);
+        VisLabel Dex = new VisLabel("DEX: " + Dex_val);
+        VisLabel Con = new VisLabel("CON: " + Con_val);
+        VisLabel Int = new VisLabel("INT: " + Int_val);
+        VisLabel Wis = new VisLabel("WIS: " + Wis_val);
+        VisLabel Cha = new VisLabel("CHA: " + Cha_val);
+        
+        character_sheet_window.add(Str).row();
+        character_sheet_window.add(Dex).row();
+        character_sheet_window.add(Con).row();
+        character_sheet_window.add(Int).row();
+        character_sheet_window.add(Wis).row();
+        character_sheet_window.add(Cha).row();
+        
+        
+        character_sheet_window.setCenterOnAdd(true);
+        character_sheet_window.setHeight(400);
+        character_sheet_window.setWidth(400);
+        character_sheet_window.setModal(true);
+        
+        character_sheet_window.closeOnEscape();
+        
+        stage.addActor(character_sheet_window);
     }
     
     public void showGameOver(){
