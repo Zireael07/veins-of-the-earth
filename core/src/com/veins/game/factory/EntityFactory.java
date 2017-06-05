@@ -19,6 +19,7 @@ import com.veins.game.components.EffectsComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.InventoryComponent;
 import com.veins.game.components.LifeComponent;
+import com.veins.game.components.MoneyComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PlayerComponent;
 import com.veins.game.components.PositionComponent;
@@ -64,6 +65,7 @@ public class EntityFactory {
         actor.add(new ActorStatsComponent(normalArray));
         actor.add(new CombatComponent());
         actor.add(new EffectsComponent());
+        actor.add(new MoneyComponent(100));
         
         _engine.addEntity(actor);
         return actor;
