@@ -36,6 +36,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.ActorStatsComponent;
+import com.veins.game.components.MoneyComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.RemoveComponent;
@@ -470,6 +471,7 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         
         character_sheet_window.columnDefaults(0).left();
         
+        //stats
         ActorStatsComponent statsComp = player.getComponent(ActorStatsComponent.class);
         
         int Str_val = statsComp.getStr();
@@ -492,6 +494,19 @@ public class GameScreen extends DefaultScreen implements InputProcessor {
         character_sheet_window.add(Int).row();
         character_sheet_window.add(Wis).row();
         character_sheet_window.add(Cha).row();
+        
+        MoneyComponent moneyComp = player.getComponent(MoneyComponent.class);
+        int silver_val = moneyComp.getSilver();
+        int gold_val = moneyComp.getGold();
+        int platinum_val = moneyComp.getPlatinum();
+        
+        VisLabel silvers = new VisLabel("Silver: " + silver_val);
+        VisLabel golds = new VisLabel("Gold: " + gold_val);
+        VisLabel plats = new VisLabel("Platinum: " + platinum_val);
+        
+        character_sheet_window.add(silvers).row();
+        character_sheet_window.add(golds).row();
+        character_sheet_window.add(plats).row();
         
         
         character_sheet_window.setCenterOnAdd(true);
