@@ -1,0 +1,22 @@
+[
+{
+ name: human,
+}
+
+{
+ name: drow,
+ dex: 2,
+ con: -2,
+ int: 2,
+}
+
+{
+ name: elf,
+ dex: 2,
+ con: -2,
+}
+
+{
+ name: half-elf,
+}
+]

@@ -17,6 +17,7 @@ import com.veins.game.components.LifeComponent;
 import com.veins.game.effects.EffectInterface;
 import com.veins.game.effects.NumericEffect;
 import com.veins.game.factory.EntityFactory;
+import com.veins.game.factory.EntityFactory.RaceData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import squidpony.squidai.DijkstraMap;
@@ -227,14 +228,22 @@ public class GameLogic {
         return ret;
     }
     
+    public ArrayList<RaceData> generateRaces(){
+        ArrayList<RaceData> races = factory.loadRaces();
+        
+        return races;
+    }
+    
+    
     //set stats
-    public void setStats(Entity entity, int[] stats){
+    //bonuses are: index 0 Dex, 1 Con, 2 Int 
+    public void setStats(Entity entity, int[] stats, ArrayList<Integer> bonuses){
         ActorStatsComponent statsComp = entity.getComponent(ActorStatsComponent.class);
         
         statsComp.setStr(stats[0]);
-        statsComp.setDex(stats[1]);
-        statsComp.setCon(stats[2]);
-        statsComp.setInt(stats[3]);
+        statsComp.setDex(stats[1]+bonuses.get(0));
+        statsComp.setCon(stats[2]+bonuses.get(1));
+        statsComp.setInt(stats[3]+bonuses.get(2));
         statsComp.setWis(stats[4]);
         statsComp.setCha(stats[5]);
     }

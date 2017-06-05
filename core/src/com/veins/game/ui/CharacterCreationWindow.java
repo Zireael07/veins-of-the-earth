@@ -13,7 +13,9 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
+import com.veins.game.factory.EntityFactory.RaceData;
 import com.veins.game.logic.GameLogic;
+import java.util.ArrayList;
 
 /**
  *
@@ -82,19 +84,43 @@ public class CharacterCreationWindow extends VisWindow {
         
         add(reroll_button);
         
+        final ArrayList<Integer> bonuses = new ArrayList<Integer>();
+        
         VisTextButton ready_button = new VisTextButton("Ready!");
         ready_button.addListener(new ChangeListener() 
         {
             @Override
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
-                g_logic.setStats(player, stats);
+                g_logic.setStats(player, stats, bonuses);
                 fadeOut();
                 
                 Gdx.app.log("Created", "created character");
             }
         });
         
-        add(ready_button);
+        add(ready_button).row();
+        
+        ArrayList<RaceData> races = g_logic.generateRaces();
+        //for every race, generate a button
+        for (int i = 0; i < races.size(); i++) {
+            final RaceData race = races.get(i);
+            VisTextButton race_button = new VisTextButton(race.getName());
+            
+            race_button.addListener(new ChangeListener()
+            {
+                @Override
+                public void changed(ChangeListener.ChangeEvent event, Actor actor){
+                    Gdx.app.log("Race select", "selected race " + race.getName());
+                    bonuses.clear();
+                    bonuses.add(race.getDexBonus());
+                    bonuses.add(race.getConBonus());
+                    bonuses.add(race.getIntBonus());
+                    Gdx.app.log("Race select", "bonus 0 " + bonuses.get(0) + "bonus 1 " + bonuses.get(1) + "bonus 2" + bonuses.get(2));
+                }
+            });
+            
+            add(race_button).row();
+        }
         
         //creation_window.setCenterOnAdd(true);
         setHeight(400);

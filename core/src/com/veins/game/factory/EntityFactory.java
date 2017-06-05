@@ -25,7 +25,10 @@ import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
 import com.veins.game.components.TurnsComponent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -423,5 +426,122 @@ public class EntityFactory {
         }//end for
         
         Gdx.app.log("Loading JSON", "Finished loading");
+    }
+    
+    public class RaceData{
+        private String name;
+        private int dex_bonus;
+        private int con_bonus;
+        private int int_bonus;
+        
+        public void setName(String str){
+            name = str;
+        }
+        
+        public void setDexBonus(int val){
+            dex_bonus = val;
+        }
+        
+        public void setConBonus(int val){
+            con_bonus = val;
+        }
+        
+        public void setIntBonus(int val){
+            int_bonus = val;
+        }
+        
+        public int getDexBonus(){
+            return dex_bonus;
+        }
+        
+        public int getConBonus(){
+            return con_bonus;
+        }
+        
+        public int getIntBonus(){
+            return int_bonus;
+        }
+        
+        public String getName(){
+            return name;
+        }
+    }
+    
+    
+    public ArrayList<RaceData> loadRaces(){
+        JsonReader reader = new JsonReader();
+        JsonValue root = reader.parse(Gdx.files.internal("data/races.json"));
+    
+        //print json to console
+        //System.out.println(root);
+        
+        ArrayList<String> racenames = new ArrayList<String>();
+        
+        ArrayList<RaceData> races = new ArrayList<RaceData>();
+        //HashMap<String, Integer> racebonus_dex = new HashMap<String, Integer>();
+        
+        
+        for (JsonValue table : root.iterator()) //returns a list of children
+        {   
+            JsonValue item = table.child;
+            Gdx.app.log("Loading JSON", "Reading " + item.asString());
+            
+            //master data
+            RaceData race = new RaceData();
+            
+            //parse the JSON
+            String name = new String();
+            int dex_plus = 0;
+            int con_plus = 0;
+            int int_plus = 0;
+            
+            
+            for (JsonValue child : table.iterator())
+            {
+            
+                Gdx.app.log("Loading JSON", "Reading " + child.name);
+                if ("name".equals(child.name)){
+                    name = child.asString();
+                }
+                
+                if ("dex".equals(child.name)){
+                    dex_plus = child.asInt();
+                }
+                if ("con".equals(child.name)){
+                    con_plus = child.asInt();
+                }
+                if ("int".equals(child.name)){
+                    int_plus = child.asInt();
+                }
+                
+                //load
+                if (!name.isEmpty()){ //&& !racenames.contains(name)){
+                    //RaceData race = new RaceData();
+                    race.setName(name);
+                    
+                    if (dex_plus != 0){
+                        race.setDexBonus(dex_plus); 
+                    }
+                    
+                    if (con_plus != 0){
+                        race.setConBonus(con_plus); 
+                    }
+                    
+                    if (int_plus != 0){
+                        race.setIntBonus(int_plus);
+                    }
+                    
+                    if (!races.contains(race)){
+                        races.add(race);
+                    }
+                }
+                
+                
+            }
+            
+        } //end outer for
+        
+        return races;
+        
     }
 }
