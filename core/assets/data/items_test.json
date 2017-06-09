@@ -10,5 +10,17 @@
       name: leather armor,
       sprite: leather, //armor
       slot: body,
+  },
+  {
+      name: silver coins,
+      sprite: silver_coins,
+      num_coins_min: 1,
+      num_coins_max: 100,
+  },
+  {
+      name: gold coins,
+      sprite: gold_coins,
+      num_coins_min: 1,
+      num_coins_max: 10,
   }
 ]

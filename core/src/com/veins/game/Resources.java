@@ -27,6 +27,8 @@ public class Resources {
          //items
          public TextureRegion sword_tex;
          public TextureRegion armor_tex;
+         public TextureRegion silver_tex;
+         public TextureRegion gold_tex;
          //misc
          public TextureRegion unit_marker_tex;
          public Sprite unit_marker;
@@ -63,6 +65,8 @@ public class Resources {
          goblin_tex = new TextureRegion(gameSprites.findRegion("goblin"));
          sword_tex = new TextureRegion(gameSprites.findRegion("longsword"));
          armor_tex = new TextureRegion(gameSprites.findRegion("armor_studded"));
+         silver_tex = new TextureRegion(gameSprites.findRegion("coins_silver"));
+         gold_tex = new TextureRegion(gameSprites.findRegion("coins_gold"));
          //markers
          unit_marker_tex = new TextureRegion(gameSprites.findRegion("unit_marker"));
          shield_splash_tex = new TextureRegion(gameSprites.findRegion("splash_shield"));
