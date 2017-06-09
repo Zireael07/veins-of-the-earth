@@ -67,7 +67,15 @@ public class Area {
         item_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
         //g_logic.factory.CreateItem("leather armor", _game.res.armor_tex, "body", item_x, item_y);
         g_logic.factory.CreateItem("leather armor", item_x, item_y);
-
+        
+        //spawn some money
+        item_x = g_logic.rng.between(1, g_logic.MAP_WIDTH-1);
+        item_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
+        g_logic.factory.CreateMoney("silver coins", item_x, item_y);
+        
+        item_x = g_logic.rng.between(1, g_logic.MAP_WIDTH-1);
+        item_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
+        g_logic.factory.CreateMoney("silver coins", item_x, item_y);
     }
     
     public void spawnActor(int x){
