@@ -71,11 +71,11 @@ public class Area {
         //spawn some money
         item_x = g_logic.rng.between(1, g_logic.MAP_WIDTH-1);
         item_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
-        g_logic.factory.CreateMoney("silver coins", item_x, item_y);
+        g_logic.factory.CreateMoney("silver coin", item_x, item_y);
         
         item_x = g_logic.rng.between(1, g_logic.MAP_WIDTH-1);
         item_y = g_logic.rng.between(1, g_logic.MAP_HEIGHT-1);
-        g_logic.factory.CreateMoney("silver coins", item_x, item_y);
+        g_logic.factory.CreateMoney("silver coin", item_x, item_y);
     }
     
     public void spawnActor(int x){

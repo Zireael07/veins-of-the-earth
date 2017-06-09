@@ -12,13 +12,13 @@
       slot: body,
   },
   {
-      name: silver coins,
+      name: silver coin,
       sprite: silver_coins,
       num_coins_min: 1,
       num_coins_max: 100,
   },
   {
-      name: gold coins,
+      name: gold coin,
       sprite: gold_coins,
       num_coins_min: 1,
       num_coins_max: 10,
