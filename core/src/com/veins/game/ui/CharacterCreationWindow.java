@@ -85,12 +85,17 @@ public class CharacterCreationWindow extends VisWindow {
         add(reroll_button);
         
         final ArrayList<Integer> bonuses = new ArrayList<Integer>();
+        //default bonuses (0 in all stats)
+        bonuses.add(0);
+        bonuses.add(0);
+        bonuses.add(0);
         
         VisTextButton ready_button = new VisTextButton("Ready!");
         ready_button.addListener(new ChangeListener() 
         {
             @Override
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
+                
                 g_logic.setStats(player, stats, bonuses);
                 fadeOut();
                 

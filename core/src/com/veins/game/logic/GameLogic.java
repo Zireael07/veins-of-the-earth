@@ -236,6 +236,7 @@ public class GameLogic {
     
     
     //set stats
+    //caller needs to make sure bonuses are always provided
     //bonuses are: index 0 Dex, 1 Con, 2 Int 
     public void setStats(Entity entity, int[] stats, ArrayList<Integer> bonuses){
         ActorStatsComponent statsComp = entity.getComponent(ActorStatsComponent.class);
