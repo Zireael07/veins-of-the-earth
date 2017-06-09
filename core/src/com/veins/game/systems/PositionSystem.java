@@ -14,6 +14,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
+import com.veins.game.components.CoinsComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.SlotComponent;
 import com.veins.game.components.SpriteComponent;
@@ -40,8 +41,8 @@ public class PositionSystem extends EntitySystem {
     }
     
     public void addedToEngine(Engine engine){
-        actor_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).exclude(SlotComponent.class).get());
-        item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class, SlotComponent.class).get());
+        actor_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).exclude(SlotComponent.class, CoinsComponent.class).get());
+        item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).one(CoinsComponent.class, SlotComponent.class).get());
     }
     
     public int getPositionX(Entity entity){

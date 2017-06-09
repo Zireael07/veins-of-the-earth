@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.ChatComponent;
+import com.veins.game.components.CoinsComponent;
 import com.veins.game.components.FactionComponent;
 import com.veins.game.components.LifeComponent;
 import com.veins.game.components.NameComponent;
@@ -75,8 +76,8 @@ public class RenderingSystem extends EntitySystem {
     }
     
     public void addedToEngine(Engine engine){
-       actor_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).exclude(SlotComponent.class).get());
-        item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class, SlotComponent.class).get());
+       actor_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).exclude(SlotComponent.class, CoinsComponent.class).get());
+        item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).one(CoinsComponent.class, SlotComponent.class).get());
     }
     
     
