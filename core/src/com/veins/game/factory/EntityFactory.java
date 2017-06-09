@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.veins.game.MyVeinsGame;
 import com.veins.game.components.ActorStatsComponent;
 import com.veins.game.components.ChatComponent;
+import com.veins.game.components.CoinsComponent;
 import com.veins.game.components.CombatComponent;
 import com.veins.game.components.EffectsComponent;
 import com.veins.game.components.FactionComponent;
@@ -130,6 +131,21 @@ public class EntityFactory {
         return item;
     }
     
+    public Entity CreateMoney(String name, int fx, int fy){
+        Entity proto_item = loaded_entities.get(name);
+        
+        Entity money = new Entity();
+        money.add(new PositionComponent(fx, fy));
+        money.add(new SpriteComponent(proto_item.getComponent(SpriteComponent.class).sprites.get(0)));
+        money.add(new NameComponent(proto_item.getComponent(NameComponent.class).string));
+        money.add(new CoinsComponent());
+        
+        Gdx.app.log("Spawn", "Spawned money at" + fx + ", " + fy);
+        _engine.addEntity(money);
+        return money;
+    }
+    
+    
     //Loading entities
     public Entity LoadActor(String name, TextureRegion tile, String faction){
         Entity actor = new Entity();
@@ -190,7 +206,16 @@ public class EntityFactory {
         return actor;
     }
     
-    
+    public Entity LoadMoney(String name, TextureRegion tile){
+        Entity money = new Entity();
+        money.add(new PositionComponent());
+        money.add(new SpriteComponent(tile));
+        money.add(new NameComponent(name));
+        Gdx.app.log("Loading", "Loaded money " + name);
+        return money;
+    }
+     
+     
     public Entity LoadItem(String name, TextureRegion tile, String slot){
         Entity item = new Entity();
         item.add(new PositionComponent());
@@ -250,6 +275,13 @@ public class EntityFactory {
     
     public void loadStoreItem(String name, TextureRegion tile, String slot, int dam_die, int num_die){
         Entity item = LoadItem(name, tile, slot, dam_die, num_die);
+        if (loaded_entities.get(name) == null){
+            loaded_entities.put(name, item);
+        }
+    }
+    
+    public void loadStoreMoney(String name, TextureRegion tile){
+        Entity item = LoadMoney(name, tile);
         if (loaded_entities.get(name) == null){
             loaded_entities.put(name, item);
         }
@@ -382,6 +414,9 @@ public class EntityFactory {
             String spritename = new String();
             int dam_die = 0;
             int num_die = 0;
+            //money only
+            int min_coins = 0;
+            int max_coins = 0;
             
             for (JsonValue child : table.iterator())
             {
@@ -406,6 +441,14 @@ public class EntityFactory {
                     num_die = child.asInt();
                     Gdx.app.log("Loading JSON", "We have damage die number " + num_die);
                 }
+                if ("num_coins_min".equals(child.name)){
+                    min_coins = child.asInt();
+                    Gdx.app.log("Loading JSON", "We have minimum coins " + min_coins);
+                }
+                if ("num_coins_max".equals(child.name)){
+                    max_coins = child.asInt();
+                    Gdx.app.log("Loading JSON", "We have maximum coins " + max_coins);
+                }
             }
             
             //paranoia
@@ -425,6 +468,20 @@ public class EntityFactory {
                     }
                 }
             }
+            
+            //money
+            if (!name.isEmpty() && !spritename.isEmpty()){
+                if (min_coins > 0 && max_coins > 0){
+                    //pick sprite
+                    if ("silver_coins".equals(spritename)){
+                        loadStoreMoney(name, _game.res.silver_tex);
+                    }
+                    if ("gold_coins".equals(spritename)){
+                        loadStoreMoney(name, _game.res.gold_tex);
+                    }
+                }
+            }
+            
         }//end for
         
         Gdx.app.log("Loading JSON", "Finished loading");
