@@ -12,7 +12,9 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.veins.game.components.CoinsComponent;
 import com.veins.game.components.InventoryComponent;
+import com.veins.game.components.MoneyComponent;
 import com.veins.game.components.NameComponent;
 import com.veins.game.components.PositionComponent;
 import com.veins.game.components.RemoveComponent;
@@ -45,7 +47,7 @@ public class InventorySystem extends EntitySystem {
     
     public void addedToEngine(Engine engine){
         entities = engine.getEntitiesFor(Family.all(InventoryComponent.class, PositionComponent.class).get());
-        item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class, SlotComponent.class).get());
+        item_entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, PositionComponent.class).one(CoinsComponent.class, SlotComponent.class).get());
         g_engine = engine;
     }
     
@@ -72,29 +74,57 @@ public class InventorySystem extends EntitySystem {
     public void attemptPickup(Entity entity, int sx, int sy){
         Entity item = checkPickupItem(entity, sx, sy);
         if (item != null){
-            if (entity.getComponent(InventoryComponent.class) != null)
-            {
-            //add to inventory
-            String added = tryaddObject(entity, "inven_1", item);
+            //normal case: item has a slot
+            if (item.getComponent(SlotComponent.class) != null){
+                if (entity.getComponent(InventoryComponent.class) != null)
+                {
+                //add to inventory
+                String added = tryaddObject(entity, "inven_1", item);
 
-                if (added != null){
-                    //test
-                    if (getObject(entity, added) != null){
-                        String inven_string = getObject(entity, added).getComponent(NameComponent.class).string;
-                        Gdx.app.log("Inventory", "Name of object in slot " + added +  " is " + inven_string);
+                    if (added != null){
+                        //test
+                        if (getObject(entity, added) != null){
+                            String inven_string = getObject(entity, added).getComponent(NameComponent.class).string;
+                            Gdx.app.log("Inventory", "Name of object in slot " + added +  " is " + inven_string);
+                        }
+                        else
+                        {
+                            Gdx.app.log("Inventory", "No item in slot " + added + "?!");
+                        }
+                        //remove from world
+                        item.add(new RemoveComponent());
                     }
-                    else
-                    {
-                        Gdx.app.log("Inventory", "No item in slot " + added + "?!");
+                }
+                else
+                {
+                    Gdx.app.log("Inventory", "entity missing inventory component");
+                }  
+            }
+            //hello, money!
+            else
+                {
+                    //add to our purse
+                    if (entity.getComponent(MoneyComponent.class) != null){
+                        int coins = item.getComponent(CoinsComponent.class).num;
+                        entity.getComponent(MoneyComponent.class).addSilver(coins);
+                        
+                        //message
+                        String name = entity.getComponent(NameComponent.class).string;
+                        String item_name = item.getComponent(NameComponent.class).string;
+                        if (coins < 2){
+                            g_logic.addLog(name + " picked up " + coins + item_name);
+                        }
+                        else{
+                            g_logic.addLog(name + " picked up " + coins + item_name+"s");
+                        }
+                        
                     }
+                 
                     //remove from world
                     item.add(new RemoveComponent());
+                    
+                    
                 }
-            }
-            else
-            {
-                Gdx.app.log("Inventory", "entity missing inventory component");
-            }  
         }
     }
     

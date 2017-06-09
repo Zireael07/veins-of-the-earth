@@ -12,7 +12,7 @@ import com.badlogic.ashley.core.Component;
  * @author AdmKasia
  */
 public class CoinsComponent implements Component {
-    int num;
+    public int num;
     
     public CoinsComponent(){
         num = 1;
